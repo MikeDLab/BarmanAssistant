@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+  <display-name>BarmanAssistant</display-name>
+  <servlet>
+  	<servlet-name>MainServlet</servlet-name>
+		<display-name>MainServlet</display-name>
+		<description></description>
+		<servlet-class>com.labutin.barman.controller.MainServlet</servlet-class>
+  </servlet>
+  	<servlet-mapping>
+		<servlet-name>MainServlet</servlet-name>
+		<url-pattern>/MainServlet</url-pattern>
+	</servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
