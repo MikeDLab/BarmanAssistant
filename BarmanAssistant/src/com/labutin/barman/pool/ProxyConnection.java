@@ -53,12 +53,18 @@ public class ProxyConnection implements Connection {
 	}
 
 	public void close() throws SQLException {
+	//	PoolConnection.POOL.returnConnection(this);
+		connection.close();
+	}
+	void closeInPool() throws SQLException
+	{
 		connection.close();
 	}
 
 	public boolean isClosed() throws SQLException {
 		return connection.isClosed();
 	}
+	
 
 	public DatabaseMetaData getMetaData() throws SQLException {
 		return connection.getMetaData();
@@ -255,6 +261,29 @@ public class ProxyConnection implements Connection {
 
 	public void setShardingKey(ShardingKey shardingKey) throws SQLException {
 		connection.setShardingKey(shardingKey);
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((connection == null) ? 0 : connection.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProxyConnection other = (ProxyConnection) obj;
+		if (connection == null) {
+			if (other.connection != null)
+				return false;
+		} else if (!connection.equals(other.connection))
+			return false;
+		return true;
 	}
 
 }

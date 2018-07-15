@@ -11,7 +11,7 @@ import com.labutin.barman.entity.User;
 
 
 public class UserLoginCommand implements Command {
-	private UserReceiver receiver = new UserReceiver();
+	private UserReceiver receiver;
 
 	public UserLoginCommand() {
 		// TODO Auto-generated constructor stub

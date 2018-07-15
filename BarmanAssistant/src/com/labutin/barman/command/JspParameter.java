@@ -1,6 +1,9 @@
 package com.labutin.barman.command;
 
 public enum JspParameter {
+	INGREDIENT("ingredient"),
+	INGREDIENT_NAME("ingredientname"),
+	INGREDIENT_DESCRIPTION("ingredientdesc"),
 	USER("user"),
 	USER_LOGIN("userlogin"),
 	USER_NAME("username"),

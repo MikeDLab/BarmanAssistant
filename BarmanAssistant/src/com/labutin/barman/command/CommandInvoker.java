@@ -18,6 +18,15 @@ public class CommandInvoker {
 		case REGISTER:
 			command = new UserRegistrationCommand();
 			break;
+		case COCKTAILLIST:
+			command = new RedirectToCoctailListPageCommand();
+			break;
+		case ADDINGREDIENTPAGE:
+			command = new RedirectToAddIngr();
+			break;
+		case ADDINGREDIENT:
+			command = new AddIngredientCommand();
+			break;
 //		case LOGIN:
 //			command = new UserLoginCommand();
 //			break;

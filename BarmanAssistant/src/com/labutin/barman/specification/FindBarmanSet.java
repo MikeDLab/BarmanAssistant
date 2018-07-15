@@ -9,32 +9,27 @@ import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
-public class FindUserByLogin extends AbstractUserSpecification implements UserSpecification {
-	private String login;
-	private final static String FIND_USER_BY_LOGIN = "SELECT user_login FROM User WHERE user_login = ?";
+public class FindBarmanSet extends AbstractUserSpecification implements UserSpecification {
+	private final static String FIND_BARMAN_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role FROM User WHERE user_role=2";
 
-	public FindUserByLogin(String login) {
-		// TODO Auto-generated constructor stubt
-		this.login = login;
+	public FindBarmanSet() {
 	}
 
 	@Override
 	public Set<User> querry() {
 		Set<User> users = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(FIND_BARMAN_SET)) {
 			if (preparedStatement != null) {
-				preparedStatement.setString(1, login);
 				resultSet = preparedStatement.executeQuery();
 			}
-			if (resultSet.next()) {
+			while (resultSet.next()) {
 				users.add(loadUserData(resultSet));
-				return users;
 			}
 		} catch (SQLException e) {
 		} finally {
 			closeResultSet();
 		}
-		return null;
+		return users;
 	}
 }

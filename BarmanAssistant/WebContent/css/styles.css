@@ -1,345 +1,363 @@
 body {
-  margin: 0;
-  color: #8f8f8f;
-  border-top: 5px solid #7e7e7e;
-  background: #f8f8f8 url(../images/bg.png);
-  font: 12px Tahoma, sans-serif;
+	margin: 0;
+	color: #8f8f8f;
+	border-top: 5px solid #7e7e7e;
+	background: #f8f8f8 url(../images/bg.png);
+	font: 12px Tahoma, sans-serif;
 }
 
 img {
-  border: 0;
+	border: 0;
 }
+
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: white;
-    opacity: 3; /* Firefox */
+	color: white;
+	opacity: 3; /* Firefox */
 }
+
 .edit {
-  text-align: center;
-  height: 50px;
-  width: 100%;
-  background-color: transparent;
-  color: white;
-  border: none;
-  border-bottom: 1px solid white;
+	text-align: center;
+	height: 50px;
+	width: 100%;
+	background-color: transparent;
+	color: white; border : none;
+	border-bottom: 1px solid white;
+	border: none;
+}
+
+textarea {
+	background: transparent;
+	color: white;
+	resize: none;
+	border: 0 none;
+	box-shadow: 0 1px 10px 0 rgba(255, 255, 255, 0.5); width : 100%;
+	font-size: 12px;
+	outline: none;
+	height: 100px;
+	width: 100%;
 }
 
 button {
-  color: #fff;
-  border: none;
-  background-color: transparent;
-  font-family: 'Oswald', sans-serif;
-  weight: 53px;
+	color: #fff;
+	border: none;
+	background-color: transparent;
+	font-family: 'Oswald', sans-serif;
+	weight: 53px;
 }
 
+button.side {
+	color: #8f8f8f;
+	font: 14px 'Oswald', sans-serif;
+}
 
 nav {
-  border: 1px solid #e7e7e7;
-  background: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	background: #f3f3f3;
 }
 
 #heading {
-  margin: 30px 0;
-  padding-left: 20px;
-  background: transparent url(../images/h1-bg.png);
+	margin: 30px 0;
+	padding-left: 20px;
+	background: transparent url(../images/h1-bg.png);
 }
 
 h1 {
-  display: inline-block;
-  margin: 0;
-  padding: 0 10px;
-  color: #7e7e7e;
-  background: url(../images/bg.png);
-  font: 40px/40px 'Oswald', sans-serif;
+	display: inline-block;
+	margin: 0;
+	padding: 0 10px;
+	color: #7e7e7e;
+	background: url(../images/bg.png);
+	font: 40px/40px 'Oswald', sans-serif;
 }
 
 #wrapper {
-  max-width: 960px;
-  margin: auto;
+	max-width: 960px;
+	margin: auto;
 }
 
 header {
-  padding: 20px 0;
+	padding: 20px 0;
 }
 
 aside {
-  float: left;
-  width: 250px;
+	float: left;
+	width: 250px;
 }
 
 aside>h2 {
-  margin: 30px 0 0 0;
-  padding: 10px;
-  color: #fff;
-  background: #29c5e6;
-  font: 14px 'Oswald', sans-serif;
+	margin: 30px 0 0 0;
+	padding: 10px;
+	color: #fff;
+	background: #29c5e6;
+	font: 14px 'Oswald', sans-serif;
 }
 
 aside>p {
-  margin: 0;
-  padding: 10px;
-  border: 1px solid #e7e7e7;
-  background: #f3f3f3;
+	margin: 0;
+	padding: 10px;
+	border: 1px solid #e7e7e7;
+	background: #f3f3f3;
 }
 
 section {
-  margin-left: 280px;
-  padding-bottom: 50px;
+	margin-left: 280px;
+	padding-bottom: 50px;
 }
 
 form[name="search"] {
-  float: right;
+	float: right;
 }
 
 footer {
-  background-color: #7e7e7e;
+	background-color: #7e7e7e;
 }
 
 nav a {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 nav ul {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 nav li {
-  padding: 10px;
-  list-style-position: inside;
-  font: 14px 'Oswald', sans-serif;
+	padding: 10px;
+	list-style-position: inside;
+	font: 14px 'Oswald', sans-serif;
 }
 
 .top-menu li {
-  display: inline-block;
-  margin: 0;
-  padding: 10px 30px;
+	display: inline-block;
+	margin: 0;
+	padding: 10px 30px;
 }
 
 .top-menu li.active {
-  color: #fff;
-  background: #daa520;
+	color: #fff;
+	background: #daa520;
 }
 
 .top-menu a {
-  color: #b2b2b2;
+	color: #b2b2b2;
 }
 
 .aside-menu li {
-  list-style-type: square;
-  border-top: 1px solid #e7e7e7;
-  font-weight: 300;
+	list-style-type: square;
+	border-top: 1px solid #e7e7e7;
+	font-weight: 300;
 }
 
 .aside-menu li:first-child {
-  border: none;
+	border: none;
 }
 
 .aside-menu li.active {
-  color: #29c5e6;
+	color: #daa520;
 }
 
 .aside-menu a {
-  color: #8f8f8f;
+	color: #8f8f8f;
 }
 
 blockquote {
-  margin: 0;
-  padding: 10px 20px;
-  background: #daa520;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 300;
+	margin: 0;
+	padding: 10px 20px;
+	background: #daa520;
+	font-family: 'Oswald', sans-serif;
+	font-weight: 300;
 }
 
 blockquote p {
-  margin: 0;
-  color: #fff;
-  font-size: 33px;
-  font-style: italic;
+	margin: 0;
+	color: #fff;
+	font-size: 33px;
+	font-style: italic;
 }
 
 blockquote cite {
-  display: block;
-  margin: 0;
-  text-align: right;
-  color: #1d8ea6;
-  font-size: 20px;
-  font-style: normal;
+	display: block;
+	margin: 0;
+	text-align: right;
+	color: #1d8ea6;
+	font-size: 20px;
+	font-style: normal;
 }
 
 figure {
-  display: inline-block;
-  margin: 0;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 300;
+	display: inline-block;
+	margin: 0;
+	font-family: 'Oswald', sans-serif;
+	font-weight: 300;
 }
 
 figure img {
-  display: block;
-  border: 1px solid #fff;
-  outline: 1px solid #c9c9c9;
+	display: block;
+	border: 1px solid #fff;
+	outline: 1px solid #c9c9c9;
 }
 
 section>figure+figure {
-  margin-left: 28px;
+	margin-left: 28px;
 }
 
 p {
-  margin: 20px 0;
+	margin: 20px 0;
 }
 
 section>h2 {
-  margin: 30px 0 0 0;
-  padding: 0 10px;
-  color: #fff;
-  background: #29c5e6;
-  font: 30px 'Oswald', sans-serif;
-  font-weight: 300;
+	margin: 30px 0 0 0;
+	padding: 0 10px;
+	color: #fff;
+	background: #29c5e6;
+	font: 30px 'Oswald', sans-serif;
+	font-weight: 300;
 }
 
 figure figcaption {
-  margin-top: 5px;
-  font-size: 16px;
-  font-weight: 300;
+	margin-top: 5px;
+	font-size: 16px;
+	font-weight: 300;
 }
 
 figure figcaption span {
-  display: block;
-  color: #29c5e6;
-  font-size: 14px;
+	display: block;
+	color: #29c5e6;
+	font-size: 14px;
 }
 
 .team-row figure {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 .team-row figure+figure {
-  margin-left: 43px;
+	margin-left: 43px;
 }
 
 footer {
-  color: #dbdbdb;
-  background: #7e7e7e;
-  font-size: 11px;
+	color: #dbdbdb;
+	background: #7e7e7e;
+	font-size: 11px;
 }
 
 #footer {
-  max-width: 960px;
-  height: 90px;
-  margin: auto;
-  padding: 10px 0;
+	max-width: 960px;
+	height: 90px;
+	margin: auto;
+	padding: 10px 0;
 }
 
 footer h3 {
-  margin: 0 0 10px 0;
-  color: #fff;
-  border-bottom: 1px solid #919191;
-  font: 14px 'Oswald', sans-serif;
+	margin: 0 0 10px 0;
+	color: #fff;
+	border-bottom: 1px solid #919191;
+	font: 14px 'Oswald', sans-serif;
 }
 
 footer a {
-  color: #dbdbdb;
+	color: #dbdbdb;
 }
 
 #twitter time a {
-  color: #b4aeae;
+	color: #b4aeae;
 }
 
 footer p {
-  margin: 5px 0;
+	margin: 5px 0;
 }
 
 #twitter {
-  float: left;
-  width: 300px;
+	float: left;
+	width: 300px;
 }
 
 #twitter p {
-  padding-right: 15px;
+	padding-right: 15px;
 }
 
 #sitemap {
-  float: left;
-  width: 150px;
-  margin-left: 20px;
-  padding-right: 15px;
+	float: left;
+	width: 150px;
+	margin-left: 20px;
+	padding-right: 15px;
 }
 
 #sitemap div {
-  display: inline-block;
+	display: inline-block;
 }
 
 #sitemap div+div {
-  margin-left: 40px;
+	margin-left: 40px;
 }
 
 #sitemap a {
-  display: block;
-  margin-bottom: 5px;
-  text-decoration: none;
-  font-size: 12px;
+	display: block;
+	margin-bottom: 5px;
+	text-decoration: none;
+	font-size: 12px;
 }
 
 #sitemap a:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 #social {
-  float: left;
-  width: 130px;
-  margin-left: 20px;
+	float: left;
+	width: 130px;
+	margin-left: 20px;
 }
 
 .social-icon {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-  background: url(../images/social.png) no-repeat;
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	margin-right: 10px;
+	background: url(../images/social.png) no-repeat;
 }
 
 .social-icon-small {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin: 5px 6px 0 0;
-  background: url(../images/social-small.png) no-repeat;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin: 5px 6px 0 0;
+	background: url(../images/social-small.png) no-repeat;
 }
 
 .twitter {
-  background-position: 0 0;
+	background-position: 0 0;
 }
 
 .facebook {
-  background-position: -30px 0;
+	background-position: -30px 0;
 }
 
 .google-plus {
-  background-position: -60px 0;
+	background-position: -60px 0;
 }
 
 .vimeo {
-  background-position: 0 0;
+	background-position: 0 0;
 }
 
 .youtube {
-  background-position: -16px 0;
+	background-position: -16px 0;
 }
 
 .flickr {
-  background-position: -32px 0;
+	background-position: -32px 0;
 }
 
 .instagram {
-  background-position: -48px 0;
+	background-position: -48px 0;
 }
 
 .rss {
-  background-position: -64px 0;
+	background-position: -64px 0;
 }
 
 #footer-logo {
-  float: right;
-  margin-top: 20px;
-  text-align: right;
-  font-size: 10px;
+	float: right;
+	margin-top: 20px;
+	text-align: right;
+	font-size: 10px;
 }

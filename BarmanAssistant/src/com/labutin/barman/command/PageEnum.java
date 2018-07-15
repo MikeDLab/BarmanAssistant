@@ -1,6 +1,8 @@
 package com.labutin.barman.command;
 
 public enum PageEnum {
+	ADD_INGRIDIENT_PAGE("/adminpages/add_ingridient.jsp"),
+	COCKTAIL_LIST_PAGE("/jsp/cocktail_list.jsp"),
 	HOME_PAGE("index.jsp"),
 	LOGIN_PAGE("/jsp/login.jsp"),
 	REGISTRATION_PAGE("/jsp/register.jsp"),

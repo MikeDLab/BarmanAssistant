@@ -45,7 +45,6 @@
 				<li class="active">
 					<form action="MainServlet" method="post">
 						<input type="hidden" name="locale" value="ru" />
-						<input type="hidden" name="pageId" value="index.jsp" />
 						<button type="submit">Русский</button>
 					</form>
 				</li>
@@ -60,26 +59,15 @@
 		<div id="heading">
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="home.page" />:</label>
+						key="cocktaillist.main" />:</label>
 			</h1>
 
 		</div>
 		<aside>
 			<nav>
 				<ul class="aside-menu">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="CocktailList" />
-							<button class="side" type="submit">Cocktail List</button>
-						</form>
-					</li>
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredientPage" />
-							<button class="side" type="submit">Add Ingredient</button>
-						</form>
-					</li>
-					<li><a href="/donec/">Barman list</a></li>
+					<li class="active">Barmen list</li>
+					<li><a href="/donec/">Cocktail list</a></li>
 				</ul>
 			</nav>
 			<h2>OUR OFFICES</h2>

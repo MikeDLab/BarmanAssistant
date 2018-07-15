@@ -1,65 +1,112 @@
 package com.labutin.barman.entity;
 
 public class User {
-	private int user_id;
-	private String user_login;
-	private String user_name;
-	private String user_password;
-	private String user_email;
-	private int user_role;
-	public User(int user_id, String user_login, String user_name, String user_password, String user_email,
-			int user_role) {
+	private int userId;
+	private String userLogin;
+	private String userName;
+	private String userPassword;
+	private String userEmail;
+	private int userRole;
+	public User(int userId, String userLogin, String userName, String userPassword, String userEmail,
+			int userRole) {
 		super();
-		this.user_id = user_id;
-		this.user_login = user_login;
-		this.user_name = user_name;
-		this.user_password = user_password;
-		this.user_email = user_email;
-		this.user_role = user_role;
+		this.userId = userId;
+		this.userLogin = userLogin;
+		this.userName = userName;
+		this.userPassword = userPassword;
+		this.userEmail = userEmail;
+		this.userRole = userRole;
 	}	
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
-	public int getUser_id() {
-		return user_id;
+	public int getUserId() {
+		return userId;
 	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public String getUser_login() {
-		return user_login;
+	public String getUserLogin() {
+		return userLogin;
 	}
-	public void setUser_login(String user_login) {
-		this.user_login = user_login;
+	public void setUserLogin(String userLogin) {
+		this.userLogin = userLogin;
 	}
-	public String getUser_name() {
-		return user_name;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public String getUser_password() {
-		return user_password;
+	public String getUserPassword() {
+		return userPassword;
 	}
-	public void setUser_password(String user_password) {
-		this.user_password = user_password;
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
-	public String getUser_email() {
-		return user_email;
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
-	public int getUser_role() {
-		return user_role;
+	public int getUserRole() {
+		return userRole;
 	}
-	public void setUser_role(int user_role) {
-		this.user_role = user_role;
+	public void setUserRole(int userRole) {
+		this.userRole = userRole;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((userEmail == null) ? 0 : userEmail.hashCode());
+		result = prime * result + userId;
+		result = prime * result + ((userLogin == null) ? 0 : userLogin.hashCode());
+		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		result = prime * result + ((userPassword == null) ? 0 : userPassword.hashCode());
+		result = prime * result + userRole;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (userEmail == null) {
+			if (other.userEmail != null)
+				return false;
+		} else if (!userEmail.equals(other.userEmail))
+			return false;
+		if (userId != other.userId)
+			return false;
+		if (userLogin == null) {
+			if (other.userLogin != null)
+				return false;
+		} else if (!userLogin.equals(other.userLogin))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		if (userPassword == null) {
+			if (other.userPassword != null)
+				return false;
+		} else if (!userPassword.equals(other.userPassword))
+			return false;
+		if (userRole != other.userRole)
+			return false;
+		return true;
 	}
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", user_login=" + user_login + ", user_name=" + user_name
-				+ ", user_password=" + user_password + ", user_email=" + user_email + ", user_role=" + user_role + "]";
+		return "User [userId=" + userId + ", userLogin=" + userLogin + ", userName=" + userName + ", userPassword="
+				+ userPassword + ", userEmail=" + userEmail + ", userRole=" + userRole + "]";
 	}
-
+	
 }

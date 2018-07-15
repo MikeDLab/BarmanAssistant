@@ -1,6 +1,9 @@
 package com.labutin.barman.command;
 
 public enum TypeCommand{
+	ADDINGREDIENT("AddIngredient"),
+	ADDINGREDIENTPAGE("AddIngredient"),
+	COCKTAILLIST("CocktailList"),
 	HOME("Home"),
 	SIGNIN("SignIn"),
 	REGISTER("Registration"),
