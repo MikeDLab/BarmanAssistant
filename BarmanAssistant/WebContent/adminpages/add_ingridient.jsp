@@ -43,14 +43,14 @@
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="locale" value="ru" />
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="Ru" />
 						<button type="submit">Русский</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="locale" value="en" />
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="En" />
 						<button type="submit">Eng</button>
 					</form>
 				</li>
@@ -59,7 +59,7 @@
 		<div id="heading">
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="cocktaillist.main" />:</label>
+						key="addingredientpage.title" />:</label>
 			</h1>
 
 		</div>
@@ -79,12 +79,13 @@
 		<section>
 			<blockquote>
 				<div class="col-6 col-sm-3">
-					<form action="MainServlet" method="post" name="addIngridient">
+					<form action="MainServlet" method="post" name="PushIngredient">
 						<div class="form-group">
-							<input type="hidden" name="command" value="AddIngredient" /> <input
+							<input type="hidden" name="command" value="PushIngredient" /> <input
 								type="text" class="edit" name="ingredientname" id="name"
-								placeholder="Inte name" maxlength="45">
-							<textarea rows="10" cols="45" name="ingredientdesc" maxlength="255">Add descri</textarea>
+								placeholder="Inter name" maxlength="45">
+							<textarea rows="10" cols="45" name="ingredientdesc"
+								maxlength="255">Add description</textarea>
 							<button type="submit" class="active">Add</button>
 						</div>
 					</form>

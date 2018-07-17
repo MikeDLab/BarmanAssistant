@@ -3,8 +3,8 @@ package com.labutin.barman.command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RedirectToAddIngr implements Command {
-	public RedirectToAddIngr() {
+public class RedirectToAddIngredientPage implements Command {
+	public RedirectToAddIngredientPage() {
 		// TODO Auto-generated constructor stub
 	}
 	@Override

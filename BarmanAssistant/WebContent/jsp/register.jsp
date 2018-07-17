@@ -27,18 +27,13 @@
 				</li>
 				<li class="active">
 					<form action="MainServlet" method="post">
-						<button type="submit">Login</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="post">
 						<button type="submit">About Us</button>
 					</form>
 				</li>
 			</ul>
 		</nav>
 		<div id="heading">
-			<h1>Register Page</h1>
+			<h1>Registration Page</h1>
 		</div>
 		<section>
 			<blockquote>
@@ -54,7 +49,7 @@
 								placeholder="user@example.com" maxlength="45"><input
 								type="password" class="edit" name="password" id="username"
 								placeholder="Inter password" maxlength="45">
-							<button type="submit" name="REGISTRATION" class="active">Register</button>
+							<button type="submit" name="Register" class="active">Register</button>
 						</div>
 					</form>
 				</div>

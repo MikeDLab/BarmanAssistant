@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.labutin.barman.builder.CommandBuilderByType;
+import com.labutin.barman.builder.Director;
+import com.labutin.barman.builder.TypeCommandBuilderByString;
 import com.labutin.barman.command.Command;
-import com.labutin.barman.command.CommandInvoker;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.command.TypeCommand;
 import com.labutin.barman.entity.Ingredient;
@@ -37,52 +39,28 @@ public class MainServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-//		try {
-//			IngredientRepository repository = IngredientRepository.getInstance();
-//			Ingredient item = new Ingredient();
-//			item.setIngredientName("Vodka");
-////			item.setIngredientDescription("Alcohol, vol 40%");
-////			repository.remove(item);
-//			Set<Ingredient> ingredients = new FindIngredientByName("Vodka").querry();
-//			System.out.println(ingredients.size());
-//			System.out.println("GOOOD");
-//		} catch (NoJDBCDriverException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (NoJDBCPropertiesFileException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		System.out.println(request.getRequestURI());
-		System.out.println(request.getRequestURL());
 		String lang = request.getParameter("locale");
 		if (lang != null) {
 			System.out.println(lang);
 			Locale l = new Locale(lang);
 			ResourceBundle rb = ResourceBundle.getBundle("resources.locale", l);
-			System.out.println(rb.getString("home.page"));
-			request.setAttribute("language", lang);
-			request.setAttribute("locale", rb);
+			request.getSession(true).setAttribute("language", lang);
+			request.getSession(true).setAttribute("locale", rb);
 		}
-		logger.info("REDIRECT");
-		Command command = null;
-		if (request.getParameter("command") != null) {
-			logger.info("Command type: " + request.getParameter("command").toUpperCase());
-			TypeCommand typeCommand = TypeCommand.valueOf(request.getParameter("command").toUpperCase());
-			CommandInvoker invokerCommand = new CommandInvoker();
-			command = invokerCommand.getCommand(typeCommand);
-		}
-		if (command != null) {
-			PageEnum page = command.execute(request, response);
-			request.getRequestDispatcher(page.getValue()).forward(request, response);
-		} else {
-		}
+		response.sendRedirect(PageEnum.HOME_PAGE.getValue());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+	//	doGet(request, response);
+		TypeCommandBuilderByString typeBuilder = new TypeCommandBuilderByString(request.getParameter("command"));
+		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
+		CommandBuilderByType commandBuilder = new CommandBuilderByType(commandType);
+		Command command = Director.createCommand(commandBuilder);
+		PageEnum page = command.execute(request, response);
+		request.getRequestDispatcher(page.getValue()).forward(request, response);
+		logger.info("Command type: " + commandType.getValue());
 	}
 
 }

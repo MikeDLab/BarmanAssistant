@@ -27,11 +27,6 @@
 				</li>
 				<li class="active">
 					<form action="MainServlet" method="post">
-						<button type="submit">Login</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="post">
 						<button type="submit">About Us</button>
 					</form>
 				</li>
@@ -53,9 +48,9 @@
 							<button type="submit" class="active">Sing in</button>
 						</div>
 					</form>
-					<form action="MainServlet" method="post" name="register">
+					<form action="MainServlet" method="post" name="Registration">
 						<div class="form-group">
-						<input type="hidden" name="command" value="RegisterPage" />
+						<input type="hidden" name="command" value="Registration" />
 							<button type="submit" class="active">Registration</button>
 						</div>
 					</form>

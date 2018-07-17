@@ -28,7 +28,8 @@
 				<li class="active">
 					<form action="MainServlet" method="post">
 						<input type="hidden" name="command" value="Home" />
-						<button type="submit">Home</button>
+						<button type="submit"><fmt:message bundle="${locale}"
+						key="homepage.homebutton"/></button>
 					</form>
 				</li>
 				<li class="active">
@@ -43,15 +44,15 @@
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="locale" value="ru" />
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="Ru" />
 						<input type="hidden" name="pageId" value="index.jsp" />
 						<button type="submit">Русский</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="locale" value="en" />
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="En" />
 						<button type="submit">Eng</button>
 					</form>
 				</li>
@@ -60,7 +61,7 @@
 		<div id="heading">
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="home.page" />:</label>
+						key="homepage.title" />:</label>
 			</h1>
 
 		</div>
@@ -75,7 +76,7 @@
 					</li>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredientPage" />
+							<input type="hidden" name="command" value="AddIngredient" />
 							<button class="side" type="submit">Add Ingredient</button>
 						</form>
 					</li>

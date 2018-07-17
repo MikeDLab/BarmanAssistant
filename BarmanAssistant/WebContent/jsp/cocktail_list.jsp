@@ -43,14 +43,14 @@
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="locale" value="ru" />
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="Ru" />
 						<button type="submit">Русский</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="locale" value="en" />
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="En" />
 						<button type="submit">Eng</button>
 					</form>
 				</li>
@@ -59,7 +59,7 @@
 		<div id="heading">
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="cocktaillist.main" />:</label>
+						key="cocktaillist.title" />:</label>
 			</h1>
 
 		</div>
