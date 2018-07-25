@@ -2,8 +2,6 @@ package com.labutin.barman.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,15 +21,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.command.PageEnum;
 
-public class LocaleFilter implements Filter {
+@WebFilter(filterName = "UserSessionFilter")
+public class UserSessionFilter implements Filter {
 	private FilterConfig filterConfig;
 	private static Logger logger = LogManager.getLogger();
-	private static ArrayList<String> pages; // хранилище страниц
-
-	public LocaleFilter() {
-		// TODO Auto-generated constructor stub
-		if (pages == null)
-			pages = new ArrayList<String>();
+	public UserSessionFilter() {
 	}
 
 	@Override
@@ -42,28 +36,20 @@ public class LocaleFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) arg0;
-		HttpServletResponse response = (HttpServletResponse) arg1;
 		// Если фильтр активной, то выполнить проверку
-		logger.info("LocaleFilter");
-		logger.info("Locale: " + request.getSession().getAttribute("language"));
+		HttpServletRequest request = (HttpServletRequest) arg0;
+		logger.info("UserSessionFilet");
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
-			// System.out.println(request.getRequestURL());
-			HttpServletRequest req = (HttpServletRequest) arg0;
-			// Раскладываем адрес на составляющие
-			String[] list = req.getRequestURI().split("/");
-			for (String k : list) {
-				if (k.equals("Es")) {
-					Locale l = new Locale(k);
-					ResourceBundle rb = ResourceBundle.getBundle("resources.locale", l);
-					request.getSession(true).setAttribute("language", k);
-					request.getSession(true).setAttribute("locale", rb);
-					response.sendRedirect("index.jsp");
-					return;
-				}
+			if (request.getSession().getAttribute("Role") == null) {
+				logger.info("UserSession: " + UserType.GUEST);
+				request.getSession(true).setAttribute("Role", UserType.GUEST);
+			}
+			else
+			{
+				logger.info("UserSession: " + request.getSession().getAttribute("Role"));
 			}
 		}
-		arg2.doFilter(request, response);
+		arg2.doFilter(arg0, arg1);
 	}
 
 }

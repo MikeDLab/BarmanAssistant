@@ -21,9 +21,6 @@ public class CocktailRepository implements IСocktailRepository {
 	private static Logger logger = LogManager.getLogger();
 	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol) VALUES (?,?,?,?)";
 	private final static String REMOVE_COCKTAIL = "DELETE FROM Ingredient WHERE Ingredient_name = ?";
-	private ProxyConnection connection;
-	private PreparedStatement preparedStatement;
-
 	private CocktailRepository() {
 		// TODO Auto-generated constructor stub
 	}
@@ -40,6 +37,8 @@ public class CocktailRepository implements IСocktailRepository {
 
 	@Override
 	public void add(Cocktail item) {
+		ProxyConnection connection;
+		PreparedStatement preparedStatement;
 		// TODO Auto-generated method stub
 		logger.info(item + " try to register");
 //		if (query(new FindIngredientByName(item.getIngredientName())) == null) {
@@ -88,6 +87,5 @@ public class CocktailRepository implements IСocktailRepository {
 //		}
 //
 //	}
-
 
 }

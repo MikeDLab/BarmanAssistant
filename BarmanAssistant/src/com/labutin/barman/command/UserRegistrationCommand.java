@@ -10,12 +10,14 @@ import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.AddUserException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.service.UserService;
+import com.labutin.barman.util.MailUtil;
 import com.labutin.barman.validator.UserValidator;
 
 public class UserRegistrationCommand implements Command {
 	// Service
 	private static Logger logger = LogManager.getLogger();
-	private UserReceiver receiver;
+	private UserService receiver;
 
 	public UserRegistrationCommand() {
 		// TODO Auto-generated constructor stub
@@ -28,19 +30,21 @@ public class UserRegistrationCommand implements Command {
 		String userName = request.getParameter(JspParameter.USER_NAME.getValue());
 		String userPassword = request.getParameter(JspParameter.USER_PASSWORD.getValue());
 		String userEmail = request.getParameter(JspParameter.USER_EMAIL.getValue());
-		if(!validator.isLogin(userLogin))
-		{
-			//return excp page login
+		if (!validator.isLogin(userLogin)) {
 			logger.info("incorrect login");
+			request.setAttribute("Errormessage", "Incorrect login");
+			return PageEnum.REGISTRATION_PAGE;
 		}
-		if(!validator.isName(userName))
-		{
+		if (!validator.isName(userName)) {
 			logger.info("incorrect name");
+			request.setAttribute("Errormessage", "Incorrect name");
+			return PageEnum.REGISTRATION_PAGE;
 		}
-		if(!validator.isPassword(userPassword))
-		{
+		if (!validator.isPassword(userPassword)) {
+			System.out.println(userPassword + " incorrect");
 			logger.info("incorrect password");
-			//return excp page password
+			request.setAttribute("Errormessage", "Incorrect password");
+			return PageEnum.REGISTRATION_PAGE;
 		}
 //		if(!validator.isEmail(userEmail))
 //		{
@@ -49,24 +53,20 @@ public class UserRegistrationCommand implements Command {
 //		}
 		// TODO Auto-generated method stub
 		try {
-			receiver = new UserReceiver();
+			receiver = new UserService();
 			logger.info("JDBC IS OK");
 		} catch (NoJDBCDriverException e) {
 			logger.info("No JDBC DRIVER");
-			// TODO Auto-generated catch block
-			// setAtribute
-			// return ERROR_PAGE;
 			e.printStackTrace();
 		} catch (NoJDBCPropertiesFileException e) {
 			logger.info("No Prop JDBC");
-			// setAtribute
-			// return ERROR_PAGE;
 		}
 		User user;
 		try {
 			user = receiver.registration(userLogin, userName, userPassword, userEmail);
 			if (user != null) {
-				//request.getSession().setAttribute(JspParameter.USER.getValue(), user);
+				// request.getSession().setAttribute(JspParameter.USER.getValue(), user);
+				new Thread(new MailUtil(userEmail, userName)).start();
 				return PageEnum.HOME_PAGE;
 			}
 		} catch (AddUserException e) {

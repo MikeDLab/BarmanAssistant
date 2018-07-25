@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
-<html lang="${language}">
+<html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -28,25 +28,36 @@
 				<li class="active">
 					<form action="MainServlet" method="post">
 						<input type="hidden" name="command" value="Home" />
-						<button type="submit"><fmt:message bundle="${locale}"
-						key="homepage.homebutton"/></button>
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.homebutton" />
+						</button>
 					</form>
 				</li>
+				<c:if test="${sessionScope.Role == 'GUEST'}">
 				<li class="active">
 					<form action="MainServlet" method="post">
 						<input type="hidden" name="command" value="SignIn" />
-						<button type="submit">Login</button>
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
 					</form>
 				</li>
+			</c:if>
+			<c:if test="${sessionScope.Role != 'GUEST'}">
 				<li class="active">
 					<form action="MainServlet" method="post">
-						<button type="submit">About Us</button>
+						<input type="hidden" name="command" value="LogOut" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
+					</form>
+				</li>
+			</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">Es</button>
 					</form>
 				</li>
 				<li class="active">
 					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" />
-						<input type="hidden" name="pageId" value="index.jsp" />
+						<input type="hidden" name="locale" value="Ru" /> <input
+							type="hidden" name="pageId" value="index.jsp" />
 						<button type="submit">Русский</button>
 					</form>
 				</li>
@@ -56,14 +67,34 @@
 						<button type="submit">Eng</button>
 					</form>
 				</li>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="UserPanel" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
+					</form>
+				</li>
+			</c:if>
+				<c:if test="${sessionScope.Role == 'ADMIN'}">
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="AdminPanel" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
+					</form>
+				</li>
+			</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
+
+			<h1>${language}</h1>
+
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="homepage.title" />:</label>
+						key="homepage.title" /></label>
 			</h1>
-
+			<h1>${Role}</h1>
+			<h1>${User.userName}</h1>
 		</div>
 		<aside>
 			<nav>
@@ -71,16 +102,48 @@
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="CocktailList" />
-							<button class="side" type="submit">Cocktail List</button>
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.cocktaillist" />
+							</button>
+						</form>
+					</li>
+					<c:if test="${sessionScope.Role == 'ADMIN'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddIngredient" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+							</button>
+						</form>
+					</li>
+					</c:if>
+					<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddCocktail" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+							</button>
+						</form>
+					</li>
+					</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="ShowBarman" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
+							</button>
 						</form>
 					</li>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
-							<button class="side" type="submit">Add Ingredient</button>
+							<input type="hidden" name="command" value="ShowIngredient" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}"
+									key="sidebar.ingredientlist" />
+							</button>
 						</form>
 					</li>
-					<li><a href="/donec/">Barman list</a></li>
 				</ul>
 			</nav>
 			<h2>OUR OFFICES</h2>

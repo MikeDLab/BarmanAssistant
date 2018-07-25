@@ -11,12 +11,13 @@ import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.AddUserException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.validator.UserValidator;
 
 public class AddIngredientCommand implements Command {
 	// Service
 	private static Logger logger = LogManager.getLogger();
-	private IngredientReceiver receiver;
+	private IngredientService receiver;
 
 	public AddIngredientCommand() {
 		// TODO Auto-generated constructor stub
@@ -28,7 +29,7 @@ public class AddIngredientCommand implements Command {
 		String ingredientDescription = request.getParameter(JspParameter.INGREDIENT_DESCRIPTION.getValue());
 		// TODO Auto-generated method stub
 		try {
-			receiver = new IngredientReceiver();
+			receiver = new IngredientService();
 			logger.info("JDBC IS OK");
 		} catch (NoJDBCDriverException e) {
 			logger.info("No JDBC DRIVER");

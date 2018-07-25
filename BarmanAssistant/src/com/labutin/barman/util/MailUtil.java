@@ -1,7 +1,7 @@
 package com.labutin.barman.util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -11,33 +11,37 @@ import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
-
-public class MailReceiver {
+public class MailUtil implements Runnable {
 	private static Logger logger = LogManager.getLogger();
 	private String hostName;
 	private int port;
 	private String emailLogin;
-	private String emailPassword;
-	private final String PATH_TO_PROPERTIES ="/Users/Mike/Documents/EpamJava/XMLParserWeb/resources/EmailConfig.properties";
-	public MailReceiver() {
+	private String emailPassword;	
+	private final static String textEmail = "thank you for registering on our website.";
+	private final static String PATH_TO_PROPERTIES = "/resources/EmailConfig.properties";
+	private String recipientEmail;
+	private String recipientName;
+
+	public MailUtil(String recipientEmail, String recipientName) {
+		this.recipientEmail = recipientEmail;
+		this.recipientName = recipientName;
 		// TODO Auto-generated constructor stub
-		FileInputStream fis;
 		Properties property = new Properties();
 		try {
-			fis = new FileInputStream(PATH_TO_PROPERTIES);
-			property.load(fis);
+			InputStream inputStream = 
+				    getClass().getClassLoader().getResourceAsStream(PATH_TO_PROPERTIES);
+			property.load(inputStream);
 			hostName = property.getProperty("host");
 			port = Integer.parseInt(property.getProperty("smtpPort"));
 			emailLogin = property.getProperty("login");
 			emailPassword = property.getProperty("password");
 		} catch (IOException e) {
-			logger.warn("File no found",e);
+			logger.warn("File no found", e);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public void sendEmail(String toWhom,String userName) {
+	public void run() {
 		// TODO Auto-generated method stub
           try {
         	  Email email = new SimpleEmail();
@@ -46,11 +50,11 @@ public class MailReceiver {
               email.setAuthenticator(new DefaultAuthenticator(emailLogin, emailPassword));
               email.setTLS(true);
               email.setFrom(emailLogin);
-              email.setSubject("Test");
-              email.setMsg(userName);
-              email.addTo(toWhom);
+              email.setSubject("BarmanAssistant");
+              email.setMsg(recipientName+"," + textEmail);
+              email.addTo(recipientEmail);
 			email.send();
-			logger.info("Email to" + userName);
+			logger.info("Email to" + recipientName);
 		} catch (EmailException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

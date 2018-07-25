@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
@@ -32,11 +31,7 @@ public class AddBarmanRating extends AbstractUserSpecification implements UserSp
 				preparedStatement.setInt(1, barmanRating);
 				preparedStatement.setInt(2, barmanId);
 				preparedStatement.setInt(3, userId);
-				resultSet = preparedStatement.executeQuery();
-			}
-			if (resultSet.next()) {
-				users.add(loadUserData(resultSet));
-				return users;
+				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
 		} finally {

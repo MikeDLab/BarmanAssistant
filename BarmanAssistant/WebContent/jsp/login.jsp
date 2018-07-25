@@ -1,4 +1,10 @@
 <!doctype html>
+<%@ page isELIgnored="false"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="resources.locale" var="locale" />
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -22,18 +28,35 @@
 				<li class="active">
 					<form action="MainServlet" method="post">
 						<input type="hidden" name="command" value="Home" />
-						<button type="submit">Home</button>
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.homebutton" />
+						</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<button type="submit">About Us</button>
+					<form action="Es" method="get">
+						<button type="submit">Es</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="Ru" /> <input
+							type="hidden" name="pageId" value="index.jsp" />
+						<button type="submit">Русский</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="En" />
+						<button type="submit">Eng</button>
 					</form>
 				</li>
 			</ul>
 		</nav>
 		<div id="heading">
-			<h1>Login Page</h1>
+			<h1>
+				<fmt:message bundle="${locale}" key="loginpage.title" />
+			</h1>
 		</div>
 		<section>
 			<blockquote>
@@ -45,13 +68,13 @@
 								placeholder="Inter username" maxlength="45"> <input
 								type="password" class="edit" name="password" id="username"
 								placeholder="Inter password" maxlength="45">
-							<button type="submit" class="active">Sing in</button>
+							<button type="submit" class="active"><fmt:message bundle="${locale}" key="loginpage.signin" /></button>
 						</div>
 					</form>
 					<form action="MainServlet" method="post" name="Registration">
 						<div class="form-group">
-						<input type="hidden" name="command" value="Registration" />
-							<button type="submit" class="active">Registration</button>
+							<input type="hidden" name="command" value="Registration" />
+							<button type="submit" class="active"><fmt:message bundle="${locale}" key="loginpage.registration" /></button>
 						</div>
 					</form>
 				</div>

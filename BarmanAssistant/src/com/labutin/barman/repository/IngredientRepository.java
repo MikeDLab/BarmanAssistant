@@ -20,8 +20,6 @@ public class IngredientRepository implements IIngredientRepository {
 	private static Logger logger = LogManager.getLogger();
 	private final static String INSERT_INGREDIENT = "INSERT INTO Ingredient(Ingredient_name, Ingredient_description) VALUES (?,?)";
 	private final static String REMOVE_INGREDIENT = "DELETE FROM Ingredient WHERE Ingredient_name = ?";
-	private ProxyConnection connection;
-	private PreparedStatement preparedStatement;
 
 	private IngredientRepository() {
 		// TODO Auto-generated constructor stub
@@ -39,6 +37,8 @@ public class IngredientRepository implements IIngredientRepository {
 
 	@Override
 	public void add(Ingredient item) {
+		ProxyConnection connection = null;
+		PreparedStatement preparedStatement;
 		// TODO Auto-generated method stub
 		logger.info(item + " try to register");
 		if (query(new FindIngredientByName(item.getIngredientName())) == null) {
@@ -49,11 +49,14 @@ public class IngredientRepository implements IIngredientRepository {
 					preparedStatement.setString(1, item.getIngredientName());
 					preparedStatement.setString(2, item.getIngredientDescription());
 					preparedStatement.executeUpdate();
-					connection.close();
 					logger.info(item + " inseted");
 				}
 			} catch (SQLException e) {
 				logger.info(item + " has problem");
+			} finally {
+				if (connection != null) {
+					connection.close();
+				}
 			}
 		}
 
@@ -61,6 +64,8 @@ public class IngredientRepository implements IIngredientRepository {
 
 	@Override
 	public void remove(Ingredient item) {
+		ProxyConnection connection;
+		PreparedStatement preparedStatement;
 		// TODO Auto-generated method stub
 		connection = PoolConnection.POOL.getConnection();
 		try {

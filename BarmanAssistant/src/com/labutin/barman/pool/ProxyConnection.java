@@ -12,6 +12,7 @@ public class ProxyConnection implements Connection {
 		// TODO Auto-generated constructor stub
 		this.connection = connection;
 	}
+
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		return connection.unwrap(iface);
 	}
@@ -52,19 +53,17 @@ public class ProxyConnection implements Connection {
 		connection.rollback();
 	}
 
-	public void close() throws SQLException {
-	//	PoolConnection.POOL.returnConnection(this);
-		connection.close();
+	public void close(){ 
+		PoolConnection.POOL.returnConnection(this);
 	}
-	void closeInPool() throws SQLException
-	{
+
+	void closeInPool() throws SQLException {
 		connection.close();
 	}
 
 	public boolean isClosed() throws SQLException {
 		return connection.isClosed();
 	}
-	
 
 	public DatabaseMetaData getMetaData() throws SQLException {
 		return connection.getMetaData();
@@ -262,6 +261,7 @@ public class ProxyConnection implements Connection {
 	public void setShardingKey(ShardingKey shardingKey) throws SQLException {
 		connection.setShardingKey(shardingKey);
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -269,6 +269,7 @@ public class ProxyConnection implements Connection {
 		result = prime * result + ((connection == null) ? 0 : connection.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -24,8 +24,6 @@ public class UserRepository implements IUserRepository {
 	private final static String INSERT_USER = "INSERT INTO User(user_login, user_name, user_password, user_email) VALUES (?,?,?,?)";
 	private final static String REMOVE_USER = "DELETE FROM User WHERE user_login = ?";
 	private final static String UPDATE_USER = "UPDATE User SET user_name = ?, user_password = ?, user_email = ?  where user_login = ?";
-	private ProxyConnection connection;
-	private PreparedStatement preparedStatement;
 
 	private UserRepository() {
 		// TODO Auto-generated constructor stub
@@ -43,8 +41,9 @@ public class UserRepository implements IUserRepository {
 
 	@Override
 	public void add(User item) throws AddUserException {
-		// TODO Auto-generated method stub
-		if (query(new FindUserByLogin(item.getUserLogin())) == null) {
+		ProxyConnection connection = null;
+		PreparedStatement preparedStatement;
+	//	if (query(new FindUserByLogin(item.getUserLogin())) == null) {
 			logger.info(item + " try to register");
 			try {
 				connection = PoolConnection.POOL.getConnection();
@@ -55,19 +54,27 @@ public class UserRepository implements IUserRepository {
 					preparedStatement.setString(3, DigestUtils.md5Hex(item.getUserPassword()));
 					preparedStatement.setString(4, item.getUserEmail());
 					preparedStatement.executeUpdate();
-					connection.close();
 					logger.info(item + " registered");
 				}
 			} catch (SQLException e) {
 				logger.info(item + " has problem");
 				throw new AddUserException();
 			}
-		}
+			finally {
+				if(connection != null)
+				{
+					connection.close();
+				}
+			}
+	//	}
+		//logger.info("User: " + item + "cannot register");
 		
 	}
 
 	@Override
 	public void remove(User item) throws RemoveUserException {
+		ProxyConnection connection;
+		PreparedStatement preparedStatement;
 		connection = PoolConnection.POOL.getConnection();
 		try {
 			preparedStatement = connection.prepareStatement(REMOVE_USER);
@@ -82,6 +89,8 @@ public class UserRepository implements IUserRepository {
 
 	@Override
 	public void update(User item) throws UpdateUserException {
+		ProxyConnection connection;
+		PreparedStatement preparedStatement;
 		connection = PoolConnection.POOL.getConnection();
 		try {
 			preparedStatement = connection.prepareStatement(UPDATE_USER);

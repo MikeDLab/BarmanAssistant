@@ -6,16 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.labutin.barman.entity.Ingredient;
+import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
-public class FindIngredientByName extends AbstractIngredientSpecification implements IngredientSpecification {
-	private String name;
-	private final static String FIND_INGREDIENT_BY_NAME = "SELECT Ingredient_id,Ingredient_name,Ingredient_description FROM Ingredient WHERE Ingredient_name = ?";
+public class FindIngredientSet extends AbstractIngredientSpecification implements IngredientSpecification {
+	private final static String FIND_INGREDIENT_SET = "SELECT * FROM Ingredient";
 
-	public FindIngredientByName(String name) {
-		// TODO Auto-generated constructor stubt
-		this.name = name;
+	public FindIngredientSet() {
 	}
 
 	@Override
@@ -24,25 +22,22 @@ public class FindIngredientByName extends AbstractIngredientSpecification implem
 		ProxyConnection connection = null;
 		try {
 			connection = PoolConnection.POOL.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(FIND_INGREDIENT_BY_NAME);
+			PreparedStatement preparedStatement = connection.prepareStatement(FIND_INGREDIENT_SET);
 			if (preparedStatement != null) {
-				preparedStatement.setString(1, name);
 				resultSet = preparedStatement.executeQuery();
 			}
-			if (resultSet.next()) {
+			connection.close();
+			while (resultSet.next()) {
 				ingredients.add(loadIngredientData(resultSet));
-				return ingredients;
 			}
 		} catch (SQLException e) {
 		} finally {
+
 			if (connection != null) {
-				if(connection != null)
-				{
-					connection.close();
-				}
+				connection.close();
 			}
 			closeResultSet();
 		}
-		return null;
+		return ingredients;
 	}
 }

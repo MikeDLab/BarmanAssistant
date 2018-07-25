@@ -11,7 +11,7 @@ import com.labutin.barman.pool.ProxyConnection;
 
 public class FindUserByLogin extends AbstractUserSpecification implements UserSpecification {
 	private String login;
-	private final static String FIND_USER_BY_LOGIN = "SELECT user_login FROM User WHERE user_login = ?";
+	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role FROM User WHERE user_login = ?";
 
 	public FindUserByLogin(String login) {
 		// TODO Auto-generated constructor stubt
@@ -21,8 +21,10 @@ public class FindUserByLogin extends AbstractUserSpecification implements UserSp
 	@Override
 	public Set<User> querry() {
 		Set<User> users = new HashSet<>();
-		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN)) {
+		ProxyConnection connection = null;
+		try {
+			connection = PoolConnection.POOL.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN);
 			if (preparedStatement != null) {
 				preparedStatement.setString(1, login);
 				resultSet = preparedStatement.executeQuery();
@@ -31,8 +33,14 @@ public class FindUserByLogin extends AbstractUserSpecification implements UserSp
 				users.add(loadUserData(resultSet));
 				return users;
 			}
+
 		} catch (SQLException e) {
 		} finally {
+
+			if (connection != null) {
+				connection.close();
+			}
+
 			closeResultSet();
 		}
 		return null;

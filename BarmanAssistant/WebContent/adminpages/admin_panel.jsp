@@ -34,21 +34,25 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="SignIn" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="LogOut" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="SignIn" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="LogOut" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
 						<button type="submit">Es</button>
@@ -67,21 +71,33 @@
 						<button type="submit">Eng</button>
 					</form>
 				</li>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="UserPanel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="AdminPanel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AdminPanel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
 			<h1>${language}</h1>
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="addingredientpage.title" />:</label>
+						key="adminpanel.title" />:</label>
 			</h1>
 			<h1>${Role}</h1>
 			<h1>${User.userName}</h1>
@@ -98,24 +114,24 @@
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="AddIngredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddCocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="AddCocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -129,8 +145,7 @@
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowIngredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
@@ -144,17 +159,32 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
-					<form action="MainServlet" method="post" name="PushIngredient">
-						<div class="form-group">
-							<input type="hidden" name="command" value="PushIngredient" /> <input
-								type="text" class="edit" name="ingredientname" id="name"
-								placeholder="Inter name" maxlength="45">
-							<textarea rows="10" cols="45" name="ingredientdesc"
-								maxlength="255">Add description</textarea>
-							<button type="submit" class="active">Add</button>
-						</div>
-					</form>
+				<div class="ingredient">
+					<li class="inactive">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="ShowUserList" />
+							<button type="submit">
+
+								<fmt:message bundle="${locale}" key="adminpanel.barmanlist" />
+							</button>
+						</form>
+					</li>
+					<li class="inactive">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddIngredient" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="homepage.addingredientpage" />
+							</button>
+						</form>
+					</li>
+					<li class="inactive">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddIngredient" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="homepage.addingredientpage" />
+							</button>
+						</form>
+					</li>
 				</div>
 			</blockquote>
 		</section>

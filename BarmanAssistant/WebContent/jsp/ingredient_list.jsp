@@ -78,10 +78,9 @@
 			</ul>
 		</nav>
 		<div id="heading">
-			<h1>${language}</h1>
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="addingredientpage.title" />:</label>
+						key="ingredientlist.title" /></label>
 			</h1>
 			<h1>${Role}</h1>
 			<h1>${User.userName}</h1>
@@ -119,7 +118,7 @@
 					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowBarmanList" />
+							<input type="hidden" name="command" value="ShowBarman" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
 							</button>
@@ -144,17 +143,28 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
-					<form action="MainServlet" method="post" name="PushIngredient">
-						<div class="form-group">
-							<input type="hidden" name="command" value="PushIngredient" /> <input
-								type="text" class="edit" name="ingredientname" id="name"
-								placeholder="Inter name" maxlength="45">
-							<textarea rows="10" cols="45" name="ingredientdesc"
-								maxlength="255">Add description</textarea>
-							<button type="submit" class="active">Add</button>
-						</div>
-					</form>
+				<div class="ingredient">
+					<c:if test="${!empty setIngredient}">
+						<table class="table table-bordered">
+							<tr class="bg-info row">
+								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
+								<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
+							</tr>
+							<c:forEach items="${setIngredient}" var="setIngredient">
+								<tr class="row">
+									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setIngredient.ingredientName}</td>
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientDescription}</td>
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><li
+										class="active">
+											<form action="MainServlet" method="get">
+												<input type="hidden" name="locale" value="Ru" />
+												<button type="submit">Edit</button>
+											</form>
+									</li></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</c:if>
 				</div>
 			</blockquote>
 		</section>

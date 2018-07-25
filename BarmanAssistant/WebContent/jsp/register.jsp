@@ -1,4 +1,10 @@
 <!doctype html>
+<%@ page isELIgnored="false"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="resources.locale" var="locale" />
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -17,28 +23,44 @@
 		<header>
 			<img src="images/logo.png" alt="Whitesquare logo">
 		</header>
-		<nav>
+			<nav>
 			<ul class="top-menu">
 				<li class="active">
 					<form action="MainServlet" method="post">
 						<input type="hidden" name="command" value="Home" />
-						<button type="submit">Home</button>
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.homebutton" />
+						</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="post">
-						<button type="submit">About Us</button>
+					<form action="Es" method="get">
+						<button type="submit">Es</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="Ru" /> <input
+							type="hidden" name="pageId" value="index.jsp" />
+						<button type="submit">Русский</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="MainServlet" method="get">
+						<input type="hidden" name="locale" value="En" />
+						<button type="submit">Eng</button>
 					</form>
 				</li>
 			</ul>
 		</nav>
 		<div id="heading">
-			<h1>Registration Page</h1>
+			<h1><fmt:message bundle="${locale}" key="registerpage.title" /></h1>
 		</div>
 		<section>
 			<blockquote>
 				<div class="col-6 col-sm-3">
 					<form action="MainServlet" method="post" name="register">
+						<p>${Errormessage}</p>
 						<div class="form-group">
 							<input type="hidden" name="command" value="Register" /> <input
 								type="text" class="edit" name="userlogin" id="userlogin"
@@ -49,7 +71,7 @@
 								placeholder="user@example.com" maxlength="45"><input
 								type="password" class="edit" name="password" id="username"
 								placeholder="Inter password" maxlength="45">
-							<button type="submit" name="Register" class="active">Register</button>
+							<button type="submit" name="Register" class="active"><fmt:message bundle="${locale}" key="registerpage.registration" /></button>
 						</div>
 					</form>
 				</div>

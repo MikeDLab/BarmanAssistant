@@ -5,14 +5,19 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
-public class FindBarmanSet extends AbstractUserSpecification implements UserSpecification {
-	private final static String FIND_BARMAN_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role FROM User WHERE user_role=1 AND user_id != ?";
+public class DowngradeBarmanToUser extends AbstractUserSpecification implements UserSpecification {
+	private static Logger logger = LogManager.getLogger();
+	private final static String DOWNGRADE_TO_USER = "UPDATE  User Set user_role=2 WHERE user_id = ?";
 	private int userId;
-	public FindBarmanSet(int userId) {
+
+	public DowngradeBarmanToUser(int userId) {
 		this.userId = userId;
 	}
 
@@ -20,15 +25,13 @@ public class FindBarmanSet extends AbstractUserSpecification implements UserSpec
 	public Set<User> querry() {
 		Set<User> users = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(FIND_BARMAN_SET)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(DOWNGRADE_TO_USER)) {
 			if (preparedStatement != null) {
 				preparedStatement.setInt(1, userId);
-				resultSet = preparedStatement.executeQuery();
-			}
-			while (resultSet.next()) {
-				users.add(loadUserData(resultSet));
+				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
+			logger.info("Cannot downgrade barman to user with user_id=" + userId);
 		} finally {
 			closeResultSet();
 		}
