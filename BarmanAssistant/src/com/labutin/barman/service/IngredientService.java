@@ -9,7 +9,9 @@ import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.repository.IngredientRepository;
 import com.labutin.barman.repository.UserRepository;
-import com.labutin.barman.specification.FindIngredientSet;
+import com.labutin.barman.specification.ingredient.AddIngredientHasCocktail;
+import com.labutin.barman.specification.ingredient.FindIngredientSet;
+import com.labutin.barman.specification.ingredient.FindIngredientSetByCocktailId;
 
 public class IngredientService {
 	private final IngredientRepository ingredientRepository;
@@ -18,15 +20,6 @@ public class IngredientService {
 		ingredientRepository = IngredientRepository.getInstance();
 	}
 
-//	public User registration(String userLogin, String userName, String userPassword, String userEmail) throws AddUserException {
-//		User user = new User();
-//		user.setUserLogin(userLogin);
-//		user.setUserName(userName);
-//		user.setUserEmail(userEmail);
-//		user.setUserPassword(userPassword);
-//		ingredientRepository.add(user);
-//		return user;
-//	}
 	public Ingredient add(String ingredientName, String ingredientDescription) {
 		Ingredient ingredient = new Ingredient();
 		ingredient.setIngredientName(ingredientName);
@@ -38,12 +31,13 @@ public class IngredientService {
 	public Set<Ingredient> receiveIngredient() {
 		return ingredientRepository.query(new FindIngredientSet());
 	}
-//	public User login(String login,String password)
-//	{
-//		User user = new User();
-//		user.setName(login);
-//		user.setPassword(password);
-//		user = userRepository.query(new FindUserByLogin(login)).iterator().next();
-//		return user;	
-//	}
+	public void insertIngredientCocktail(int ingredientId,int cocktailId)
+	{
+		ingredientRepository.query(new AddIngredientHasCocktail(ingredientId, cocktailId));
+	}
+	public Set<Ingredient> receiveIngredientByCocktailId(int cocktailId)
+	{
+		return ingredientRepository.query(new FindIngredientSetByCocktailId(cocktailId));
+	}
+
 }

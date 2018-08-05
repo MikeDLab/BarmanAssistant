@@ -9,6 +9,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.mysql.jdbc.Driver;
@@ -25,6 +28,7 @@ public enum PoolConnection {
 	private String URL;
 	private String password;
 	private int poolSize = 10;
+	private static Logger logger = LogManager.getLogger();
 	private AtomicBoolean isCreated = new AtomicBoolean(false);
 
 	public ProxyConnection getConnection() {
@@ -37,12 +41,12 @@ public enum PoolConnection {
 				}
 				connection = availableConnetion.take();
 				unavailableConnetion.put(connection);
-				System.out.println("Connctions: " + availableConnetion.size());
-				System.out.println("Unvaible: " + unavailableConnetion.size());
+				logger.info("Connections: " + availableConnetion.size());
+				logger.info("Unvaible: " + unavailableConnetion.size());
 				return connection;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.info("Interruptedexception",e);
 			}
 		}
 		throw new RuntimeException();
@@ -62,13 +66,10 @@ public enum PoolConnection {
 	public void returnConnection(ProxyConnection connection) {
 
 		try {
-			if (!connection.getAutoCommit()) {
-				connection.setAutoCommit(true);
-			}
 			unavailableConnetion.remove(connection);
 			availableConnetion.put(connection);
-		} catch (SQLException | InterruptedException e) {
-			System.out.println("Plobem when returned");
+		} catch (InterruptedException e) {
+			logger.info("Connection ploblem",e);
 		}
 	}
 

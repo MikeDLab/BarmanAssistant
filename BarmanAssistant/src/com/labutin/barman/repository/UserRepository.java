@@ -16,8 +16,8 @@ import com.labutin.barman.exception.RemoveUserException;
 import com.labutin.barman.exception.UpdateUserException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
-import com.labutin.barman.specification.FindUserByLogin;
 import com.labutin.barman.specification.Specification;
+import com.labutin.barman.specification.user.FindUserByLogin;
 
 public class UserRepository implements IUserRepository {
 	private static Logger logger = LogManager.getLogger();
@@ -43,32 +43,28 @@ public class UserRepository implements IUserRepository {
 	public void add(User item) throws AddUserException {
 		ProxyConnection connection = null;
 		PreparedStatement preparedStatement;
-	//	if (query(new FindUserByLogin(item.getUserLogin())) == null) {
-			logger.info(item + " try to register");
-			try {
-				connection = PoolConnection.POOL.getConnection();
-				preparedStatement = connection.prepareStatement(INSERT_USER);
-				if (preparedStatement != null) {
-					preparedStatement.setString(1, item.getUserLogin());
-					preparedStatement.setString(2, item.getUserName());
-					preparedStatement.setString(3, DigestUtils.md5Hex(item.getUserPassword()));
-					preparedStatement.setString(4, item.getUserEmail());
-					preparedStatement.executeUpdate();
-					logger.info(item + " registered");
-				}
-			} catch (SQLException e) {
-				logger.info(item + " has problem");
-				throw new AddUserException();
+		logger.info(item + " try to register");
+		try {
+			connection = PoolConnection.POOL.getConnection();
+			preparedStatement = connection.prepareStatement(INSERT_USER);
+			if (preparedStatement != null) {
+				preparedStatement.setString(1, item.getUserLogin());
+				preparedStatement.setString(2, item.getUserName());
+				preparedStatement.setString(3, DigestUtils.md5Hex(item.getUserPassword()));
+				preparedStatement.setString(4, item.getUserEmail());
+				preparedStatement.executeUpdate();
+				logger.info(item + " registered");
 			}
-			finally {
-				if(connection != null)
-				{
-					connection.close();
-				}
+		} catch (SQLException e) {
+			logger.info(item + " has problem");
+			throw new AddUserException();
+		} finally {
+			if (connection != null) {
+				connection.close();
 			}
-	//	}
-		//logger.info("User: " + item + "cannot register");
-		
+		}
+		// logger.info("User: " + item + "cannot register");
+
 	}
 
 	@Override

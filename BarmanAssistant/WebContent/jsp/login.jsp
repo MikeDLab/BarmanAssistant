@@ -62,6 +62,7 @@
 			<blockquote>
 				<div class="col-6 col-sm-3">
 					<form action="MainServlet" method="post" name="register">
+						<p>${Errormessage}</p>
 						<div class="form-group">
 							<input type="hidden" name="command" value="Login" /> <input
 								type="text" class="edit" name="username" id="username"

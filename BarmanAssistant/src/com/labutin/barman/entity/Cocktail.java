@@ -1,27 +1,29 @@
 package com.labutin.barman.entity;
 
 public class Cocktail {
-	private int cocktaiId;
+	private int cocktailId;
 	private String cocktailName;
 	private int userId;
 	private String cocktailDescription;
 	private int cocktailVol;
-	public Cocktail(int cocktaiId, String cocktailName, int userId, String cocktailDescription, int cocktailVol) {
+	private boolean isPublished;
+	public Cocktail(int cocktaiId, String cocktailName, int userId, String cocktailDescription, int cocktailVol, boolean isPublished) {
 		super();
-		this.cocktaiId = cocktaiId;
+		this.cocktailId = cocktaiId;
 		this.cocktailName = cocktailName;
 		this.userId = userId;
 		this.cocktailDescription = cocktailDescription;
 		this.cocktailVol = cocktailVol;
+		this.isPublished = isPublished;
 	}
 	public Cocktail() {
 		// TODO Auto-generated constructor stub
 	}
-	public int getCocktaiId() {
-		return cocktaiId;
+	public int getCocktailId() {
+		return cocktailId;
 	}
-	public void setCocktaiId(int cocktaiId) {
-		this.cocktaiId = cocktaiId;
+	public void setCocktailId(int cocktailId) {
+		this.cocktailId = cocktailId;
 	}
 	public String getCocktailName() {
 		return cocktailName;
@@ -47,11 +49,17 @@ public class Cocktail {
 	public void setCocktailVol(int cocktailVol) {
 		this.cocktailVol = cocktailVol;
 	}
+	public boolean getIsPublished() {
+		return isPublished;
+	}
+	public void setIsPublished(boolean isPublished) {
+		this.isPublished = isPublished;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + cocktaiId;
+		result = prime * result + cocktailId;
 		result = prime * result + ((cocktailDescription == null) ? 0 : cocktailDescription.hashCode());
 		result = prime * result + ((cocktailName == null) ? 0 : cocktailName.hashCode());
 		result = prime * result + cocktailVol;
@@ -67,7 +75,7 @@ public class Cocktail {
 		if (getClass() != obj.getClass())
 			return false;
 		Cocktail other = (Cocktail) obj;
-		if (cocktaiId != other.cocktaiId)
+		if (cocktailId != other.cocktailId)
 			return false;
 		if (cocktailDescription == null) {
 			if (other.cocktailDescription != null)
@@ -87,7 +95,7 @@ public class Cocktail {
 	}
 	@Override
 	public String toString() {
-		return "Cocktail [cocktaiId=" + cocktaiId + ", cocktailName=" + cocktailName + ", userId=" + userId
+		return "Cocktail [cocktaiId=" + cocktailId + ", cocktailName=" + cocktailName + ", userId=" + userId
 				+ ", cocktailDescription=" + cocktailDescription + ", cocktailVol=" + cocktailVol + "]";
 	}
 	

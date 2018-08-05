@@ -1,6 +1,7 @@
 package com.labutin.barman.repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
@@ -13,14 +14,16 @@ import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
-import com.labutin.barman.specification.FindIngredientByName;
-import com.labutin.barman.specification.FindUserByLogin;
 import com.labutin.barman.specification.Specification;
+import com.labutin.barman.specification.ingredient.FindIngredientByName;
+import com.labutin.barman.specification.user.FindUserByLogin;
+import com.mysql.jdbc.Statement;
 
 public class CocktailRepository implements IСocktailRepository {
 	private static Logger logger = LogManager.getLogger();
-	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol) VALUES (?,?,?,?)";
+	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished) VALUES (?,?,?,?,?)";
 	private final static String REMOVE_COCKTAIL = "DELETE FROM Ingredient WHERE Ingredient_name = ?";
+
 	private CocktailRepository() {
 		// TODO Auto-generated constructor stub
 	}
@@ -41,23 +44,29 @@ public class CocktailRepository implements IСocktailRepository {
 		PreparedStatement preparedStatement;
 		// TODO Auto-generated method stub
 		logger.info(item + " try to register");
-//		if (query(new FindIngredientByName(item.getIngredientName())) == null) {
 		try {
 			connection = PoolConnection.POOL.getConnection();
-			preparedStatement = connection.prepareStatement(INSERT_COCKTAIL);
+			preparedStatement = connection.prepareStatement(INSERT_COCKTAIL,Statement.RETURN_GENERATED_KEYS);
 			if (preparedStatement != null) {
 				preparedStatement.setString(1, item.getCocktailName());
 				preparedStatement.setInt(2, item.getUserId());
 				preparedStatement.setString(3, item.getCocktailDescription());
 				preparedStatement.setInt(4, item.getCocktailVol());
-				preparedStatement.executeUpdate();
+				preparedStatement.setBoolean(5, item.getIsPublished());
+				int affectedRows = preparedStatement.executeUpdate();
+					try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+						if (generatedKeys.next()) {
+							item.setCocktailId(generatedKeys.getInt(1));
+						} else {
+							throw new SQLException("Creating user failed, no ID obtained.");
+						}
+					}
 				connection.close();
 				logger.info(item + " inseted");
 			}
 		} catch (SQLException e) {
 			logger.info(item + " has problem");
 		}
-//		}
 	}
 
 	@Override

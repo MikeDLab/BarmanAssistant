@@ -1,23 +1,26 @@
 package com.labutin.barman.command;
 
 public enum TypeCommand{
-	Home("Home"),
-	UserPanel("UserPanel"),
-	LogOut("LogOut"),
-	SignIn("SignIn"),
-	AdminPanel("AdminPanel"),
-	AddCocktail("AddCocktail"),
-	AddIngredient("AddIngredient"),
-	Login("Login"),
-	Registration("Registration"),
-	Register("Register"),
-	PushIngredient("PushIngredient"),
-	ShowIngredient("ShowIngredient"),
-	ShowBarman("ShowBarman"),
-	ShowUserList("ShowUserList"),
-	UpdateToBarman("UpdateToBarman"),
-	DowngradeToUser("DowngradeToUser"),
-	AddBarmanRating("AddBarmanRating");
+	HOME("Home"),
+	USERPANEL("UserPanel"),
+	LOGOUT("LogOut"),
+	SIGNIN("SignIn"),
+	ADMINPANEL("AdminPanel"),
+	ADDCOCKTAIL("AddCocktail"),
+	ADDINGREDIENT("AddIngredient"),
+	LOGIN("Login"),
+	REGISTRATION("Registration"),
+	REGISTER("Register"),
+	PUSHINGREDIENT("PushIngredient"),
+	SHOWINGREDIENT("ShowIngredient"),
+	SHOWBARMAN("ShowBarman"),
+	SHOWUSERLIST("ShowUserList"),
+	UPDATETOBARMAN("UpdateToBarman"),
+	DOWNGRADETOUSER("DowngradeToUser"),
+	ADDBARMANRATING("AddBarmanRating"),
+	PUSHCOCKTAIL("PushCocktail"),
+	COCKTAILLIST("CocktailList"),
+	COCKTAILINFO("CocktailInfo");
 	private String value;
 	private TypeCommand(String value)
 	{

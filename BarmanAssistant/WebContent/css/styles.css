@@ -1,9 +1,9 @@
 body {
 	margin: 0;
-	color: #8f8f8f;
+	color: white;
 	border-top: 5px solid #7e7e7e;
 	background: #f8f8f8 url(../images/bg.png);
-	font: 12px Tahoma, sans-serif;
+	font: 18px Tahoma, sans-serif;
 }
 
 img {

@@ -5,20 +5,22 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.labutin.barman.command.UpdateToBarmanCommand;
+import com.labutin.barman.command.user.UpdateToBarmanCommand;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.AddUserException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.repository.UserRepository;
-import com.labutin.barman.specification.AddBarmanRating;
-import com.labutin.barman.specification.DowngradeBarmanToUser;
-import com.labutin.barman.specification.FindBarmanSet;
-import com.labutin.barman.specification.FindIngredientSet;
-import com.labutin.barman.specification.FindUserByLoginAndPassword;
-import com.labutin.barman.specification.FindUserSet;
-import com.labutin.barman.specification.UpdateUserToBarman;
+import com.labutin.barman.specification.ingredient.FindIngredientSet;
+import com.labutin.barman.specification.user.AddBarmanRating;
+import com.labutin.barman.specification.user.DowngradeBarmanToUser;
+import com.labutin.barman.specification.user.FindBarmanSet;
+import com.labutin.barman.specification.user.FindCocktailAuthrorSet;
+import com.labutin.barman.specification.user.FindUserById;
+import com.labutin.barman.specification.user.FindUserByLoginAndPassword;
+import com.labutin.barman.specification.user.FindUserSet;
+import com.labutin.barman.specification.user.UpdateUserToBarman;
 
 public class UserService {
 	private static Logger logger = LogManager.getLogger();
@@ -40,8 +42,10 @@ public class UserService {
 	}
 
 	public User login(String login, String password) {
-		User user = new User();
-		user = userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().next();
+		User user = null;
+		if (userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().hasNext()) {
+			user = (User) userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().next();
+		}
 		return user;
 	}
 
@@ -56,11 +60,20 @@ public class UserService {
 	public void updateToBarman(int userId) {
 		userRepository.query(new UpdateUserToBarman(userId));
 	}
+
 	public void downgradeToUser(int userId) {
 		userRepository.query(new DowngradeBarmanToUser(userId));
 	}
-	public void addBarmanRating(int barmanRating,int barmanId,int userId)
-	{
+
+	public void addBarmanRating(int barmanRating, int barmanId, int userId) {
 		userRepository.query(new AddBarmanRating(barmanRating, barmanId, userId));
+	}
+	public Set<User> receiveCocktailAuthorSet()
+	{
+		return userRepository.query(new FindCocktailAuthrorSet());
+	}
+	public User receiveUserById(int userId)
+	{
+		return (User) userRepository.query(new FindUserById(userId)).iterator().next();
 	}
 }

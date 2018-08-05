@@ -12,9 +12,9 @@ import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
-import com.labutin.barman.specification.FindIngredientByName;
-import com.labutin.barman.specification.FindUserByLogin;
 import com.labutin.barman.specification.Specification;
+import com.labutin.barman.specification.ingredient.FindIngredientByName;
+import com.labutin.barman.specification.user.FindUserByLogin;
 
 public class IngredientRepository implements IIngredientRepository {
 	private static Logger logger = LogManager.getLogger();

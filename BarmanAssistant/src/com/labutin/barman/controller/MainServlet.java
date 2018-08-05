@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.labutin.barman.builder.CommandBuilderByType;
+import com.labutin.barman.builder.CommandBuilder;
 import com.labutin.barman.builder.Director;
-import com.labutin.barman.builder.TypeCommandBuilderByString;
+import com.labutin.barman.builder.TypeCommandBuilder;
 import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.command.TypeCommand;
@@ -44,9 +44,9 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
-		TypeCommandBuilderByString typeBuilder = new TypeCommandBuilderByString(request.getParameter("command"));
+		TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
 		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
-		CommandBuilderByType commandBuilder = new CommandBuilderByType(commandType);
+		CommandBuilder commandBuilder = new CommandBuilder(commandType);
 		Command command = Director.createCommand(commandBuilder);
 		PageEnum page = command.execute(request, response);
 		request.getRequestDispatcher(page.getValue()).forward(request, response);

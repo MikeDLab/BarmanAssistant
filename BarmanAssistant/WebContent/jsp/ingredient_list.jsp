@@ -96,6 +96,23 @@
 							</button>
 						</form>
 					</li>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="ShowBarman" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
+							</button>
+						</form>
+					</li>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="ShowIngredient" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}"
+									key="sidebar.ingredientlist" />
+							</button>
+						</form>
+					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -116,23 +133,6 @@
 						</form>
 					</li>
 					</c:if>
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowBarman" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
-							</button>
-						</form>
-					</li>
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
-							</button>
-						</form>
-					</li>
 				</ul>
 			</nav>
 			<h2>OUR OFFICES</h2>

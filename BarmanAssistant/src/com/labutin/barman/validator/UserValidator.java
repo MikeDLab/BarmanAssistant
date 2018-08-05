@@ -37,7 +37,6 @@ public class UserValidator {
 	{
 		pattern = Pattern.compile(USER_PASSWORD_REGEX);
 		matcher = pattern.matcher(userPassword);
-		System.out.println(userPassword);
 		return userPassword.matches(userPassword);
 	}
 }

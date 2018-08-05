@@ -43,9 +43,6 @@ public class SecurityFilter implements Filter {
 			HttpServletRequest req = (HttpServletRequest) arg0;
 			// Раскладываем адрес на составляющие
 			String[] list = req.getRequestURI().split("/");
-			for (String k : list) {
-				System.out.println(k);
-			}
 			// Извлекаем наименование страницы
 			String page = null;
 			if (list[list.length - 1].indexOf(".jsp") > 0) {
@@ -57,11 +54,9 @@ public class SecurityFilter implements Filter {
 				// login.jsp или registration.jsp, то передаем управление
 				// следующему элементу цепочки фильтра
 				if (pages.contains("login.jsp") || pages.contains("register.jsp")) {
-					System.out.println("Tut");
 					arg2.doFilter(arg0, arg1);
 					return;
 				} else {
-					System.out.println("Forward");
 					// Перенаправление на страницу login.jsp
 					ServletContext ctx = filterConfig.getServletContext();
 					arg0.getRequestDispatcher(PageEnum.HOME_PAGE.getValue()).forward(arg0, arg1);

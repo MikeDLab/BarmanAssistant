@@ -53,7 +53,7 @@ public class LocaleFilter implements Filter {
 			// Раскладываем адрес на составляющие
 			String[] list = req.getRequestURI().split("/");
 			for (String k : list) {
-				if (k.equals("Es")) {
+				if ("Es".equals(k)) {
 					Locale l = new Locale(k);
 					ResourceBundle rb = ResourceBundle.getBundle("resources.locale", l);
 					request.getSession(true).setAttribute("language", k);

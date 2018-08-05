@@ -113,29 +113,9 @@
 							</button>
 						</form>
 					</li>
-					<c:if test="${sessionScope.Role == 'ADMIN'}">
-						<li class="active">
-							<form action="MainServlet" method="post">
-								<input type="hidden" name="command" value="AddIngredient" />
-								<button class="side" type="submit">
-									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-								</button>
-							</form>
-						</li>
-					</c:if>
-					<c:if test="${sessionScope.Role != 'GUEST'}">
-						<li class="active">
-							<form action="MainServlet" method="post">
-								<input type="hidden" name="command" value="AddCocktail" />
-								<button class="side" type="submit">
-									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-								</button>
-							</form>
-						</li>
-					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowBarmanList" />
+							<input type="hidden" name="command" value="ShowBarman" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
 							</button>
@@ -145,10 +125,31 @@
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowIngredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}"
+									key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
+					<c:if test="${sessionScope.Role == 'ADMIN'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddIngredient" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+							</button>
+						</form>
+					</li>
+					</c:if>
+					<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddCocktail" />
+							<button class="side" type="submit">
+								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+							</button>
+						</form>
+					</li>
+					</c:if>
 				</ul>
 			</nav>
 			<h2>OUR OFFICES</h2>
