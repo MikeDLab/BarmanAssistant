@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html>
@@ -74,6 +75,14 @@
 						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
 					</form>
 				</li>
+				</c:if>
+				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="BarmanPanel" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
+					</form>
+				</li>
 			</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
 				<li class="active">
@@ -107,6 +116,7 @@
 							</button>
 						</form>
 					</li>
+					<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowBarman" />
@@ -115,6 +125,7 @@
 							</button>
 						</form>
 					</li>
+					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowIngredient" />
@@ -152,7 +163,7 @@
 					alt="Our offices">
 			</p>
 		</aside>
-		<%-- <section>
+		 <section>
 			<blockquote>
 				<form method="post">
 
@@ -161,9 +172,9 @@
 				<p>&ldquo;QUISQUE IN ENIM VELIT, AT DIGNISSIM EST. NULLA UL
 					CORPER, DOLOR AC PELLENTESQUE PLACERAT, JUSTO TELLUS GRAVIDA ERAT,
 					VEL PORTTITOR LIBERO ERAT.&rdquo;</p>
-				<cite>John Doe, Lorem Ipsum</cite>
+				<ctg:info-tag/>
 			</blockquote>
-
+<!-- 
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 				Aenean non neque ac sem accumsan rhoncus ut ut turpis. In hac
 				habitasse platea dictumst. Proin eget nisi erat, et feugiat arcu.
@@ -268,8 +279,9 @@
 						Darryl Brunton<span>ui designer</span>
 					</figcaption>
 				</figure>
-			</div>
-		</section> --%>
+			</div -->>
+		</section> 
 	</div>
+	
 </body>
 </html>

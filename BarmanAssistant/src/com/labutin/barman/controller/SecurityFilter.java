@@ -40,6 +40,7 @@ public class SecurityFilter implements Filter {
 		// Если фильтр активной, то выполнить проверку
 		System.out.println("SecurityFilter");
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
+			System.out.println("Filert usss");
 			HttpServletRequest req = (HttpServletRequest) arg0;
 			// Раскладываем адрес на составляющие
 			String[] list = req.getRequestURI().split("/");
@@ -47,9 +48,10 @@ public class SecurityFilter implements Filter {
 			String page = null;
 			if (list[list.length - 1].indexOf(".jsp") > 0) {
 				page = list[list.length - 1];
+				System.out.println(page);
 			}
 			// Если открывается главная страница, то выполняем проверку
-			if ((page != null) && page.equalsIgnoreCase("add_ingredient.jsp")) {
+			if ((page != null) && page.equalsIgnoreCase("index.jsp")) {
 				// Если была предварительно открыта одна из страниц
 				// login.jsp или registration.jsp, то передаем управление
 				// следующему элементу цепочки фильтра
@@ -60,8 +62,8 @@ public class SecurityFilter implements Filter {
 					// Перенаправление на страницу login.jsp
 					ServletContext ctx = filterConfig.getServletContext();
 					arg0.getRequestDispatcher(PageEnum.HOME_PAGE.getValue()).forward(arg0, arg1);
-//					RequestDispatcher dispatcher = ctx.getRequestDispatcher("index.jsp");
-//					dispatcher.forward(arg0, arg1);
+					RequestDispatcher dispatcher = ctx.getRequestDispatcher("index.jsp");
+					dispatcher.forward(arg0, arg1);
 					return;
 				}
 			} else if (page != null) {

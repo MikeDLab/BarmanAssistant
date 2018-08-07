@@ -16,16 +16,17 @@ import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.CocktailService;
 import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.service.UserService;
 
 
 
-public class ShowCocktailList implements Command {
+public class ShowPublishedCocktailList implements Command {
 	private CocktailService receiverCocktail;
 	private UserService receiverUser;
-	public ShowCocktailList() {
+	public ShowPublishedCocktailList() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,7 +34,7 @@ public class ShowCocktailList implements Command {
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			receiverCocktail = new CocktailService();
-			Set<Cocktail> setCocktail = receiverCocktail.receiveCocktail();
+			Set<Cocktail> setCocktail = receiverCocktail.receivePublishedCocktail();
 			Set<User> setUser =null;
 			if(setCocktail != null)
 			{
@@ -55,9 +56,8 @@ public class ShowCocktailList implements Command {
 			}
 			System.out.println("Map size: " + userCocktailMap.keySet().size());
 			request.setAttribute("userCocktailMap", userCocktailMap);
-			request.setAttribute("setCocktail", setCocktail);
-			
-			} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+			request.setAttribute("setCocktail", setCocktail);	
+			} catch (ServiceException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}

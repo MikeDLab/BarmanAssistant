@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
@@ -25,7 +26,7 @@ public class RedirectToAddCocktailPage implements Command {
 			receiver = new IngredientService();		
 			Set<Ingredient> setIngredient = receiver.receiveIngredient();
 			request.setAttribute("setIngredient", setIngredient);
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+		}catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

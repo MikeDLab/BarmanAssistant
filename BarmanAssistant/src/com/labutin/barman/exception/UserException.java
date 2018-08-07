@@ -1,6 +1,6 @@
 package com.labutin.barman.exception;
 
-public class UserException extends Exception {
+public class UserException extends EntityException {
 
 	public UserException() {
 		// TODO Auto-generated constructor stub

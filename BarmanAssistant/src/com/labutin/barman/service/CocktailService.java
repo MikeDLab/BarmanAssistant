@@ -5,21 +5,28 @@ import java.util.Set;
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.AddUserException;
+import com.labutin.barman.exception.EntityException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
-import com.labutin.barman.repository.CocktailRepository;
-import com.labutin.barman.repository.IngredientRepository;
-import com.labutin.barman.repository.UserRepository;
+import com.labutin.barman.exception.ServiceException;
+import com.labutin.barman.repository.CocktailRepositoryImpl;
+import com.labutin.barman.repository.IngredientRepositoryImpl;
+import com.labutin.barman.repository.UserRepositoryImpl;
 import com.labutin.barman.specification.cocktail.FindCocktailById;
-import com.labutin.barman.specification.cocktail.FindCocktailSet;
+import com.labutin.barman.specification.cocktail.FindCocktailForBarmenAccept;
+import com.labutin.barman.specification.cocktail.FindCocktailPublishedSet;
 import com.labutin.barman.specification.ingredient.FindIngredientSet;
 
 public class CocktailService {
-	private final CocktailRepository cocktailRepository;
+	private final CocktailRepositoryImpl cocktailRepository;
 
-	public CocktailService() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
-		cocktailRepository = CocktailRepository.getInstance();
+	public CocktailService() throws ServiceException {
+		try {
+			cocktailRepository = CocktailRepositoryImpl.getInstance();
+		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 	public Cocktail add(String cocktailName, int userId, String cocktailDescription, int cocktailVol, boolean isPublished) {
 	Cocktail cocktail = new Cocktail();
@@ -31,19 +38,39 @@ public class CocktailService {
 	cocktailRepository.add(cocktail);
 	return cocktail;
 }
-//	public Ingredient add(String ingredientName, String ingredientDescription) {
-//		Ingredient ingredient = new Ingredient();
-//		ingredient.setIngredientName(ingredientName);
-//		ingredient.setIngredientDescription(ingredientDescription);
-//		ingredientRepository.add(ingredient);
-//		return ingredient;
-//	}
-//
-	public Set<Cocktail> receiveCocktail() {
-		return cocktailRepository.query(new FindCocktailSet());
+	public Set<Cocktail> receivePublishedCocktail() throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailPublishedSet());
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
-	public Cocktail receiveCocktailById(int cocktailId) {
-		return cocktailRepository.query(new FindCocktailById(cocktailId)).iterator().next();
+	public Set<Cocktail> receiveNotPublishedCocktail() throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailForBarmenAccept());
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
+	}
+	public Cocktail receiveCocktailById(int cocktailId) throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailById(cocktailId)).iterator().next();
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
+	}
+	public void publishCocktail(int cocktailId)
+	{
+		cocktailRepository.setPublished(cocktailId);
+	}
+	public void removeCocktail(int cocktailId)
+	{
+		Cocktail item = new Cocktail();
+		item.setCocktailId(cocktailId);
+		cocktailRepository.remove(item);
 	}
 
 }

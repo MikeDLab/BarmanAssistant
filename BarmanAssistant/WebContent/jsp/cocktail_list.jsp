@@ -165,26 +165,6 @@
 				<div class="col-6 col-sm-3">
 					<p>${Errormessage}</p>
 					<div class="form-group">
-						<%-- 	<c:if test="${!empty setCocktail}">
-									<table class="table table-bordered">
-										<tr class="bg-info row">
-											<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Id</th>
-											<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-											<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
-											<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Volume</th>
-												<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">UserId</th>
-										</tr>
-										<c:forEach items="${setCocktail}" var="setCocktail">
-											<tr class="row">
-												<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setCocktail.cocktailId}</td>
-												<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setCocktail.cocktailName}</td>
-													<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setCocktail.cocktailDescription}</td>
-														<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setCocktail.cocktailVol}</td>
-														<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setCocktail.userId}</td>
-											</tr>
-										</c:forEach>
-									</table>
-								</c:if> --%>
 						<c:if test="${!empty userCocktailMap}">
 							<table class="table table-bordered">
 								<tr class="bg-info row">
@@ -204,10 +184,32 @@
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
 												action="MainServlet" method="post">
 												<input type="hidden" name="command" value="cocktailInfo" />
-												<input type="hidden" name="cocktail_id" value="${userCocktailMap.key.cocktailId}"/>
-												<input type="hidden" name="user_id" value="${userCocktailMap.value.userId}"/>
+												<input type="hidden" name="cocktail_id"
+													value="${userCocktailMap.key.cocktailId}" /> <input
+													type="hidden" name="user_id"
+													value="${userCocktailMap.value.userId}" />
 												<button type="submit">INFO</button>
 											</form></td>
+										<c:if test="${sessionScope.Role == 'ADMIN'}">
+											<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
+													action="MainServlet" method="post">
+													<input type="hidden" name="command" value="DeleteCocktail" />
+													<input type="hidden" name="cocktail_id"
+														value="${userCocktailMap.key.cocktailId}" />
+													<button type="submit" onclick="return proverka();">Delete</button>
+												</form>
+												<script type="text/javascript">
+													function proverka() {
+														if (confirm("Подтвердить")) {
+															return
+
+															true;
+														} else {
+															return false;
+														}
+													}
+												</script></td>
+										</c:if>
 
 									</tr>
 								</c:forEach>

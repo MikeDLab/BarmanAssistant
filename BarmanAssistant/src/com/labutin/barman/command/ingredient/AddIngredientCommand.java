@@ -11,9 +11,9 @@ import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.AddUserException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.validator.UserValidator;
 
@@ -33,24 +33,17 @@ public class AddIngredientCommand implements Command {
 		// TODO Auto-generated method stub
 		try {
 			receiver = new IngredientService();
+			Ingredient ingredient;
+			ingredient = receiver.add(ingredientName, ingredientDescription);
+			if (ingredient != null) {
+				// request.getSession().setAttribute(JspParameter.USER.getValue(), user);
+				return PageEnum.HOME_PAGE;
+			}
 			logger.info("JDBC IS OK");
-		} catch (NoJDBCDriverException e) {
-			logger.info("No JDBC DRIVER");
-			// TODO Auto-generated catch block
-			// setAtribute
-			// return ERROR_PAGE;
-			e.printStackTrace();
-		} catch (NoJDBCPropertiesFileException e) {
-			logger.info("No Prop JDBC");
-			// setAtribute
-			// return ERROR_PAGE;
+		}catch (ServiceException e) {
+			// TODO: handle exception
 		}
-		Ingredient ingredient;
-		ingredient = receiver.add(ingredientName, ingredientDescription);
-		if (ingredient != null) {
-			// request.getSession().setAttribute(JspParameter.USER.getValue(), user);
-			return PageEnum.HOME_PAGE;
-		}
+		
 		throw new RuntimeException();
 
 	}

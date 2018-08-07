@@ -10,6 +10,7 @@ import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.UserService;
 
 public class ShowUserCommand implements Command {
@@ -25,7 +26,7 @@ public class ShowUserCommand implements Command {
 			receiver = new UserService();
 			Set<User> setUser = receiver.receiveAllUsers();
 			request.setAttribute("setUser", setUser);
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+		} catch (ServiceException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

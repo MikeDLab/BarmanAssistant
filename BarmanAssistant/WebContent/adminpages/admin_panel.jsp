@@ -165,7 +165,6 @@
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowUserList" />
 							<button type="submit">
-
 								<fmt:message bundle="${locale}" key="adminpanel.barmanlist" />
 							</button>
 						</form>

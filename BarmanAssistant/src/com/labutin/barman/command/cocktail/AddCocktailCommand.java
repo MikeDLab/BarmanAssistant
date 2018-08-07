@@ -17,6 +17,7 @@ import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.CocktailService;
 import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.service.UserService;
@@ -59,7 +60,7 @@ public class AddCocktailCommand implements Command {
 				System.out.println("Ingredient id: " + s);
 				receiverIngredient.insertIngredientCocktail(Integer.parseInt(s), cocktailId);
 			}
-			Set<Cocktail> setCocktail = receiver.receiveCocktail();
+			Set<Cocktail> setCocktail = receiver.receivePublishedCocktail();
 			Set<User> setUser =null;
 			if(setCocktail != null)
 			{
@@ -82,16 +83,8 @@ public class AddCocktailCommand implements Command {
 			request.setAttribute("userCocktailMap", userCocktailMap);
 			request.setAttribute("setCocktail", setCocktail);
 			logger.info("JDBC IS OK");
-		} catch (NoJDBCDriverException e) {
-			logger.info("No JDBC DRIVER");
-			// TODO Auto-generated catch block
-			// setAtribute
-			// return ERROR_PAGE;
-			e.printStackTrace();
-		} catch (NoJDBCPropertiesFileException e) {
-			logger.info("No Prop JDBC");
-			// setAtribute
-			// return ERROR_PAGE;
+		}catch (ServiceException e) {
+			// TODO: handle exception
 		}
 
 		return PageEnum.COCKTAIL_LIST_PAGE;

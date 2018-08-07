@@ -17,6 +17,9 @@
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 </head>
 <body>
 	<div id="wrapper">
@@ -94,12 +97,10 @@
 			</ul>
 		</nav>
 		<div id="heading">
-
 			<h1>${language}</h1>
-
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="barmanlist.title" /></label>
+						key="cocktaillist.title" />:</label>
 			</h1>
 			<h1>${Role}</h1>
 			<h1>${User.userName}</h1>
@@ -127,30 +128,29 @@
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowIngredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="AddIngredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddCocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="AddCocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -162,65 +162,46 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="ingredient">
-					<c:if test="${!empty setUser}">
-						<table class="table table-bordered">
-							<tr class="bg-info row">
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Id</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Login</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Email</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Role</th>
-							</tr>
-							<c:forEach items="${setUser}" var="setUser">
-								<tr class="row">
-									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setUser.userId}</td>
-									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setUser.userLogin}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setUser.userName}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setUser.userEmail}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setUser.userRole}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><c:if
-											test="${setUser.userRole == 2 }">
-											<li class="active">
-												<form action="MainServlet" method="post">
-													<input type="hidden" name="userId"
-														value="${setUser.userId}" /> <input type="hidden"
-														name="command" value="UpdateToBarman" />
-													<button type="submit">Update to barman</button>
-												</form>
-											</li>
-										</c:if> <c:if test="${setUser.userRole == 1 }">
-											<li class="active">
-												<form action="MainServlet" method="post">
-													<input type="hidden" name="userId"
-														value="${setUser.userId}" /> <input type="hidden"
-														name="command" value="DowngradeToUser" />
-													<button type="submit">Downgrade to user</button>
-												</form>
-											</li>
-										</c:if></td>
+				<div class="col-6 col-sm-3">
+					<p>${Errormessage}</p>
+					<div class="form-group">
+						<c:if test="${!empty userCocktailMap}">
+							<table class="table table-bordered">
+								<tr class="bg-info row">
+									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Id</th>
+									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
+									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
+									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Volume</th>
+									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">UserName</th>
+								</tr>
+								<c:forEach items="${userCocktailMap}" var="userCocktailMap">
+									<tr class="row">
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailId}</td>
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailName}</td>
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailDescription}</td>
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailVol}</td>
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.value.userName}</td>
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
 												action="MainServlet" method="post">
-												<input type="hidden" name="command" value="DeleteUser" />
-												<input type="hidden" name="user_id"
-													value="${setUser.userId}" />
-												<button type="submit" onclick="return proverka();">Delete</button>
-											</form>
-											<script type="text/javascript">
-												function proverka() {
-													if (confirm("Подтвердить")) {
-														return
-
-														true;
-													} else {
-														return false;
-													}
-												}
-											</script></td>
-								</tr>
-							</c:forEach>
-						</table>
-					</c:if>
+												<input type="hidden" name="command" value="cocktailInfo" />
+												<input type="hidden" name="cocktail_id"
+													value="${userCocktailMap.key.cocktailId}" /> <input
+													type="hidden" name="user_id"
+													value="${userCocktailMap.value.userId}" />
+												<button type="submit">INFO</button>
+											</form></td>
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
+												action="MainServlet" method="post">
+												<input type="hidden" name="command" value="PublishCocktail" />
+												<input type="hidden" name="cocktail_id"
+													value="${userCocktailMap.key.cocktailId}" />
+												<button type="submit">PUBLISHED</button>
+											</form></td>
+									</tr>
+								</c:forEach>
+							</table>
+						</c:if>
+					</div>
 				</div>
 			</blockquote>
 		</section>

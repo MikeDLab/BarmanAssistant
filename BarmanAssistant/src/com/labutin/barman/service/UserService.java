@@ -8,10 +8,12 @@ import org.apache.logging.log4j.Logger;
 import com.labutin.barman.command.user.UpdateToBarmanCommand;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.AddUserException;
+import com.labutin.barman.exception.EntityException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
-import com.labutin.barman.repository.UserRepository;
+import com.labutin.barman.exception.ServiceException;
+import com.labutin.barman.exception.UserException;
+import com.labutin.barman.repository.UserRepositoryImpl;
 import com.labutin.barman.specification.ingredient.FindIngredientSet;
 import com.labutin.barman.specification.user.AddBarmanRating;
 import com.labutin.barman.specification.user.DowngradeBarmanToUser;
@@ -24,14 +26,19 @@ import com.labutin.barman.specification.user.UpdateUserToBarman;
 
 public class UserService {
 	private static Logger logger = LogManager.getLogger();
-	private final UserRepository userRepository;
+	private final UserRepositoryImpl userRepository;
 
-	public UserService() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
-		userRepository = UserRepository.getInstance();
+	public UserService() throws ServiceException {
+		try {
+			userRepository = UserRepositoryImpl.getInstance();
+		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 
 	public User registration(String userLogin, String userName, String userPassword, String userEmail)
-			throws AddUserException {
+			throws UserException {
 		User user = new User();
 		user.setUserLogin(userLogin);
 		user.setUserName(userName);
@@ -41,39 +48,91 @@ public class UserService {
 		return user;
 	}
 
-	public User login(String login, String password) {
+	public User login(String login, String password) throws ServiceException {
 		User user = null;
-		if (userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().hasNext()) {
-			user = (User) userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().next();
+		try {
+			if (userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().hasNext()) {
+				user = (User) userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().next();
+			}
+			return user;
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
 		}
-		return user;
+
 	}
 
-	public Set<User> receiveBarman(int userId) {
-		return userRepository.query(new FindBarmanSet(userId));
+	public Set<User> receiveBarman(int userId) throws ServiceException {
+		try {
+			return userRepository.query(new FindBarmanSet(userId));
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 
-	public Set<User> receiveAllUsers() {
-		return userRepository.query(new FindUserSet());
+	public Set<User> receiveAllUsers() throws ServiceException {
+		try {
+			return userRepository.query(new FindUserSet());
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 
-	public void updateToBarman(int userId) {
-		userRepository.query(new UpdateUserToBarman(userId));
+	public void updateToBarman(int userId) throws ServiceException {
+		try {
+			userRepository.query(new UpdateUserToBarman(userId));
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 
-	public void downgradeToUser(int userId) {
-		userRepository.query(new DowngradeBarmanToUser(userId));
+	public void downgradeToUser(int userId) throws ServiceException {
+		try {
+			userRepository.query(new DowngradeBarmanToUser(userId));
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 
-	public void addBarmanRating(int barmanRating, int barmanId, int userId) {
-		userRepository.query(new AddBarmanRating(barmanRating, barmanId, userId));
+	public void addBarmanRating(int barmanRating, int barmanId, int userId) throws ServiceException {
+		try {
+			userRepository.query(new AddBarmanRating(barmanRating, barmanId, userId));
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
-	public Set<User> receiveCocktailAuthorSet()
-	{
-		return userRepository.query(new FindCocktailAuthrorSet());
+
+	public Set<User> receiveCocktailAuthorSet() throws ServiceException {
+		try {
+			return userRepository.query(new FindCocktailAuthrorSet());
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
-	public User receiveUserById(int userId)
-	{
-		return (User) userRepository.query(new FindUserById(userId)).iterator().next();
+
+	public User receiveUserById(int userId) throws ServiceException {
+		try {
+			return (User) userRepository.query(new FindUserById(userId)).iterator().next();
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
+	}
+
+	public void removeUser(int userId) {
+		User user = new User();
+		user.setUserId(userId);
+		try {
+			userRepository.remove(user);
+		} catch (EntityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -2,18 +2,23 @@ package com.labutin.barman.builder;
 
 import com.labutin.barman.command.TypeCommand;
 import com.labutin.barman.command.cocktail.AddCocktailCommand;
+import com.labutin.barman.command.cocktail.DeleteCocktail;
+import com.labutin.barman.command.cocktail.PublishCocktail;
 import com.labutin.barman.command.cocktail.ShowCocktailInfo;
-import com.labutin.barman.command.cocktail.ShowCocktailList;
+import com.labutin.barman.command.cocktail.ShowNotPublishedCocktailList;
+import com.labutin.barman.command.cocktail.ShowPublishedCocktailList;
 import com.labutin.barman.command.ingredient.AddIngredientCommand;
 import com.labutin.barman.command.ingredient.ShowIngredientCommand;
 import com.labutin.barman.command.redirect.RedirectToAddCocktailPage;
 import com.labutin.barman.command.redirect.RedirectToAddIngredientPage;
 import com.labutin.barman.command.redirect.RedirectToAdminPanel;
+import com.labutin.barman.command.redirect.RedirectToBarmanPanel;
 import com.labutin.barman.command.redirect.RedirectToHomePageCommand;
 import com.labutin.barman.command.redirect.RedirectToLoginPageCommand;
 import com.labutin.barman.command.redirect.RedirectToRegisterPageCommand;
 import com.labutin.barman.command.redirect.RedirectToUserPanelCommand;
 import com.labutin.barman.command.user.AddBarmanRatingCommand;
+import com.labutin.barman.command.user.DeleteUser;
 import com.labutin.barman.command.user.DowngradeToUserCommand;
 import com.labutin.barman.command.user.ShowBarmanCommand;
 import com.labutin.barman.command.user.ShowUserCommand;
@@ -88,10 +93,25 @@ public class CommandBuilder extends AbstractCommandBuilder {
 			command = new AddCocktailCommand();
 			break;
 		case COCKTAILLIST:
-			command = new ShowCocktailList();
+			command = new ShowPublishedCocktailList();
 			break;
 		case COCKTAILINFO:
 			command = new ShowCocktailInfo();
+			break;
+		case CHECKCOCKTAILLIST:
+			command = new ShowNotPublishedCocktailList();
+			break;
+		case BARMANPANEL:
+			command = new RedirectToBarmanPanel();
+			break;
+		case PUBLISHCOCKTAIL:
+			command = new PublishCocktail();
+			break;
+		case DELETECOCKTAIL:
+			command = new DeleteCocktail();
+			break;
+		case DELETEUSER:
+			command = new DeleteUser();
 			break;
 		}
 	}

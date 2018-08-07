@@ -10,8 +10,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Ingredient;
+import com.labutin.barman.exception.EntityException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.UserException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 import com.labutin.barman.specification.Specification;
@@ -19,20 +21,20 @@ import com.labutin.barman.specification.ingredient.FindIngredientByName;
 import com.labutin.barman.specification.user.FindUserByLogin;
 import com.mysql.jdbc.Statement;
 
-public class CocktailRepository implements IСocktailRepository {
+public class CocktailRepositoryImpl implements СocktailRepository {
 	private static Logger logger = LogManager.getLogger();
 	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished) VALUES (?,?,?,?,?)";
-	private final static String REMOVE_COCKTAIL = "DELETE FROM Ingredient WHERE Ingredient_name = ?";
-
-	private CocktailRepository() {
+	private final static String SET_COCKTAIL = "UPDATE Cocktail SET cocktail_isPublished=1 WHERE cocktail_id = ?";
+	private final static String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
+	private CocktailRepositoryImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
 	private static class SingletonHandler {
-		private final static CocktailRepository INSTANCE = new CocktailRepository();
+		private final static CocktailRepositoryImpl INSTANCE = new CocktailRepositoryImpl();
 	}
 
-	public static CocktailRepository getInstance() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
+	public static CocktailRepositoryImpl getInstance() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
 		PoolConnection pool = PoolConnection.POOL;
 		pool.initialization();
 		return SingletonHandler.INSTANCE;
@@ -46,7 +48,7 @@ public class CocktailRepository implements IСocktailRepository {
 		logger.info(item + " try to register");
 		try {
 			connection = PoolConnection.POOL.getConnection();
-			preparedStatement = connection.prepareStatement(INSERT_COCKTAIL,Statement.RETURN_GENERATED_KEYS);
+			preparedStatement = connection.prepareStatement(INSERT_COCKTAIL, Statement.RETURN_GENERATED_KEYS);
 			if (preparedStatement != null) {
 				preparedStatement.setString(1, item.getCocktailName());
 				preparedStatement.setInt(2, item.getUserId());
@@ -54,13 +56,13 @@ public class CocktailRepository implements IСocktailRepository {
 				preparedStatement.setInt(4, item.getCocktailVol());
 				preparedStatement.setBoolean(5, item.getIsPublished());
 				int affectedRows = preparedStatement.executeUpdate();
-					try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-						if (generatedKeys.next()) {
-							item.setCocktailId(generatedKeys.getInt(1));
-						} else {
-							throw new SQLException("Creating user failed, no ID obtained.");
-						}
+				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						item.setCocktailId(generatedKeys.getInt(1));
+					} else {
+						throw new SQLException("Creating user failed, no ID obtained.");
 					}
+				}
 				connection.close();
 				logger.info(item + " inseted");
 			}
@@ -72,29 +74,37 @@ public class CocktailRepository implements IСocktailRepository {
 	@Override
 	public void remove(Cocktail item) {
 		// TODO Auto-generated method stub
-
+		logger.info(" try to update");
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COCKTAIL);){
+			if (preparedStatement != null) {
+				preparedStatement.setInt(1,item.getCocktailId());
+				preparedStatement.executeUpdate();
+			}
+			logger.info("GOOD");
+		} catch (SQLException e) {
+			logger.info(" has problem");
+		}
 	}
 
 	@Override
-	public Set<Cocktail> query(Specification<Cocktail> specification) {
+	public Set<Cocktail> query(Specification<Cocktail> specification) throws EntityException {
 		// TODO Auto-generated method stub
 		return specification.querry();
 	}
 
-//
-//	@Override
-//	public void remove(Ingredient item) {
-//		// TODO Auto-generated method stub
-//		connection = PoolConnection.POOL.getConnection();
-//		try {
-//			preparedStatement = connection.prepareStatement(REMOVE_INGREDIENT);
-//			preparedStatement.setString(1, item.getIngredientName());
-//			preparedStatement.executeUpdate();
-//			connection.close();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//		}
-//
-//	}
-
+	public void setPublished(int cocktailId) {
+		// TODO Auto-generated method stub
+		logger.info(" try to update");
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL);) {
+			if (preparedStatement != null) {
+				preparedStatement.setInt(1,cocktailId);
+				preparedStatement.executeUpdate();
+			}
+			logger.info("GOOD");
+		} catch (SQLException e) {
+			logger.info(" has problem");
+		}
+	}
 }

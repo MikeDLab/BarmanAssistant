@@ -86,30 +86,29 @@
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="ShowIngredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="AddIngredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddCocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="AddCocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -122,7 +121,43 @@
 		<section>
 			<blockquote>
 				<div class="ingredient">
-					<c:if test="${!empty setBarman}">
+					<c:if test="${!empty userRatingMap}">
+						<table class="table table-bordered">
+							<tr class="bg-info row">
+								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Login</th>
+								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
+								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Email</th>
+								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Role</th>
+								<c:if test="${sessionScope.Role != 'GUEST'}">
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Rating</td>
+								</c:if>
+							</tr>
+							<c:forEach items="${userRatingMap}" var="userRatingMap">
+								<tr class="row">
+									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${userRatingMap.key.userLogin}</td>
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userRatingMap.key.userName}</td>
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userRatingMap.key.userEmail}</td>
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userRatingMap.key.userRole}</td>
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><c:if
+											test="${!empty userRatingMap.value}">${userRatingMap.value.rating}</c:if>
+										<c:if test="${empty userRatingMap.value}">
+											<c:if test="${sessionScope.Role != 'GUEST'}">
+												<form action="MainServlet" method="post">
+													<input type="number" min="0" max="10"
+														placeholder="Inter vol" class="edit" name="cocktailvol"
+														id="vol"> <input type="hidden" name="test"
+														value="number" /> <input type="hidden" name="command"
+														value="AddBarmanRating" /> <input type="hidden"
+														name="barmanid" value="${userRatingMap.key.userId}" />
+													<button type="submit" class="active">Оценить</button>
+												</form>
+											</c:if>
+										</c:if></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</c:if>
+					<%-- <c:if test="${!empty setBarman}">
 						<table class="table table-bordered">
 							<tr class="bg-info row">
 								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Login</th>
@@ -158,18 +193,10 @@
 											</form>
 										</c:if>
 									</c:if>
-									<!-- <td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><li
-										class="active">
-											<form action="MainServlet" method="get">
-												<input type="hidden" name="locale" value="Ru" />
-												<button type="submit">Edit</button>
-											</form>
-									</li> 
-									</td> -->
 								</tr>
 							</c:forEach>
 						</table>
-					</c:if>
+					</c:if> --%>
 				</div>
 			</blockquote>
 		</section>

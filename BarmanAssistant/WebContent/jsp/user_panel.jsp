@@ -145,9 +145,19 @@
 		<section>
 			<blockquote>
 				<div>
-				<h1>User login: ${User.userLogin}</h1>
-				<h1>User name: ${User.userName}</h1>
-				<h1>User email: ${User.userEmail}</h1>
+				<p>User login: ${User.userLogin}</p>
+				<p>User name: ${User.userName}</p>
+				<p>User email: ${User.userEmail}</p>
+				<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddCocktail" />
+							<button type="submit">Cnage email
+							</button>
+						</form>
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="AddCocktail" />
+							<button type="submit">Cnage password
+							</button>
+						</form>
 				</div>
 			</blockquote>
 		</section>

@@ -10,9 +10,10 @@ import com.labutin.barman.command.Command;
 import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.AddUserException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
+import com.labutin.barman.exception.UserException;
 import com.labutin.barman.service.UserService;
 import com.labutin.barman.util.MailSender;
 import com.labutin.barman.validator.UserValidator;
@@ -58,13 +59,11 @@ public class UserRegistrationCommand implements Command {
 		try {
 			receiver = new UserService();
 			logger.info("JDBC IS OK");
-		} catch (NoJDBCDriverException e) {
-			logger.info("No JDBC DRIVER");
-			e.printStackTrace();
-		} catch (NoJDBCPropertiesFileException e) {
-			logger.info("No Prop JDBC");
+		}catch (ServiceException e) {
+			// TODO: handle exception
 		}
 		User user;
+
 		try {
 			user = receiver.registration(userLogin, userName, userPassword, userEmail);
 			if (user != null) {
@@ -72,10 +71,12 @@ public class UserRegistrationCommand implements Command {
 				new Thread(new MailSender(userEmail, userName)).start();
 				return PageEnum.HOME_PAGE;
 			}
-		} catch (AddUserException e) {
+		} catch (UserException e) {
 			// TODO Auto-generated catch block
-			// return ERROR_PAGE;
+			e.printStackTrace();
 		}
+		
+
 		throw new RuntimeException();
 	}
 

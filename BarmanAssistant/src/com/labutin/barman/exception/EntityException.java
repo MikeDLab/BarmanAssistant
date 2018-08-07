@@ -1,27 +1,27 @@
 package com.labutin.barman.exception;
 
-public class NoUserException extends UserException {
+public class EntityException extends Exception {
 
-	public NoUserException() {
+	public EntityException() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NoUserException(String message) {
+	public EntityException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public NoUserException(Throwable cause) {
+	public EntityException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public NoUserException(String message, Throwable cause) {
+	public EntityException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public NoUserException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public EntityException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}

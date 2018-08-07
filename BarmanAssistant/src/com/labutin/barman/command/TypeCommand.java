@@ -8,10 +8,13 @@ public enum TypeCommand{
 	ADMINPANEL("AdminPanel"),
 	ADDCOCKTAIL("AddCocktail"),
 	ADDINGREDIENT("AddIngredient"),
+	BARMANPANEL("BarmanPanel"),
 	LOGIN("Login"),
 	REGISTRATION("Registration"),
 	REGISTER("Register"),
 	PUSHINGREDIENT("PushIngredient"),
+	DELETECOCKTAIL("DeleteCocktail"),
+	DELETEUSER("DeleteUser"),
 	SHOWINGREDIENT("ShowIngredient"),
 	SHOWBARMAN("ShowBarman"),
 	SHOWUSERLIST("ShowUserList"),
@@ -19,8 +22,10 @@ public enum TypeCommand{
 	DOWNGRADETOUSER("DowngradeToUser"),
 	ADDBARMANRATING("AddBarmanRating"),
 	PUSHCOCKTAIL("PushCocktail"),
+	PUBLISHCOCKTAIL("PublishCocktail"),
 	COCKTAILLIST("CocktailList"),
-	COCKTAILINFO("CocktailInfo");
+	COCKTAILINFO("CocktailInfo"),
+	CHECKCOCKTAILLIST("CheckCocktailList");
 	private String value;
 	private TypeCommand(String value)
 	{

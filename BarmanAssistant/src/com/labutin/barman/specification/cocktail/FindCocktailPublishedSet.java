@@ -14,11 +14,11 @@ import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
-public class FindCocktailSet extends AbstractCocktailSpecification implements CocktailSpecification {
-	private final static String FIND_COCKTAIL_SET = "SELECT * FROM Cocktail";
+public class FindCocktailPublishedSet extends AbstractCocktailSpecification implements CocktailSpecification {
+	private final static String FIND_COCKTAIL_SET = "SELECT * FROM Cocktail Where cocktail_isPublished = 1";
 	private static Logger logger = LogManager.getLogger();
 
-	public FindCocktailSet() {
+	public FindCocktailPublishedSet() {
 	}
 
 	@Override

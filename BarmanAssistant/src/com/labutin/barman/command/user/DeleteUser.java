@@ -1,34 +1,32 @@
 package com.labutin.barman.command.user;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
+import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.UserService;
 
-public class UpdateToBarmanCommand implements Command {
-	private static Logger logger = LogManager.getLogger();
+public class DeleteUser implements Command {
 	private UserService receiver;
 
-	public UpdateToBarmanCommand() {
+	public DeleteUser() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
+		int userId = Integer.parseInt(request.getParameter("user_id"));
 		try {
 			receiver = new UserService();
-			int userId = Integer.parseInt(request.getParameter("userId"));
-			receiver.updateToBarman(userId);
-			logger.info("User: " + userId + " upgraded to Barman");
-		} catch (ServiceException e) {
+			receiver.removeUser(userId);
+		} catch (ServiceException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

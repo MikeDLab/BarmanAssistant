@@ -13,6 +13,7 @@ import com.labutin.barman.controller.UserType;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.UserService;
 
 public class UserLoginCommand implements Command {
@@ -55,7 +56,7 @@ public class UserLoginCommand implements Command {
 				request.setAttribute("Errormessage", "Incorrect user login or password!");
 				return PageEnum.LOGIN_PAGE;
 			}
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+		} catch (ServiceException e) {
 			logger.warn("JDBC problem",e);
 		}
 

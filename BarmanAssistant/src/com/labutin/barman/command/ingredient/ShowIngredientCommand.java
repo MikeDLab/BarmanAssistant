@@ -12,6 +12,7 @@ import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
+import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.IngredientService;
 
 
@@ -30,7 +31,7 @@ public class ShowIngredientCommand implements Command {
 			Set<Ingredient> setIngredient = receiver.receiveIngredient();
 			request.setAttribute("setIngredient", setIngredient);
 			System.out.println("good");
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

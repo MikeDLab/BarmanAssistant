@@ -21,35 +21,48 @@ import com.labutin.barman.service.CocktailService;
 import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.service.UserService;
 
-public class ShowCocktailInfo implements Command {
+
+
+public class ShowNotPublishedCocktailList implements Command {
 	private CocktailService receiverCocktail;
 	private UserService receiverUser;
-	private IngredientService receiverIngredient;
-
-	public ShowCocktailInfo() {
+	public ShowNotPublishedCocktailList() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
-		int cocktailId = Integer.parseInt(request.getParameter("cocktail_id"));
-		int userId = Integer.parseInt(request.getParameter("user_id"));
 		try {
 			receiverCocktail = new CocktailService();
-			Cocktail cocktail = receiverCocktail.receiveCocktailById(cocktailId);
-			receiverUser = new UserService();
-			User user = receiverUser.receiveUserById(userId);
-			receiverIngredient = new IngredientService();
-			Set<Ingredient> setIngredient = receiverIngredient.receiveIngredientByCocktailId(cocktailId);
-			request.setAttribute("setIngredient", setIngredient);
-			request.setAttribute("user", user);
-			request.setAttribute("cocktail", cocktail);
-
-		} catch (ServiceException e) {
+			Set<Cocktail> setCocktail = receiverCocktail.receiveNotPublishedCocktail();
+			Set<User> setUser =null;
+			if(setCocktail != null)
+			{
+				receiverUser = new UserService();
+				setUser = receiverUser.receiveCocktailAuthorSet();
+				
+			}
+			Map<Cocktail,User> userCocktailMap = new HashMap<>();
+			for(User user :setUser)
+			{
+				for(Cocktail cocktail : setCocktail)
+				{
+					if(user.getUserId() == cocktail.getUserId())
+					{
+						System.out.println(user + " cocktail : " + cocktail);
+						userCocktailMap.put(cocktail, user);
+					}
+				}
+			}
+			System.out.println("Map size: " + userCocktailMap.keySet().size());
+			request.setAttribute("userCocktailMap", userCocktailMap);
+			request.setAttribute("setCocktail", setCocktail);
+			
+			} catch (ServiceException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}
-		return PageEnum.COCKTAIL_INFO_PAGE;
+		return PageEnum.COCKTAIL_LIST_FOR_BARMAN;
 
 	}
 
