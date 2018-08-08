@@ -4,9 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.TreeSet;
+import java.util.Comparator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
@@ -22,13 +24,13 @@ public class FindIngredientSet extends AbstractIngredientSpecification implement
 
 	@Override
 	public Set<Ingredient> querry() {
-		Set<Ingredient> ingredients = new HashSet<>();
+		Comparator<Ingredient> comparator = Comparator.comparing(obj -> obj.getIngredientId());
+		TreeSet<Ingredient> ingredients = new TreeSet<>(comparator);
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(FIND_INGREDIENT_SET);) {
 			if (preparedStatement != null) {
 				resultSet = preparedStatement.executeQuery();
 			}
-			connection.close();
 			while (resultSet.next()) {
 				ingredients.add(loadIngredientData(resultSet));
 			}

@@ -49,7 +49,6 @@ public class ShowBarmanCommand implements Command {
 					{
 						if(usr.getUserId() == rating.getEstimated())
 						{
-							System.out.println("Putted:" + usr + "Rat: "  + rating);
 							userRatingMap.replace(usr, rating);
 						}
 					}

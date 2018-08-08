@@ -37,9 +37,7 @@ public class PublishCocktail implements Command {
 		try {
 			// TODO Auto-generated method stub
 			receiver = new CocktailService();
-			System.out.println("COCKTAIL ID" + cocktailId);
 			receiver.publishCocktail(cocktailId);
-			System.out.println("OKOKO");
 		} catch (ServiceException e) {
 			
 		}

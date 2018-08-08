@@ -1,11 +1,16 @@
 package com.labutin.barman.command.cocktail;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +32,8 @@ public class AddCocktailCommand implements Command {
 	private CocktailService receiver;
 	private IngredientService receiverIngredient;
 	private UserService receiverUser;
+	private ImageUtil imageUtil = new ImageUtil();
+
 	public AddCocktailCommand() {
 		// TODO Auto-generated constructor stub
 
@@ -37,54 +44,49 @@ public class AddCocktailCommand implements Command {
 		// TODO Auto-generated method stub
 		String cocktailName = request.getParameter("cocktailname");
 		String cocktailDescription = request.getParameter("cocktaildesc");
-		User user = (User) request.getSession().getAttribute("User");
-		int userId = user.getUserId();
-		boolean isPublished = user.getUserRole() != 2;
-		System.out.println(isPublished);
+		User userSession = (User) request.getSession().getAttribute("User");
+		int userId = userSession.getUserId();
+		boolean isPublished = userSession.getUserRole() != 2;
 		int cocktailVol = Integer.parseInt(request.getParameter("cocktailvol"));
 		String[] selectedIngredients = request.getParameterValues("selected");
 		try {
 			receiverIngredient = new IngredientService();
-			if (selectedIngredients == null) {	
+			if (selectedIngredients == null) {
 				Set<Ingredient> setIngredient = receiverIngredient.receiveIngredient();
 				request.setAttribute("setIngredient", setIngredient);
 				request.setAttribute("Errormessage", "Не выбрано ни 1 ингредиента");
 				return PageEnum.ADD_COCKTAIL;
 			}
+
 			// TODO Auto-generated method stub
+			InputStream inputStream = imageUtil.getInputStream(request);
 			receiver = new CocktailService();
-			Cocktail cocktail = receiver.add(cocktailName, userId, cocktailDescription, cocktailVol, isPublished);
-			System.out.println("ID cocktail: " + cocktail.getCocktailId());
+			Cocktail cocktail = receiver.add(cocktailName, userId, cocktailDescription, cocktailVol, isPublished,
+					inputStream);
+			request.setAttribute("cocktailId", cocktail.getCocktailId());
 			int cocktailId = cocktail.getCocktailId();
-			for (String s : selectedIngredients) {
-				System.out.println("Ingredient id: " + s);
-				receiverIngredient.insertIngredientCocktail(Integer.parseInt(s), cocktailId);
+			for (String selected : selectedIngredients) {
+				receiverIngredient.insertIngredientCocktail(Integer.parseInt(selected), cocktailId);
 			}
 			Set<Cocktail> setCocktail = receiver.receivePublishedCocktail();
-			Set<User> setUser =null;
-			if(setCocktail != null)
-			{
+			Set<User> setUser = null;
+			if (setCocktail != null) {
 				receiverUser = new UserService();
 				setUser = receiverUser.receiveCocktailAuthorSet();
-				
+
 			}
-			Map<Cocktail,User> userCocktailMap = new HashMap<>();
-			for(User user1 :setUser)
-			{
-				for(Cocktail cocktail1 : setCocktail)
-				{
-					if(user1.getUserId() == cocktail1.getUserId())
-					{
-						userCocktailMap.put(cocktail1, user1);
+			Map<Cocktail, User> userCocktailMap = new HashMap<>();
+			for (User user : setUser) {
+				for (Cocktail cocktail1 : setCocktail) {
+					if (user.getUserId() == cocktail1.getUserId()) {
+						userCocktailMap.put(cocktail1, user);
 					}
 				}
 			}
-			System.out.println("Map size: " + userCocktailMap.keySet().size());
 			request.setAttribute("userCocktailMap", userCocktailMap);
 			request.setAttribute("setCocktail", setCocktail);
-			logger.info("JDBC IS OK");
-		}catch (ServiceException e) {
-			// TODO: handle exception
+		} catch (ServiceException e) {
+			return PageEnum.ERROR_PAGE;
 		}
 
 		return PageEnum.COCKTAIL_LIST_PAGE;

@@ -34,21 +34,25 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="SignIn" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="LogOut" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Sign_In" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Log_Out" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
 						<button type="submit">Es</button>
@@ -67,14 +71,37 @@
 						<button type="submit">Eng</button>
 					</form>
 				</li>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="User_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="AdminPanel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Admin_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -90,48 +117,49 @@
 				<ul class="aside-menu">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="CocktailList" />
+							<input type="hidden" name="command" value="Cocktail_List" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.cocktaillist" />
 							</button>
 						</form>
 					</li>
+					<c:if test="${sessionScope.Role != 'GUEST'}">
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Show_Barman" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
+								</button>
+							</form>
+						</li>
+					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowBarman" />
+							<input type="hidden" name="command" value="Show_Ingredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
-							</button>
-						</form>
-					</li>
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Ingredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddCocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Cocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -154,13 +182,19 @@
 								<tr class="row">
 									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setIngredient.ingredientName}</td>
 									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientDescription}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><li
-										class="active">
-											<form action="MainServlet" method="get">
-												<input type="hidden" name="locale" value="Ru" />
+									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><c:if
+											test="${sessionScope.Role == 'ADMIN'}">
+											<form action="MainServlet" method="post">
+												<input type="hidden" name="command" value="Edit_Ingredient_Page" />
+												<input type="hidden" name="ingredient_id"
+													value="${setIngredient.ingredientId}" /> <input
+													type="hidden" name="ingredient_name"
+													value="${setIngredient.ingredientName}" /> <input
+													type="hidden" name="ingredient_description"
+													value="${setIngredient.ingredientDescription}" />
 												<button type="submit">Edit</button>
 											</form>
-									</li></td>
+										</c:if></td>
 								</tr>
 							</c:forEach>
 						</table>

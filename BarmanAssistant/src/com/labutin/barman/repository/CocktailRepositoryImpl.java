@@ -1,5 +1,6 @@
 package com.labutin.barman.repository;
 
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,22 +10,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.entity.Cocktail;
-import com.labutin.barman.entity.Ingredient;
-import com.labutin.barman.exception.EntityException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
-import com.labutin.barman.exception.UserException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
-import com.labutin.barman.specification.Specification;
-import com.labutin.barman.specification.ingredient.FindIngredientByName;
-import com.labutin.barman.specification.user.FindUserByLogin;
+import com.labutin.barman.specification.cocktail.CocktailSpecification;
 import com.mysql.jdbc.Statement;
 
 public class CocktailRepositoryImpl implements СocktailRepository {
 	private static Logger logger = LogManager.getLogger();
-	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished) VALUES (?,?,?,?,?)";
+	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished,cocktail_img) VALUES (?,?,?,?,?,?)";
 	private final static String SET_COCKTAIL = "UPDATE Cocktail SET cocktail_isPublished=1 WHERE cocktail_id = ?";
+	private final static String SET_COCKTAIL_IMAGE = "UPDATE Cocktail SET cocktail_img= ? WHERE cocktail_id = ?";
 	private final static String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
 	private CocktailRepositoryImpl() {
 		// TODO Auto-generated constructor stub
@@ -39,7 +37,20 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 		pool.initialization();
 		return SingletonHandler.INSTANCE;
 	}
-
+	public void addImage(int cocktailId, InputStream inputStream)
+	{
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL_IMAGE);){
+			if (preparedStatement != null) {
+				preparedStatement.setBlob(1,inputStream);
+				preparedStatement.setInt(2, cocktailId);
+				preparedStatement.executeUpdate();
+			}
+			logger.info("GOOD");
+		} catch (SQLException e) {
+			logger.info(" has problem");
+		}
+	}
 	@Override
 	public void add(Cocktail item) {
 		ProxyConnection connection;
@@ -55,6 +66,7 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 				preparedStatement.setString(3, item.getCocktailDescription());
 				preparedStatement.setInt(4, item.getCocktailVol());
 				preparedStatement.setBoolean(5, item.getIsPublished());
+				preparedStatement.setBlob(6, item.getImage());
 				int affectedRows = preparedStatement.executeUpdate();
 				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
@@ -88,7 +100,7 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 	}
 
 	@Override
-	public Set<Cocktail> query(Specification<Cocktail> specification) throws EntityException {
+	public Set<Cocktail> query(CocktailSpecification specification) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return specification.querry();
 	}

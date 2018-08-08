@@ -24,24 +24,17 @@ public class FindCocktailPublishedSet extends AbstractCocktailSpecification impl
 	@Override
 	public Set<Cocktail> querry() {
 		Set<Cocktail> cocktails = new HashSet<>();
-		ProxyConnection connection = null;
-		try {
-			connection = PoolConnection.POOL.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_SET);
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_SET);) {
 			if (preparedStatement != null) {
 				resultSet = preparedStatement.executeQuery();
 			}
-			connection.close();
 			while (resultSet.next()) {
 				cocktails.add(loadCocktailData(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.info("Sqlexception", e);
 		} finally {
-
-			if (connection != null) {
-				connection.close();
-			}
 			closeResultSet();
 		}
 		return cocktails;

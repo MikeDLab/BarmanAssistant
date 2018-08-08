@@ -15,21 +15,14 @@ import com.labutin.barman.service.UserService;
 
 public class ShowUserCommand implements Command {
 	private UserService receiver;
-
+	private UserUtil userUtil = new UserUtil();
 	public ShowUserCommand() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			receiver = new UserService();
-			Set<User> setUser = receiver.receiveAllUsers();
-			request.setAttribute("setUser", setUser);
-		} catch (ServiceException  e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		userUtil.showUserSet(request, response);
 		return PageEnum.USER_LIST;
 
 	}

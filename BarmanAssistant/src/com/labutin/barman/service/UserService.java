@@ -8,11 +8,10 @@ import org.apache.logging.log4j.Logger;
 import com.labutin.barman.command.user.UpdateToBarmanCommand;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.EntityException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;
-import com.labutin.barman.exception.UserException;
 import com.labutin.barman.repository.UserRepositoryImpl;
 import com.labutin.barman.specification.ingredient.FindIngredientSet;
 import com.labutin.barman.specification.user.AddBarmanRating;
@@ -38,7 +37,7 @@ public class UserService {
 	}
 
 	public User registration(String userLogin, String userName, String userPassword, String userEmail)
-			throws UserException {
+			throws RepositoryException {
 		User user = new User();
 		user.setUserLogin(userLogin);
 		user.setUserName(userName);
@@ -55,7 +54,7 @@ public class UserService {
 				user = (User) userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().next();
 			}
 			return user;
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -65,7 +64,7 @@ public class UserService {
 	public Set<User> receiveBarman(int userId) throws ServiceException {
 		try {
 			return userRepository.query(new FindBarmanSet(userId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -74,7 +73,7 @@ public class UserService {
 	public Set<User> receiveAllUsers() throws ServiceException {
 		try {
 			return userRepository.query(new FindUserSet());
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -83,7 +82,7 @@ public class UserService {
 	public void updateToBarman(int userId) throws ServiceException {
 		try {
 			userRepository.query(new UpdateUserToBarman(userId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -92,7 +91,7 @@ public class UserService {
 	public void downgradeToUser(int userId) throws ServiceException {
 		try {
 			userRepository.query(new DowngradeBarmanToUser(userId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -101,7 +100,7 @@ public class UserService {
 	public void addBarmanRating(int barmanRating, int barmanId, int userId) throws ServiceException {
 		try {
 			userRepository.query(new AddBarmanRating(barmanRating, barmanId, userId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -110,7 +109,7 @@ public class UserService {
 	public Set<User> receiveCocktailAuthorSet() throws ServiceException {
 		try {
 			return userRepository.query(new FindCocktailAuthrorSet());
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -119,20 +118,20 @@ public class UserService {
 	public User receiveUserById(int userId) throws ServiceException {
 		try {
 			return (User) userRepository.query(new FindUserById(userId)).iterator().next();
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}
 
-	public void removeUser(int userId) {
+	public void removeUser(int userId) throws ServiceException {
 		User user = new User();
 		user.setUserId(userId);
 		try {
 			userRepository.remove(user);
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ServiceException(e);
 		}
 	}
 }

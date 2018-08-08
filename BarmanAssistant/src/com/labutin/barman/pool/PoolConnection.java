@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayDeque;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.management.RuntimeErrorException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,58 +21,46 @@ import com.mysql.jdbc.Driver;
 public enum PoolConnection {
 	POOL;
 	private LinkedBlockingQueue<ProxyConnection> availableConnetion = new LinkedBlockingQueue<>();
-	private LinkedBlockingQueue<ProxyConnection> unavailableConnetion = new LinkedBlockingQueue<>();
-	private final String dbURL = "db.URL";
-	private final String dbLogin = "db.Login";
-	private final String dbPassword = "db.Password";
-	private final String dbProperties = "resources/DataBase.properties";
+	private ArrayDeque<ProxyConnection> unavailableConnetion = new ArrayDeque<>();
+	private static final String DATABASE_URL = "db.URL";
+	private static final String DATABASE_USER_LOGIN = "db.Login";
+	private static final String DATABASE_USER_PASSWORD = "db.Password";
+	private static final String DATABASE_PROPERTIES = "resources/DataBase.properties";
 	private String user;
 	private String URL;
 	private String password;
-	private int poolSize = 10;
+	private static final int POOL_SIZE = 32;
 	private static Logger logger = LogManager.getLogger();
 	private AtomicBoolean isCreated = new AtomicBoolean(false);
 
 	public ProxyConnection getConnection() {
-
-		if (!availableConnetion.isEmpty()) {
-			ProxyConnection connection;
+			ProxyConnection connection = null;
 			try {
-				if (availableConnetion.size() > 20) {
-					destroyFree();
-				}
 				connection = availableConnetion.take();
-				unavailableConnetion.put(connection);
+				unavailableConnetion.add(connection);
 				logger.info("Connections: " + availableConnetion.size());
 				logger.info("Unvaible: " + unavailableConnetion.size());
-				return connection;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				logger.info("Interruptedexception",e);
 			}
-		}
-		throw new RuntimeException();
+		 return connection;
 	}
-
-	private void destroyFree() {
-		while (availableConnetion.size() > 15) {
-			try {
-				availableConnetion.poll().closeInPool();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
+	
 	public void returnConnection(ProxyConnection connection) {
-
+		
 		try {
+			if(!connection.getAutoCommit())
+			{
+				connection.setAutoCommit(true);
+			}
 			unavailableConnetion.remove(connection);
 			availableConnetion.put(connection);
 		} catch (InterruptedException e) {
 			logger.info("Connection ploblem",e);
-		}
+		}catch (SQLException e) {
+            throw new RuntimeException();
+        }
 	}
 
 	public void initialization() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
@@ -87,7 +77,7 @@ public enum PoolConnection {
 				throw new NoJDBCDriverException(e);
 			}
 
-			for (int i = 0; i < poolSize; i++) {
+			for (int i = 0; i < POOL_SIZE; i++) {
 				try {
 					ProxyConnection connection = new ProxyConnection(DriverManager.getConnection(URL, user, password));
 					availableConnetion.add(connection);
@@ -102,12 +92,12 @@ public enum PoolConnection {
 
 	private void setConfing() throws NoJDBCPropertiesFileException {
 		Properties property = new Properties();
-		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dbProperties);
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(DATABASE_PROPERTIES);
 		try {
 			property.load(inputStream);
-			URL = property.getProperty(dbURL);
-			user = property.getProperty(dbLogin);
-			password = property.getProperty(dbPassword);
+			URL = property.getProperty(DATABASE_URL);
+			user = property.getProperty(DATABASE_USER_LOGIN);
+			password = property.getProperty(DATABASE_USER_PASSWORD);
 		} catch (IOException e) {
 			throw new NoJDBCPropertiesFileException();
 		}

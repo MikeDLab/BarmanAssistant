@@ -37,6 +37,8 @@ public abstract class AbstractCocktailSpecification {
 				cocktail.setUserId(resultSet.getInt("user_id"));
 				cocktail.setCocktailVol(resultSet.getInt("cocktail_vol"));
 				cocktail.setIsPublished(resultSet.getBoolean("cocktail_isPublished"));
+				System.out.println("COCKTAIL NAME: "+ cocktail.getCocktailName());
+				cocktail.setImage(resultSet.getBlob("cocktail_img").getBinaryStream());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

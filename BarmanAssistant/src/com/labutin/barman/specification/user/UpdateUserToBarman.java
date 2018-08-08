@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.UserException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
@@ -23,7 +23,7 @@ public class UpdateUserToBarman extends AbstractUserSpecification implements Use
 	}
 
 	@Override
-	public Set<User> querry() throws UserException {
+	public Set<User> querry() throws RepositoryException {
 		Set<User> users = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TO_BARMAN)) {
@@ -33,7 +33,7 @@ public class UpdateUserToBarman extends AbstractUserSpecification implements Use
 			}
 		} catch (SQLException e) {
 			logger.info("Cannot update user to barman with user_id=" + userId);
-			throw new UserException(e);
+			throw new RepositoryException();
 		} finally {
 			closeResultSet();
 		}

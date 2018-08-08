@@ -25,10 +25,10 @@ public class FindCocktailById extends AbstractCocktailSpecification implements C
 	@Override
 	public Set<Cocktail> querry() {
 		Set<Cocktail> cocktails = new HashSet<>();
-		ProxyConnection connection = null;
-		try {
-			connection = PoolConnection.POOL.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_SET);
+		
+		try(ProxyConnection connection = PoolConnection.POOL.getConnection();	PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_SET);) {
+			
+		
 			if (preparedStatement != null) {
 				preparedStatement.setInt(1, cocktailId);
 				resultSet = preparedStatement.executeQuery();
@@ -41,9 +41,6 @@ public class FindCocktailById extends AbstractCocktailSpecification implements C
 			logger.info("Sqlexception", e);
 		} finally {
 
-			if (connection != null) {
-				connection.close();
-			}
 			closeResultSet();
 		}
 		return cocktails;

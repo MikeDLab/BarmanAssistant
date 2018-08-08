@@ -1,6 +1,7 @@
 package com.labutin.barman.command.cocktail;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,12 +21,12 @@ import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.CocktailService;
 import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.service.UserService;
-
-
+import com.mysql.jdbc.Blob;
 
 public class ShowPublishedCocktailList implements Command {
 	private CocktailService receiverCocktail;
 	private UserService receiverUser;
+
 	public ShowPublishedCocktailList() {
 		// TODO Auto-generated constructor stub
 	}
@@ -35,29 +36,22 @@ public class ShowPublishedCocktailList implements Command {
 		try {
 			receiverCocktail = new CocktailService();
 			Set<Cocktail> setCocktail = receiverCocktail.receivePublishedCocktail();
-			Set<User> setUser =null;
-			if(setCocktail != null)
-			{
+			Set<User> setUser = null;
+			if (setCocktail != null) {
 				receiverUser = new UserService();
 				setUser = receiverUser.receiveCocktailAuthorSet();
-				
 			}
-			Map<Cocktail,User> userCocktailMap = new HashMap<>();
-			for(User user :setUser)
-			{
-				for(Cocktail cocktail : setCocktail)
-				{
-					if(user.getUserId() == cocktail.getUserId())
-					{
-						System.out.println(user + " cocktail : " + cocktail);
+			Map<Cocktail, User> userCocktailMap = new HashMap<>();
+			for (User user : setUser) {
+				for (Cocktail cocktail : setCocktail) {
+					if (user.getUserId() == cocktail.getUserId()) {
 						userCocktailMap.put(cocktail, user);
 					}
 				}
 			}
-			System.out.println("Map size: " + userCocktailMap.keySet().size());
 			request.setAttribute("userCocktailMap", userCocktailMap);
-			request.setAttribute("setCocktail", setCocktail);	
-			} catch (ServiceException e) {
+			request.setAttribute("setCocktail", setCocktail);
+		} catch (ServiceException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}

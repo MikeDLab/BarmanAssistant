@@ -4,12 +4,12 @@ import java.util.Set;
 
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Ingredient;
-import com.labutin.barman.exception.EntityException;
-import com.labutin.barman.exception.UserException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.specification.Specification;
+import com.labutin.barman.specification.cocktail.CocktailSpecification;
 
 public interface СocktailRepository extends Repository {
 	 void add(Cocktail item);
 	 void remove(Cocktail item);
-	 Set<Cocktail> query(Specification<Cocktail> specification) throws EntityException;
+	 Set<Cocktail> query(CocktailSpecification specification) throws RepositoryException;
 }

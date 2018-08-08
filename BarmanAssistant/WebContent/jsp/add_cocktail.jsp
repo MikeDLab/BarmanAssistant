@@ -17,7 +17,8 @@
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 </head>
 <body>
@@ -25,7 +26,7 @@
 		<header>
 			<img src="images/logo.png" alt="Whitesquare logo">
 		</header>
-			<nav>
+		<nav>
 			<ul class="top-menu">
 				<li class="active">
 					<form action="MainServlet" method="post">
@@ -38,7 +39,7 @@
 				<c:if test="${sessionScope.Role == 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="SignIn" />
+							<input type="hidden" name="command" value="Sign_In" />
 							<button type="submit">
 								<fmt:message bundle="${locale}" key="menubar.login" />
 							</button>
@@ -48,7 +49,7 @@
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="LogOut" />
+							<input type="hidden" name="command" value="Log_Out" />
 							<button type="submit">
 								<fmt:message bundle="${locale}" key="menubar.logout" />
 							</button>
@@ -76,9 +77,20 @@
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="UserPanel" />
+							<input type="hidden" name="command" value="User_Panel" />
 							<button type="submit">
 								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
 							</button>
 						</form>
 					</li>
@@ -86,7 +98,7 @@
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AdminPanel" />
+							<input type="hidden" name="command" value="Admin_Panel" />
 							<button type="submit">
 								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
 							</button>
@@ -109,7 +121,7 @@
 				<ul class="aside-menu">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="CocktailList" />
+							<input type="hidden" name="command" value="Cocktail_List" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.cocktaillist" />
 							</button>
@@ -117,7 +129,7 @@
 					</li>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowBarman" />
+							<input type="hidden" name="command" value="Show_Barman" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
 							</button>
@@ -125,32 +137,31 @@
 					</li>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowIngredient" />
+							<input type="hidden" name="command" value="Show_Ingredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Ingredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddCocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Cocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -163,30 +174,38 @@
 		<section>
 			<blockquote>
 				<div class="col-6 col-sm-3">
-				<p>${Errormessage}</p>
-					<form action="MainServlet" method="post" name="PushCocktail">
-						<div class="form-group">
-							<input type="hidden" name="command" value="PushCocktail" /> <input
-								type="text" class="edit" name="cocktailname" id="name"
-								placeholder="Inter cocktail name" maxlength="45">
-								<input type="number" min="0" max="100" placeholder="Inter vol" class="edit" name="cocktailvol" id="vol">
-							<textarea rows="10" cols="45" name="cocktaildesc"
-								maxlength="255">Add description</textarea>
-								<c:if test="${!empty setIngredient}">
-									<table class="table table-bordered">
-										<tr class="bg-info row">
-											<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-											<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
+					<p>${Errormessage}</p>
+					<form action="MainServlet" method="post" name="PushCocktail"
+						enctype="multipart/form-data">
+						<input type="hidden" name="command" value="Push_Cocktail"><br>
+						<br> <input type="text" class="edit" name="cocktailname"
+							id="name" placeholder="Inter cocktail name" maxlength="45"><br>
+						<br> <input type="number" min="0" max="100"
+							placeholder="Inter vol" class="edit" name="cocktailvol" id="vol"
+							required><br> <br>
+						<textarea rows="10" cols="45" name="cocktaildesc" maxlength="255">Add description</textarea>
+						<br> <br> <input type="hidden" name="cocktailId"
+							value="44"><br> <br>
+						 	<c:if test="${!empty setIngredient}">
+								<table class="table table-bordered">
+									<tr class="bg-info row">
+										<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
+										<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
+									</tr>
+									<c:forEach items="${setIngredient}" var="setIngredient">
+										<tr class="row">
+											<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setIngredient.ingredientName}</td>
+											<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientDescription}</td>
+											<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><input
+												type="checkbox" name="selected"
+												value="${setIngredient.ingredientId}"></td>
 										</tr>
-										<c:forEach items="${setIngredient}" var="setIngredient">
-											<tr class="row">
-												<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setIngredient.ingredientName}</td>
-												<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientDescription}</td>
-												<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">	<input type="checkbox" name="selected" value="${setIngredient.ingredientId}"></td>
-											</tr>
-										</c:forEach>
-									</table>
-								</c:if>
+									</c:forEach>
+								</table>
+							</c:if>
+						<div class="form-group">
+							<input type="file" name="photo" size="50"
+								placeholder="Upload Your Image" required />
 							<button type="submit" class="active">Add</button>
 						</div>
 					</form>

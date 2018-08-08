@@ -24,7 +24,7 @@ public class FindCocktailAuthrorSet extends AbstractUserSpecification implements
 		Set<User> users = new HashSet<>();
 
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_AUTHOR_SET)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_AUTHOR_SET);) {
 			if (preparedStatement != null) {
 				resultSet = preparedStatement.executeQuery();
 			}

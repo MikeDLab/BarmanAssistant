@@ -33,6 +33,7 @@ public class UserLoginCommand implements Command {
 			logger.info("Try to login user");
 			User user = receiver.login((String) request.getParameter(JspParameter.USER_NAME.getValue()),
 					(String) request.getParameter(JspParameter.USER_PASSWORD.getValue()));
+			System.out.println(user);
 			if (user != null) {
 				switch (user.getUserRole()) {
 				case 0:

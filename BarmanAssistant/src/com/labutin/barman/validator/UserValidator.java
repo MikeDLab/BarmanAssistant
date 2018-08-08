@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 public class UserValidator {
 	private Pattern pattern;
 	private Matcher matcher;
-	private static final String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	private static final String USER_LOGIN_REGEX = "[a-zA-Z0-9\\._\\-]{3,}";
+	private static final String EMAIL_REGEX = "^[_A-Za-z\\d-\\+]+(\\.[_A-Za-z\\d-]+)*@"
+			+ "[A-Za-z\\d-]+(\\.[A-Za-z\\d]+)*(\\.[A-Za-z]{2,})$";
+	private static final String USER_LOGIN_REGEX = "[\\p{Lower}\\p{Upper}\\d]{3,}";
 	private static final String USER_NAME_REGEX = "[a-zA-Z\\._\\-]{3,}";
-	private static final String USER_PASSWORD_REGEX= "(?=.*[0-9])(?=.*[a-z])(?=\\\\S+$).{4,}";
+	private static final String USER_PASSWORD_REGEX= "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\\\S+$).{6,}";
 
 	public UserValidator() {
 		// TODO Auto-generated constructor stub
@@ -35,8 +35,6 @@ public class UserValidator {
 	}
 	public boolean isPassword(String userPassword)
 	{
-		pattern = Pattern.compile(USER_PASSWORD_REGEX);
-		matcher = pattern.matcher(userPassword);
-		return userPassword.matches(userPassword);
+		return userPassword.matches(USER_PASSWORD_REGEX);
 	}
 }

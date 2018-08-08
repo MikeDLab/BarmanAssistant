@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
-<html lang="${language}">
+<html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -17,9 +17,6 @@
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
 </head>
 <body>
 	<div id="wrapper">
@@ -108,13 +105,9 @@
 			</ul>
 		</nav>
 		<div id="heading">
-			<h1>${language}</h1>
 			<h1>
-				<label for="username"><fmt:message bundle="${locale}"
-						key="cocktaillist.title" />:</label>
+				<fmt:message bundle="${locale}" key="loginpage.title" />
 			</h1>
-			<h1>${Role}</h1>
-			<h1>${User.userName}</h1>
 		</div>
 		<aside>
 			<nav>
@@ -167,75 +160,11 @@
 					</c:if>
 				</ul>
 			</nav>
-			<h2>OUR OFFICES</h2>
-			<p>
-				<img src="images/sample.png" width="230" height="180"
-					alt="Our offices">
-			</p>
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
-					<p>${Errormessage}</p>
-					<div class="form-group">
-						<c:if test="${!empty userCocktailMap}">
-							<table class="table table-bordered">
-								<tr class="bg-info row">
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Id</th>
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Volume</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">UserName</th>
-								</tr>
-								<c:forEach items="${userCocktailMap}" var="userCocktailMap">
-									<tr class="row">
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailId}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailName}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailDescription}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailVol}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.value.userName}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "> <img src="ImageServlet?imageId=${userCocktailMap.key.cocktailId}" width="200"/></td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
-												action="MainServlet" method="post">
-												<input type="hidden" name="command" value="Cocktail_Info" />
-												<input type="hidden" name="cocktail_id"
-													value="${userCocktailMap.key.cocktailId}" /> <input
-													type="hidden" name="user_id"
-													value="${userCocktailMap.value.userId}" />
-												<button type="submit">INFO</button>
-											</form></td>
-										<c:if test="${sessionScope.Role == 'ADMIN'}">
-											<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
-													action="MainServlet" method="post">
-													<input type="hidden" name="command" value="Delete_Cocktail" />
-													<input type="hidden" name="cocktail_id"
-														value="${userCocktailMap.key.cocktailId}" />
-													<button type="submit" onclick="return proverka();">Delete</button>
-												</form> <script type="text/javascript">
-													function proverka() {
-														if (confirm("Подтвердить")) {
-															return
-
-															
-
-															true;
-														} else {
-															return false;
-														}
-													}
-												</script></td>
-										</c:if>
-
-									</tr>
-								</c:forEach>
-							</table>
-						</c:if>
-					</div>
-				</div>
 				<div>
-					<c:forEach items="${imagenames}" var="imagename">
-						<img src="${pageContext.request.contextPath}/images/${imagename}">
-					</c:forEach>
+					<p>ERROR PAGE</p>
 				</div>
 			</blockquote>
 		</section>

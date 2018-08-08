@@ -6,9 +6,10 @@ public class User {
 	private String userName;
 	private String userPassword;
 	private String userEmail;
+	private boolean isAvaible;
 	private int userRole;
 	public User(int userId, String userLogin, String userName, String userPassword, String userEmail,
-			int userRole) {
+			int userRole,boolean isAvaible) {
 		super();
 		this.userId = userId;
 		this.userLogin = userLogin;
@@ -16,6 +17,7 @@ public class User {
 		this.userPassword = userPassword;
 		this.userEmail = userEmail;
 		this.userRole = userRole;
+		this.isAvaible = isAvaible;
 	}	
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -67,6 +69,13 @@ public class User {
 		result = prime * result + ((userPassword == null) ? 0 : userPassword.hashCode());
 		result = prime * result + userRole;
 		return result;
+	}
+	
+	public boolean isAvaible() {
+		return isAvaible;
+	}
+	public void setAvaible(boolean isAvaible) {
+		this.isAvaible = isAvaible;
 	}
 	@Override
 	public boolean equals(Object obj) {

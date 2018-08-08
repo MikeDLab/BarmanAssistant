@@ -28,7 +28,7 @@ public class DeleteUser implements Command {
 			receiver.removeUser(userId);
 		} catch (ServiceException  e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return PageEnum.ERROR_PAGE;
 		}
 		return new ShowUserCommand().execute(request, response);
 

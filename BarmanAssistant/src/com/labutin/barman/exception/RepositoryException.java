@@ -1,27 +1,27 @@
 package com.labutin.barman.exception;
 
-public class CocktailException extends EntityException{
+public class RepositoryException extends Exception {
 
-	public CocktailException() {
+	public RepositoryException() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CocktailException(String message) {
+	public RepositoryException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public CocktailException(Throwable cause) {
+	public RepositoryException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public CocktailException(String message, Throwable cause) {
+	public RepositoryException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public CocktailException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public RepositoryException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}

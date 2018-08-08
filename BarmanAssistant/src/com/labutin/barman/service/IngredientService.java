@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.EntityException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;
@@ -42,7 +42,7 @@ public class IngredientService {
 	public Set<Ingredient> receiveIngredient() throws ServiceException {
 		try {
 			return ingredientRepository.query(new FindIngredientSet());
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -51,7 +51,7 @@ public class IngredientService {
 	{
 		try {
 			ingredientRepository.query(new AddIngredientHasCocktail(ingredientId, cocktailId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -60,7 +60,7 @@ public class IngredientService {
 	{
 		try {
 			return ingredientRepository.query(new FindIngredientSetByCocktailId(cocktailId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -69,10 +69,18 @@ public class IngredientService {
 	{
 		try {
 			ingredientRepository.query(new DeleteIngredientByCocktailId(cocktailId));
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
+	}
+	public void updateIngredient(int ingredientId,String ingredientName,String ingredientDescription)
+	{
+		Ingredient item = new Ingredient();
+		item.setIngredientId(ingredientId);
+		item.setIngredientName(ingredientName);
+		item.setIngredientDescription(ingredientDescription);
+		ingredientRepository.update(item);
 	}
 
 }

@@ -1,11 +1,12 @@
 package com.labutin.barman.service;
 
+import java.io.InputStream;
 import java.util.Set;
 
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.EntityException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;
@@ -28,20 +29,25 @@ public class CocktailService {
 			throw new ServiceException(e);
 		}
 	}
-	public Cocktail add(String cocktailName, int userId, String cocktailDescription, int cocktailVol, boolean isPublished) {
+	public void addImage(int cocktailId,InputStream inputStream)
+	{
+		cocktailRepository.addImage(cocktailId, inputStream);
+	}
+	public Cocktail add(String cocktailName, int userId, String cocktailDescription, int cocktailVol, boolean isPublished,InputStream imageStream) {
 	Cocktail cocktail = new Cocktail();
 	cocktail.setCocktailName(cocktailName);
 	cocktail.setCocktailDescription(cocktailDescription);
 	cocktail.setUserId(userId);
 	cocktail.setCocktailVol(cocktailVol);
 	cocktail.setIsPublished(isPublished);
+	cocktail.setImage(imageStream);
 	cocktailRepository.add(cocktail);
 	return cocktail;
 }
 	public Set<Cocktail> receivePublishedCocktail() throws ServiceException {
 		try {
 			return cocktailRepository.query(new FindCocktailPublishedSet());
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -49,7 +55,7 @@ public class CocktailService {
 	public Set<Cocktail> receiveNotPublishedCocktail() throws ServiceException {
 		try {
 			return cocktailRepository.query(new FindCocktailForBarmenAccept());
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
@@ -57,7 +63,7 @@ public class CocktailService {
 	public Cocktail receiveCocktailById(int cocktailId) throws ServiceException {
 		try {
 			return cocktailRepository.query(new FindCocktailById(cocktailId)).iterator().next();
-		} catch (EntityException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}

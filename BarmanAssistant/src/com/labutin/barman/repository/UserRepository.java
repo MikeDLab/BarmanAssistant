@@ -3,16 +3,16 @@ package com.labutin.barman.repository;
 import java.util.Set;
 
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.EntityException;
-import com.labutin.barman.exception.UserException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.specification.Specification;
+import com.labutin.barman.specification.user.UserSpecification;
 
 public interface UserRepository extends Repository {
-	void add(User item) throws UserException;
+	void add(User item) throws RepositoryException;
 
-	void remove(User item) throws UserException;
+	void remove(User item) throws RepositoryException;
 
-	void update(User item) throws UserException;
+	void update(User item) throws RepositoryException;
 
-	Set<User> query(Specification<User> specification) throws EntityException;
+	Set<User> query(UserSpecification specification) throws RepositoryException;
 }

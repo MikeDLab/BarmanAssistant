@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import com.labutin.barman.entity.User;
 /**
  * Servlet implementation class First
  */
+@MultipartConfig(maxFileSize = 16177215)
 public class MainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LogManager.getLogger();
@@ -46,11 +48,12 @@ public class MainServlet extends HttpServlet {
 		// doGet(request, response);
 		TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
 		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
+		logger.info("Command type: " + commandType.getValue());
 		CommandBuilder commandBuilder = new CommandBuilder(commandType);
 		Command command = Director.createCommand(commandBuilder);
 		PageEnum page = command.execute(request, response);
 		request.getRequestDispatcher(page.getValue()).forward(request, response);
-		logger.info("Command type: " + commandType.getValue());
+		
 	}
 
 }

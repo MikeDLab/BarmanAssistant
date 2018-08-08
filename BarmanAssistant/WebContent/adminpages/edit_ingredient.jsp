@@ -34,21 +34,25 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Sign_In" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Log_Out" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Sign_In" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Log_Out" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
 						<button type="submit">Es</button>
@@ -68,29 +72,36 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="User_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
-					</form>
-				</li>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="User_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
 				</c:if>
-				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Barman_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Admin_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Admin_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -114,43 +125,42 @@
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Show_Barman" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Show_Barman" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="Show_Ingredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Ingredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Cocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Cocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -165,12 +175,18 @@
 				<div class="col-6 col-sm-3">
 					<form action="MainServlet" method="post" name="PushIngredient">
 						<div class="form-group">
-							<input type="hidden" name="command" value="Push_Ingredient" /> <input
+							<input type="hidden" name="command" value="Edit_Ingredient" /> <input
 								type="text" class="edit" name="ingredientname" id="name"
-								placeholder="Inter name" maxlength="45">
+								placeholder="${ingredient.ingredientName}" maxlength="45">
 							<textarea rows="10" cols="45" name="ingredientdesc"
-								maxlength="255">Add description</textarea>
-							<button type="submit" class="active">Add</button>
+								maxlength="255">${ingredient.ingredientDescription}</textarea>
+							<input type="hidden" name="ingredient_id"
+								value="${ingredient.ingredientId}" /> <input type="hidden"
+								name="ingredient_name" value="${ingredient.ingredientName}" />
+							<input type="hidden" name="ingredient_description"
+								value="${ingredient.ingredientDescription}" />
+							<button type="submit">Edit</button>
+
 						</div>
 					</form>
 				</div>

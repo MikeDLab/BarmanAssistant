@@ -1,5 +1,9 @@
 package com.labutin.barman.entity;
 
+import java.io.InputStream;
+
+import com.mysql.jdbc.Blob;
+
 public class Cocktail {
 	private int cocktailId;
 	private String cocktailName;
@@ -7,6 +11,7 @@ public class Cocktail {
 	private String cocktailDescription;
 	private int cocktailVol;
 	private boolean isPublished;
+	private InputStream image;
 	public Cocktail(int cocktaiId, String cocktailName, int userId, String cocktailDescription, int cocktailVol, boolean isPublished) {
 		super();
 		this.cocktailId = cocktaiId;
@@ -53,6 +58,15 @@ public class Cocktail {
 		return isPublished;
 	}
 	public void setIsPublished(boolean isPublished) {
+		this.isPublished = isPublished;
+	}
+	public InputStream getImage() {
+		return image;
+	}
+	public void setImage(InputStream image) {
+		this.image = image;
+	}
+	public void setPublished(boolean isPublished) {
 		this.isPublished = isPublished;
 	}
 	@Override

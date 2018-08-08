@@ -14,7 +14,7 @@ import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.EntityException;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;

@@ -49,12 +49,10 @@ public class ShowNotPublishedCocktailList implements Command {
 				{
 					if(user.getUserId() == cocktail.getUserId())
 					{
-						System.out.println(user + " cocktail : " + cocktail);
 						userCocktailMap.put(cocktail, user);
 					}
 				}
 			}
-			System.out.println("Map size: " + userCocktailMap.keySet().size());
 			request.setAttribute("userCocktailMap", userCocktailMap);
 			request.setAttribute("setCocktail", setCocktail);
 			

@@ -34,25 +34,21 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="SignIn" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="menubar.login" />
-							</button>
-						</form>
-					</li>
-				</c:if>
-				<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="LogOut" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="menubar.logout" />
-							</button>
-						</form>
-					</li>
-				</c:if>
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="Sign_In" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
+					</form>
+				</li>
+			</c:if>
+			<c:if test="${sessionScope.Role != 'GUEST'}">
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="Log_Out" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
+					</form>
+				</li>
+			</c:if>
 				<li class="active">
 					<form action="Es" method="get">
 						<button type="submit">Es</button>
@@ -72,25 +68,29 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="UserPanel" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="menubar.userpanel" />
-							</button>
-						</form>
-					</li>
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="User_Panel" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
+					</form>
+				</li>
 				</c:if>
+				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="Barman_Panel" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
+					</form>
+				</li>
+			</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AdminPanel" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
-							</button>
-						</form>
-					</li>
-				</c:if>
+				<li class="active">
+					<form action="MainServlet" method="post">
+						<input type="hidden" name="command" value="Admin_Panel" />
+						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
+					</form>
+				</li>
+			</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -109,23 +109,25 @@
 				<ul class="aside-menu">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="CocktailList" />
+							<input type="hidden" name="command" value="Cocktail_List" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.cocktaillist" />
 							</button>
 						</form>
 					</li>
+					<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowBarman" />
+							<input type="hidden" name="command" value="Show_Barman" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
 							</button>
 						</form>
 					</li>
+					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="ShowIngredient" />
+							<input type="hidden" name="command" value="Show_Ingredient" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}"
 									key="sidebar.ingredientlist" />
@@ -135,7 +137,7 @@
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddIngredient" />
+							<input type="hidden" name="command" value="Add_Ingredient" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
 							</button>
@@ -145,7 +147,7 @@
 					<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="AddCocktail" />
+							<input type="hidden" name="command" value="Add_Cocktail" />
 							<button class="side" type="submit">
 								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
 							</button>
@@ -185,7 +187,7 @@
 												<form action="MainServlet" method="post">
 													<input type="hidden" name="userId"
 														value="${setUser.userId}" /> <input type="hidden"
-														name="command" value="UpdateToBarman" />
+														name="command" value="Update_To_Barman" />
 													<button type="submit">Update to barman</button>
 												</form>
 											</li>
@@ -194,14 +196,14 @@
 												<form action="MainServlet" method="post">
 													<input type="hidden" name="userId"
 														value="${setUser.userId}" /> <input type="hidden"
-														name="command" value="DowngradeToUser" />
+														name="command" value="Downgrade_To_User" />
 													<button type="submit">Downgrade to user</button>
 												</form>
 											</li>
 										</c:if></td>
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
 												action="MainServlet" method="post">
-												<input type="hidden" name="command" value="DeleteUser" />
+												<input type="hidden" name="command" value="Delete_User" />
 												<input type="hidden" name="user_id"
 													value="${setUser.userId}" />
 												<button type="submit" onclick="return proverka();">Delete</button>

@@ -28,10 +28,8 @@ public class FindUserByLoginAndPassword extends AbstractUserSpecification implem
 	@Override
 	public Set<User> querry() {
 		Set<User> users = new HashSet<>();
-		ProxyConnection connection = null;
-		try {
-			connection = PoolConnection.POOL.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN);
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN);) {
 			if (preparedStatement != null) {
 				preparedStatement.setString(1, login);
 				preparedStatement.setString(2, DigestUtils.md5Hex(password));
@@ -42,11 +40,8 @@ public class FindUserByLoginAndPassword extends AbstractUserSpecification implem
 				return users;
 			}
 		} catch (SQLException e) {
-			logger.warn("Sql exception",e);
+			logger.warn("Sql exception", e);
 		} finally {
-			if (connection != null) {
-				connection.close();
-			}
 			closeResultSet();
 		}
 		return users;

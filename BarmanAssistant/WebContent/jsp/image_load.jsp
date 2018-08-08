@@ -17,6 +17,9 @@
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 </head>
 <body>
 	<div id="wrapper">
@@ -34,21 +37,25 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Sign_In" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Log_Out" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Sign_In" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Log_Out" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
 						<button type="submit">Es</button>
@@ -68,36 +75,43 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="User_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
-					</form>
-				</li>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="User_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
 				</c:if>
-				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Barman_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Admin_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Admin_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
 			<h1>${language}</h1>
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="adminpanel.title" />:</label>
+						key="addcocktail.title" />:</label>
 			</h1>
 			<h1>${Role}</h1>
 			<h1>${User.userName}</h1>
@@ -113,7 +127,6 @@
 							</button>
 						</form>
 					</li>
-					<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="Show_Barman" />
@@ -122,35 +135,33 @@
 							</button>
 						</form>
 					</li>
-					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="Show_Ingredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Ingredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Cocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Cocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -162,31 +173,22 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="ingredient">
-					<li class="inactive">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Check_Cocktail_List" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="adminpanel.barmanlist" />
-							</button>
-						</form>
-					</li>
-					<li class="inactive">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="homepage.addingredientpage" />
-							</button>
-						</form>
-					</li>
-					<li class="inactive">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="homepage.addingredientpage" />
-							</button>
-						</form>
-					</li>
+				<div class="col-6 col-sm-3">
+					<p>${Errormessage}</p>
+					<p>${cocktailId}</p>
+					<form action="FileUploadServlet" method="post" name="PushCocktail"
+						enctype="multipart/form-data">
+						<input type="hidden" name="cocktailId" value="${cocktailId}"><br>
+						<br> <label for="lastName">Last Name: </label> <input
+							type="text" name="lastName" size="50"
+							placeholder="Enter Your LastName" required /><br>
+						<br>
+						<div class="form-group">
+							<input type="file" name="photo" size="50"
+								placeholder="Upload Your Image" required />
+							<button type="submit" class="active">Add</button>
+						</div>
+					</form>
 				</div>
 			</blockquote>
 		</section>
