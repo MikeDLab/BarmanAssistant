@@ -3,7 +3,6 @@ package com.labutin.barman.specification.user;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,7 +31,7 @@ public class FindUserSet extends AbstractUserSpecification implements UserSpecif
 				resultSet = preparedStatement.executeQuery();
 			}
 			while (resultSet.next()) {
-				users.add(loadUserData(resultSet));
+				users.add(loadUserData());
 			}
 		} catch (SQLException e) {
 			logger.info("Sqlexception", e);

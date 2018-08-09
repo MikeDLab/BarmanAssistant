@@ -18,7 +18,7 @@ import com.labutin.barman.specification.ingredient.FindIngredientSetByCocktailId
 public class IngredientService {
 	private final IngredientRepositoryImpl ingredientRepository;
 
-	public IngredientService() throws ServiceException{
+	public IngredientService() throws ServiceException {
 		try {
 			ingredientRepository = IngredientRepositoryImpl.getInstance();
 		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
@@ -32,9 +32,9 @@ public class IngredientService {
 		ingredient.setIngredientDescription(ingredientDescription);
 		try {
 			ingredientRepository.add(ingredient);
-		} catch (ServiceException e) {
+		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
-			throw new ServiceException(e);
+			throw new ServiceException();
 		}
 		return ingredient;
 	}
@@ -47,8 +47,8 @@ public class IngredientService {
 			throw new ServiceException(e);
 		}
 	}
-	public void insertIngredientCocktail(int ingredientId,int cocktailId) throws ServiceException
-	{
+
+	public void insertIngredientCocktail(int ingredientId, int cocktailId) throws ServiceException {
 		try {
 			ingredientRepository.query(new AddIngredientHasCocktail(ingredientId, cocktailId));
 		} catch (RepositoryException e) {
@@ -56,8 +56,8 @@ public class IngredientService {
 			throw new ServiceException(e);
 		}
 	}
-	public Set<Ingredient> receiveIngredientByCocktailId(int cocktailId) throws ServiceException
-	{
+
+	public Set<Ingredient> receiveIngredientByCocktailId(int cocktailId) throws ServiceException {
 		try {
 			return ingredientRepository.query(new FindIngredientSetByCocktailId(cocktailId));
 		} catch (RepositoryException e) {
@@ -65,8 +65,8 @@ public class IngredientService {
 			throw new ServiceException(e);
 		}
 	}
-	public void removeIngredient(int cocktailId) throws ServiceException
-	{
+
+	public void removeIngredient(int cocktailId) throws ServiceException {
 		try {
 			ingredientRepository.query(new DeleteIngredientByCocktailId(cocktailId));
 		} catch (RepositoryException e) {
@@ -74,13 +74,18 @@ public class IngredientService {
 			throw new ServiceException(e);
 		}
 	}
-	public void updateIngredient(int ingredientId,String ingredientName,String ingredientDescription)
-	{
-		Ingredient item = new Ingredient();
-		item.setIngredientId(ingredientId);
-		item.setIngredientName(ingredientName);
-		item.setIngredientDescription(ingredientDescription);
-		ingredientRepository.update(item);
+
+	public void updateIngredient(int ingredientId, String ingredientName, String ingredientDescription) throws ServiceException {	
+		try {
+			Ingredient item = new Ingredient();
+			item.setIngredientId(ingredientId);
+			item.setIngredientName(ingredientName);
+			item.setIngredientDescription(ingredientDescription);
+			ingredientRepository.update(item);
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
 	}
 
 }

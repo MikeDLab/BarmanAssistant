@@ -1,9 +1,6 @@
 package com.labutin.barman.specification.user;
 
-import java.util.Set;
-
 import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.RepositoryException;
 
 import com.labutin.barman.specification.Specification;
 

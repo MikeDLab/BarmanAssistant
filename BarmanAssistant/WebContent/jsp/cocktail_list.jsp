@@ -194,7 +194,9 @@
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailDescription}</td>
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailVol}</td>
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.value.userName}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "> <img src="ImageServlet?imageId=${userCocktailMap.key.cocktailId}" width="200"/></td>
+										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><img
+											src="MainServlet?imageId=${userCocktailMap.key.cocktailId}&command=Show_Cocktail_Image"
+											width="200" /></td>
 										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
 												action="MainServlet" method="post">
 												<input type="hidden" name="command" value="Cocktail_Info" />
@@ -214,29 +216,20 @@
 												</form> <script type="text/javascript">
 													function proverka() {
 														if (confirm("Подтвердить")) {
-															return
-
-															
-
-															true;
+															return true;
 														} else {
 															return false;
 														}
 													}
 												</script></td>
 										</c:if>
-
 									</tr>
 								</c:forEach>
 							</table>
 						</c:if>
 					</div>
 				</div>
-				<div>
-					<c:forEach items="${imagenames}" var="imagename">
-						<img src="${pageContext.request.contextPath}/images/${imagename}">
-					</c:forEach>
-				</div>
+
 			</blockquote>
 		</section>
 	</div>

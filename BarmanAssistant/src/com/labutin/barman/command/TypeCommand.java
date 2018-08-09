@@ -27,7 +27,9 @@ public enum TypeCommand{
 	COCKTAIL_INFO("CocktailInfo"),
 	CHECK_COCKTAIL_LIST("CheckCocktailList"),
 	EDIT_INGREDIENT_PAGE("EditIngredientPage"),
-	EDIT_INGREDIENT("EditIngredient");
+	EDIT_INGREDIENT("EditIngredient"),
+	SHOW_COCKTAIL_IMAGE("ShowCocktailImage"),
+	ADD_COCKTAIL_RATING("AddCocktailRating");
 	private String value;
 	private TypeCommand(String value)
 	{

@@ -9,14 +9,14 @@ import org.apache.logging.log4j.Logger;
 import com.labutin.barman.entity.User;
 
 public abstract class AbstractUserSpecification {
-	protected ResultSet resultSet;
-	private static Logger logger = LogManager.getLogger();
 	protected final String USER_ID = "user_id";
 	protected final String USER_NAME = "user_name";
 	protected final String USER_LOGIN = "user_login";
 	protected final String USER_PASSWORD = "user_password";
 	protected final String USER_EMAIL = "user_email";
 	protected final String USER_ROLE = "user_role";
+	protected ResultSet resultSet;
+	private static Logger logger = LogManager.getLogger();
 	public AbstractUserSpecification() {
 		// TODO Auto-generated constructor stub
 	}
@@ -31,7 +31,7 @@ public abstract class AbstractUserSpecification {
 		}
 	}
 
-	protected User loadUserData(ResultSet resultSet)
+	protected User loadUserData()
 	{
 		User user = null;
 		try {

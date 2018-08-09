@@ -11,7 +11,6 @@ import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.RepositoryException;
-import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 import com.labutin.barman.specification.ingredient.FindIngredientByName;
@@ -38,50 +37,32 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 	}
 
 	@Override
-	public void add(Ingredient item) throws ServiceException {
-		ProxyConnection connection = null;
-		PreparedStatement preparedStatement;
-		// TODO Auto-generated method stub
-		logger.info(item + " try to register");
-		try {
+	public void add(Ingredient item) throws RepositoryException {
+
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INGREDIENT);) {
 			if (query(new FindIngredientByName(item.getIngredientName())) == null) {
-				try {
-					connection = PoolConnection.POOL.getConnection();
-					preparedStatement = connection.prepareStatement(INSERT_INGREDIENT);
-					if (preparedStatement != null) {
-						preparedStatement.setString(1, item.getIngredientName());
-						preparedStatement.setString(2, item.getIngredientDescription());
-						preparedStatement.executeUpdate();
-						logger.info(item + " inseted");
-					}
-				} catch (SQLException e) {
-					logger.info(item + " has problem");
-				} finally {
-					if (connection != null) {
-						connection.close();
-					}
+				if (preparedStatement != null) {
+					preparedStatement.setString(1, item.getIngredientName());
+					preparedStatement.setString(2, item.getIngredientDescription());
+					preparedStatement.executeUpdate();
+					logger.info(item + " inseted");
 				}
 			}
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException(e);
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
 		}
-
 	}
 
 	@Override
-	public void remove(Ingredient item) {
-		ProxyConnection connection;
-		PreparedStatement preparedStatement;
-		// TODO Auto-generated method stub
-		connection = PoolConnection.POOL.getConnection();
-		try {
-			preparedStatement = connection.prepareStatement(REMOVE_INGREDIENT);
+	public void remove(Ingredient item) throws RepositoryException {
+
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_INGREDIENT);) {
 			preparedStatement.setString(1, item.getIngredientName());
 			preparedStatement.executeUpdate();
-			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			throw new RepositoryException(e);
 		}
 
 	}
@@ -92,7 +73,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 		return specification.querry();
 	}
 
-	public void update(Ingredient item) {
+	public void update(Ingredient item) throws RepositoryException {
 
 		// TODO Auto-generated method stub
 		System.out.println("Try to change ");
@@ -102,10 +83,9 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 			preparedStatement.setString(2, item.getIngredientDescription());
 			preparedStatement.setInt(3, item.getIngredientId());
 			preparedStatement.executeUpdate();
-			System.out.println("Norm ");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("has problem ");
+			throw new RepositoryException(e);
 		}
 	}
 

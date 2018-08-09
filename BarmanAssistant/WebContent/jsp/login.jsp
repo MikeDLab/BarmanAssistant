@@ -158,9 +158,9 @@
 						<p>${Errormessage}</p>
 						<div class="form-group">
 							<input type="hidden" name="command" value="Login" /> <input
-								type="text" class="edit" name="username" id="username"
+								type="text" class="edit" name="user_login" id="user_login"
 								placeholder="Inter username" maxlength="45"> <input
-								type="password" class="edit" name="password" id="username"
+								type="password" class="edit" name="user_password" id="username"
 								placeholder="Inter password" maxlength="45">
 							<button type="submit" class="active"><fmt:message bundle="${locale}" key="loginpage.signin" /></button>
 						</div>

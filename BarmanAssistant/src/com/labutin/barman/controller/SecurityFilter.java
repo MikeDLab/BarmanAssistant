@@ -43,12 +43,17 @@ public class SecurityFilter implements Filter {
 			System.out.println("Filert usss");
 			HttpServletRequest req = (HttpServletRequest) arg0;
 			// Раскладываем адрес на составляющие
+			System.out.println(req.getRequestURI());
+			System.out.println(req.getRequestURL());
 			String[] list = req.getRequestURI().split("/");
+			for(String l: list)
+			{
+				System.out.println("Page: " + l);
+			}
 			// Извлекаем наименование страницы
 			String page = null;
 			if (list[list.length - 1].indexOf(".jsp") > 0) {
 				page = list[list.length - 1];
-				System.out.println(page);
 			}
 			// Если открывается главная страница, то выполняем проверку
 			if ((page != null) && page.equalsIgnoreCase("index.jsp")) {

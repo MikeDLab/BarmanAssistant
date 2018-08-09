@@ -33,7 +33,7 @@ public class FindUserByLogin extends AbstractUserSpecification implements UserSp
 				resultSet = preparedStatement.executeQuery();
 			}
 			if (resultSet.next()) {
-				users.add(loadUserData(resultSet));
+				users.add(loadUserData());
 				return users;
 			}
 

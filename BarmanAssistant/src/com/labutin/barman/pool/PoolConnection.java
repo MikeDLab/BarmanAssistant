@@ -9,8 +9,6 @@ import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.management.RuntimeErrorException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,33 +32,32 @@ public enum PoolConnection {
 	private AtomicBoolean isCreated = new AtomicBoolean(false);
 
 	public ProxyConnection getConnection() {
-			ProxyConnection connection = null;
-			try {
-				connection = availableConnetion.take();
-				unavailableConnetion.add(connection);
-				logger.info("Connections: " + availableConnetion.size());
-				logger.info("Unvaible: " + unavailableConnetion.size());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				logger.info("Interruptedexception",e);
-			}
-		 return connection;
-	}
-	
-	public void returnConnection(ProxyConnection connection) {
-		
+		ProxyConnection connection = null;
 		try {
-			if(!connection.getAutoCommit())
-			{
+			connection = availableConnetion.take();
+			unavailableConnetion.add(connection);
+			logger.info("Connections: " + availableConnetion.size());
+			logger.info("Unvaible: " + unavailableConnetion.size());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			logger.info("Interruptedexception", e);
+		}
+		return connection;
+	}
+
+	public void returnConnection(ProxyConnection connection) {
+
+		try {
+			if (!connection.getAutoCommit()) {
 				connection.setAutoCommit(true);
 			}
 			unavailableConnetion.remove(connection);
 			availableConnetion.put(connection);
 		} catch (InterruptedException e) {
-			logger.info("Connection ploblem",e);
-		}catch (SQLException e) {
-            throw new RuntimeException();
-        }
+			logger.info("Connection ploblem", e);
+		} catch (SQLException e) {
+			throw new RuntimeException();
+		}
 	}
 
 	public void initialization() throws NoJDBCDriverException, NoJDBCPropertiesFileException {

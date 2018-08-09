@@ -9,8 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.entity.Cocktail;
-import com.labutin.barman.entity.Ingredient;
-import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
@@ -18,6 +16,7 @@ public class FindCocktailById extends AbstractCocktailSpecification implements C
 	private final static String FIND_COCKTAIL_SET = "SELECT * FROM Cocktail WHERE cocktail_id=?";
 	private static Logger logger = LogManager.getLogger();
 	private int cocktailId;
+
 	public FindCocktailById(int cocktailId) {
 		this.cocktailId = cocktailId;
 	}
@@ -25,22 +24,19 @@ public class FindCocktailById extends AbstractCocktailSpecification implements C
 	@Override
 	public Set<Cocktail> querry() {
 		Set<Cocktail> cocktails = new HashSet<>();
-		
-		try(ProxyConnection connection = PoolConnection.POOL.getConnection();	PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_SET);) {
-			
-		
+
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(FIND_COCKTAIL_SET);) {
 			if (preparedStatement != null) {
 				preparedStatement.setInt(1, cocktailId);
 				resultSet = preparedStatement.executeQuery();
 			}
-			connection.close();
 			while (resultSet.next()) {
 				cocktails.add(loadCocktailData(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.info("Sqlexception", e);
 		} finally {
-
 			closeResultSet();
 		}
 		return cocktails;

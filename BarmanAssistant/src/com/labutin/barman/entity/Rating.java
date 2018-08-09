@@ -4,6 +4,16 @@ public class Rating {
 	protected int estimatingId;
 	protected int estimatedId;
 	protected int rating;
+	public Rating()
+	{
+		
+	}
+	public Rating(int estimatingId, int estimatedId, int rating) {
+		super();
+		this.estimatingId = estimatingId;
+		this.estimatedId = estimatedId;
+		this.rating = rating;
+	}
 	public int getEstimating() {
 		return estimatingId;
 	}

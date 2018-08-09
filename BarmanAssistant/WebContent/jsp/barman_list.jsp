@@ -197,46 +197,6 @@
 							</c:forEach>
 						</table>
 					</c:if>
-					<%-- <c:if test="${!empty setBarman}">
-						<table class="table table-bordered">
-							<tr class="bg-info row">
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Login</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Email</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Role</th>
-								<c:if test="${sessionScope.Role != 'GUEST'}">
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Rating</td>
-								</c:if>
-							</tr>
-							<c:forEach items="${setBarman}" var="setBarman">
-								<tr class="row">
-									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setBarman.userLogin}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setBarman.userName}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setBarman.userEmail}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setBarman.userRole}</td>
-									<c:if test="${!empty barmanRating}">
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${barmanRating}</td>
-									</c:if>
-									<c:if test="${empty barmanRating}">
-										<c:if test="${sessionScope.Role != 'GUEST'}">
-											<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">
-												<form action="MainServlet" method="post">
-													<input type="number" min="0" max="10"
-														placeholder="Inter vol" class="edit" name="cocktailvol"
-														id="vol"> <input type="hidden" name="test"
-														value="number" /> <input type="hidden" name="command"
-														value="AddBarmanRating" />
-													<input type="hidden" name="barmanid"
-														value="${setBarman.userId}" />
-													<button type="submit" class="active">Оценить</button>
-											</td>
-											</form>
-										</c:if>
-									</c:if>
-								</tr>
-							</c:forEach>
-						</table>
-					</c:if> --%>
 				</div>
 			</blockquote>
 		</section>

@@ -1,21 +1,20 @@
-package com.labutin.barman.command.user;
+package com.labutin.barman.command.cocktail;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.labutin.barman.command.PageEnum;
 
-public class DowngradeToUserCommand extends AbstractUserCommand {
-	public DowngradeToUserCommand() {
+public class ShowCocktailImage extends CocktailCommand {
+
+	public ShowCocktailImage() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
-		userUtil.downgradeToUser(request, response);
-		userUtil.showUserSet(request, response);
-		return PageEnum.USER_LIST;
-
+		util.findCocktailImage(request, response);
+		return null;
 	}
 
 }

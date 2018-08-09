@@ -22,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
 	private static Logger logger = LogManager.getLogger();
 	private final static String INSERT_USER = "INSERT INTO User(user_login, user_name, user_password, user_email) VALUES (?,?,?,?)";
 	private final static String REMOVE_USER = "UPDATE User SET user_isAvaible = 0 Where user_id = ?";
-	private final static String UPDATE_USER = "UPDATE User SET user_name = ?, user_password = ?, user_email = ?  where user_login = ?";
+	private final static String UPDATE_USER = "UPDATE User SET user_name = ?, user_password = ?, user_email = ?  where user_id = ?";
 
 	private UserRepositoryImpl() {
 		// TODO Auto-generated constructor stub
@@ -54,7 +54,6 @@ public class UserRepositoryImpl implements UserRepository {
 		} catch (SQLException e) {
 			logger.info(item + " has problem");
 			throw new RepositoryException(e);
-		} finally {
 		}
 		// logger.info("User: " + item + "cannot register");
 
@@ -74,13 +73,12 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public void update(User item) throws RepositoryException {
-
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER);) {
 			preparedStatement.setString(1, item.getUserName());
 			preparedStatement.setString(2, item.getUserPassword());
 			preparedStatement.setString(3, item.getUserEmail());
-			preparedStatement.setString(4, item.getUserLogin());
+			preparedStatement.setInt(4, item.getUserId());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

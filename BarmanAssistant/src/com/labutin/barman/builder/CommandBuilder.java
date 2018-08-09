@@ -2,8 +2,10 @@ package com.labutin.barman.builder;
 
 import com.labutin.barman.command.TypeCommand;
 import com.labutin.barman.command.cocktail.AddCocktailCommand;
+import com.labutin.barman.command.cocktail.AddCocktailRating;
 import com.labutin.barman.command.cocktail.DeleteCocktail;
 import com.labutin.barman.command.cocktail.PublishCocktail;
+import com.labutin.barman.command.cocktail.ShowCocktailImage;
 import com.labutin.barman.command.cocktail.ShowCocktailInfo;
 import com.labutin.barman.command.cocktail.ShowNotPublishedCocktailList;
 import com.labutin.barman.command.cocktail.ShowPublishedCocktailList;
@@ -120,6 +122,12 @@ public class CommandBuilder extends AbstractCommandBuilder {
 			break;
 		case EDIT_INGREDIENT:
 			command = new EditIngredient();
+			break;
+		case SHOW_COCKTAIL_IMAGE:
+			command = new ShowCocktailImage();
+			break;
+		case ADD_COCKTAIL_RATING:
+			command = new AddCocktailRating();
 			break;
 		}
 	}

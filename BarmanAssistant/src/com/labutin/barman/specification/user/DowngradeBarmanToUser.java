@@ -2,7 +2,6 @@ package com.labutin.barman.specification.user;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;

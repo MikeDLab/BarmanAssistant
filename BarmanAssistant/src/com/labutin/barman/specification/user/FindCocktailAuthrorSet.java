@@ -29,7 +29,7 @@ public class FindCocktailAuthrorSet extends AbstractUserSpecification implements
 				resultSet = preparedStatement.executeQuery();
 			}
 			while (resultSet.next()) {
-				users.add(loadUserData(resultSet));
+				users.add(loadUserData());
 			}
 		} catch (SQLException e) {
 			logger.info("Sqlexception", e);

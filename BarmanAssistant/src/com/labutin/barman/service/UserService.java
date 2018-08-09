@@ -1,20 +1,19 @@
 package com.labutin.barman.service;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.labutin.barman.command.user.UpdateToBarmanCommand;
-import com.labutin.barman.entity.Ingredient;
+import com.labutin.barman.entity.Rating;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;
+import com.labutin.barman.repository.RatingRepository;
 import com.labutin.barman.repository.UserRepositoryImpl;
-import com.labutin.barman.specification.ingredient.FindIngredientSet;
-import com.labutin.barman.specification.user.AddBarmanRating;
 import com.labutin.barman.specification.user.DowngradeBarmanToUser;
 import com.labutin.barman.specification.user.FindBarmanSet;
 import com.labutin.barman.specification.user.FindCocktailAuthrorSet;
@@ -26,10 +25,12 @@ import com.labutin.barman.specification.user.UpdateUserToBarman;
 public class UserService {
 	private static Logger logger = LogManager.getLogger();
 	private final UserRepositoryImpl userRepository;
+	private final RatingRepository ratingRepository;
 
 	public UserService() throws ServiceException {
 		try {
 			userRepository = UserRepositoryImpl.getInstance();
+			ratingRepository = new RatingRepository();
 		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
@@ -37,35 +38,41 @@ public class UserService {
 	}
 
 	public User registration(String userLogin, String userName, String userPassword, String userEmail)
-			throws RepositoryException {
-		User user = new User();
-		user.setUserLogin(userLogin);
-		user.setUserName(userName);
-		user.setUserEmail(userEmail);
-		user.setUserPassword(userPassword);
-		userRepository.add(user);
-		return user;
+			throws ServiceException {
+		User user = null;
+		try {
+			user = new User();
+			user.setUserLogin(userLogin);
+			user.setUserName(userName);
+			user.setUserEmail(userEmail);
+			user.setUserPassword(userPassword);
+			userRepository.add(user);
+			return user;
+		} catch (RepositoryException e) {
+			throw new ServiceException();
+		}
 	}
 
 	public User login(String login, String password) throws ServiceException {
 		User user = null;
 		try {
-			if (userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().hasNext()) {
-				user = (User) userRepository.query(new FindUserByLoginAndPassword(login, password)).iterator().next();
+			Set<User> userSet = userRepository.query(new FindUserByLoginAndPassword(login, password));
+			if (userSet != null) {
+				if (userSet.iterator().hasNext()) {
+					user = userSet.iterator().next();
+				}
 			}
-			return user;
+
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
-
+		return user;
 	}
 
 	public Set<User> receiveBarman(int userId) throws ServiceException {
 		try {
 			return userRepository.query(new FindBarmanSet(userId));
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}
@@ -99,7 +106,8 @@ public class UserService {
 
 	public void addBarmanRating(int barmanRating, int barmanId, int userId) throws ServiceException {
 		try {
-			userRepository.query(new AddBarmanRating(barmanRating, barmanId, userId));
+			Rating rating = new Rating(userId, barmanId, barmanRating);
+			ratingRepository.addBarmanRating(rating);
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
@@ -116,12 +124,19 @@ public class UserService {
 	}
 
 	public User receiveUserById(int userId) throws ServiceException {
+		User user = null;
 		try {
-			return (User) userRepository.query(new FindUserById(userId)).iterator().next();
+			Set<User> userSet = userRepository.query(new FindUserById(userId));
+			if (userSet != null) {
+				if (userSet.iterator().hasNext()) {
+					user = userSet.iterator().next();
+				}
+			}
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
+		return user;
 	}
 
 	public void removeUser(int userId) throws ServiceException {

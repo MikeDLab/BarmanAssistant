@@ -48,15 +48,18 @@ public class LocaleFilter implements Filter {
 		logger.info("LocaleFilter");
 		logger.info("Locale: " + request.getSession().getAttribute("language"));
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
-			// System.out.println(request.getRequestURL());
 			HttpServletRequest req = (HttpServletRequest) arg0;
-			// Раскладываем адрес на составляющие
 			String[] list = req.getRequestURI().split("/");
-			for (String k : list) {
-				if ("Es".equals(k)) {
-					Locale l = new Locale(k);
-					ResourceBundle rb = ResourceBundle.getBundle("resources.locale", l);
-					request.getSession(true).setAttribute("language", k);
+			Locale l;
+			ResourceBundle rb;
+			for (String localeLanguage : list) {
+				switch (localeLanguage) {
+				case "Es":
+				case "Ru":
+				case "En":
+					l = new Locale(localeLanguage);
+					rb = ResourceBundle.getBundle("resources.locale", l);
+					request.getSession(true).setAttribute("language", localeLanguage);
 					request.getSession(true).setAttribute("locale", rb);
 					response.sendRedirect("index.jsp");
 					return;

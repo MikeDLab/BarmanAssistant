@@ -1,48 +1,17 @@
 package com.labutin.barman.command.cocktail;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
-import com.labutin.barman.entity.Cocktail;
-import com.labutin.barman.entity.Ingredient;
-import com.labutin.barman.entity.User;
-import com.labutin.barman.exception.NoJDBCDriverException;
-import com.labutin.barman.exception.NoJDBCPropertiesFileException;
-import com.labutin.barman.exception.ServiceException;
-import com.labutin.barman.service.CocktailService;
-import com.labutin.barman.service.IngredientService;
-import com.labutin.barman.service.UserService;
 
-public class PublishCocktail implements Command {
-	private static Logger logger = LogManager.getLogger();
-	private CocktailService receiver;
-	public PublishCocktail() {
-		// TODO Auto-generated constructor stub
-
-	}
-
+public class PublishCocktail extends CocktailCommand {
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		int cocktailId = Integer.parseInt(request.getParameter("cocktail_id"));
-		try {
-			// TODO Auto-generated method stub
-			receiver = new CocktailService();
-			receiver.publishCocktail(cocktailId);
-		} catch (ServiceException e) {
-			
-		}
-
-		return new ShowNotPublishedCocktailList().execute(request, response);
+		util.publishCocktail(request, response);
+		util.showNotPublishedCocktail(request, response);
+		return PageEnum.COCKTAIL_LIST_FOR_BARMAN;
 	}
 
 }

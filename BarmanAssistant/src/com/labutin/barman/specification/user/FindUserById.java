@@ -33,7 +33,7 @@ public class FindUserById extends AbstractUserSpecification implements UserSpeci
 				resultSet = preparedStatement.executeQuery();
 			}
 			if (resultSet.next()) {
-				users.add(loadUserData(resultSet));
+				users.add(loadUserData());
 				return users;
 			}
 

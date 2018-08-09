@@ -24,6 +24,7 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 	private final static String SET_COCKTAIL = "UPDATE Cocktail SET cocktail_isPublished=1 WHERE cocktail_id = ?";
 	private final static String SET_COCKTAIL_IMAGE = "UPDATE Cocktail SET cocktail_img= ? WHERE cocktail_id = ?";
 	private final static String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
+
 	private CocktailRepositoryImpl() {
 		// TODO Auto-generated constructor stub
 	}
@@ -37,29 +38,28 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 		pool.initialization();
 		return SingletonHandler.INSTANCE;
 	}
-	public void addImage(int cocktailId, InputStream inputStream)
-	{
+
+	public void addImage(int cocktailId, InputStream inputStream) throws RepositoryException {
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL_IMAGE);){
+				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL_IMAGE);) {
 			if (preparedStatement != null) {
-				preparedStatement.setBlob(1,inputStream);
+				preparedStatement.setBlob(1, inputStream);
 				preparedStatement.setInt(2, cocktailId);
 				preparedStatement.executeUpdate();
 			}
-			logger.info("GOOD");
 		} catch (SQLException e) {
-			logger.info(" has problem");
+			throw new RepositoryException(e);
 		}
 	}
+
 	@Override
-	public void add(Cocktail item) {
-		ProxyConnection connection;
-		PreparedStatement preparedStatement;
+	public void add(Cocktail item) throws RepositoryException {
+
 		// TODO Auto-generated method stub
 		logger.info(item + " try to register");
-		try {
-			connection = PoolConnection.POOL.getConnection();
-			preparedStatement = connection.prepareStatement(INSERT_COCKTAIL, Statement.RETURN_GENERATED_KEYS);
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COCKTAIL,
+						Statement.RETURN_GENERATED_KEYS);) {
 			if (preparedStatement != null) {
 				preparedStatement.setString(1, item.getCocktailName());
 				preparedStatement.setInt(2, item.getUserId());
@@ -67,35 +67,35 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 				preparedStatement.setInt(4, item.getCocktailVol());
 				preparedStatement.setBoolean(5, item.getIsPublished());
 				preparedStatement.setBlob(6, item.getImage());
-				int affectedRows = preparedStatement.executeUpdate();
-				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-					if (generatedKeys.next()) {
-						item.setCocktailId(generatedKeys.getInt(1));
-					} else {
-						throw new SQLException("Creating user failed, no ID obtained.");
-					}
+				preparedStatement.executeUpdate();
+				ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					item.setCocktailId(generatedKeys.getInt(1));
+				} else {
+					throw new SQLException("Add cocktail failed");
 				}
-				connection.close();
 				logger.info(item + " inseted");
 			}
 		} catch (SQLException e) {
 			logger.info(item + " has problem");
+			throw new RepositoryException(e);
 		}
 	}
 
 	@Override
-	public void remove(Cocktail item) {
+	public void remove(Cocktail item) throws RepositoryException {
 		// TODO Auto-generated method stub
 		logger.info(" try to update");
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COCKTAIL);){
+				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COCKTAIL);) {
 			if (preparedStatement != null) {
-				preparedStatement.setInt(1,item.getCocktailId());
+				preparedStatement.setInt(1, item.getCocktailId());
 				preparedStatement.executeUpdate();
 			}
-			logger.info("GOOD");
+
 		} catch (SQLException e) {
 			logger.info(" has problem");
+			throw new RepositoryException(e);
 		}
 	}
 
@@ -105,18 +105,17 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 		return specification.querry();
 	}
 
-	public void setPublished(int cocktailId) {
+	public void setPublished(int cocktailId) throws RepositoryException {
 		// TODO Auto-generated method stub
 		logger.info(" try to update");
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL);) {
 			if (preparedStatement != null) {
-				preparedStatement.setInt(1,cocktailId);
+				preparedStatement.setInt(1, cocktailId);
 				preparedStatement.executeUpdate();
 			}
-			logger.info("GOOD");
 		} catch (SQLException e) {
-			logger.info(" has problem");
+			throw new RepositoryException(e);
 		}
 	}
 }

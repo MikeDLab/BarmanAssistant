@@ -1,6 +1,7 @@
 package com.labutin.barman.controller;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -31,29 +32,35 @@ public class MainServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String lang = request.getParameter("locale");
-		logger.info("Locale used: " + lang);
-		if (lang != null) {
-			Locale l = new Locale(lang);
-			ResourceBundle rb = ResourceBundle.getBundle("resources.locale", l);
-			request.getSession(true).setAttribute("language", lang);
-			request.getSession(true).setAttribute("locale", rb);
-		}
-		response.sendRedirect(PageEnum.HOME_PAGE.getValue());
+		getCommand(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
+		System.out.println("COMMAND: " + request.getParameter("command"));
 		TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
 		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
 		logger.info("Command type: " + commandType.getValue());
 		CommandBuilder commandBuilder = new CommandBuilder(commandType);
 		Command command = Director.createCommand(commandBuilder);
 		PageEnum page = command.execute(request, response);
-		request.getRequestDispatcher(page.getValue()).forward(request, response);
-		
+		if (page != null) {
+			request.getRequestDispatcher(page.getValue()).forward(request, response);
+		}
+	}
+
+	protected void getCommand(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
+		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
+		if (commandType == TypeCommand.SHOW_COCKTAIL_IMAGE) {
+			logger.info("Command type: " + commandType.getValue());
+			CommandBuilder commandBuilder = new CommandBuilder(commandType);
+			Command command = Director.createCommand(commandBuilder);
+			PageEnum page = command.execute(request, response);
+		}
 	}
 
 }

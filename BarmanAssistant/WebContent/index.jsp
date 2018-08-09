@@ -56,15 +56,12 @@
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
+					<form action="Ru" method="get">
 						<button type="submit">Русский</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
+					<form action="En" method="get">
 						<button type="submit">Eng</button>
 					</form>
 				</li>

@@ -31,7 +31,7 @@ public class FindBarmanSet extends AbstractUserSpecification implements UserSpec
 				resultSet = preparedStatement.executeQuery();
 			}
 			while (resultSet.next()) {
-				users.add(loadUserData(resultSet));
+				users.add(loadUserData());
 			}
 		} catch (SQLException e) {
 			logger.warn("Find barman set - SQL exception", e);

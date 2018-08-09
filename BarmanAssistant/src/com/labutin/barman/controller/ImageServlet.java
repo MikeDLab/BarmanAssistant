@@ -51,6 +51,7 @@ public class ImageServlet extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("PAREMTS: "+ request.getParameter("command"));
 		int cocktailId = Integer.parseInt(request.getParameter("imageId"));
 		try {
 			receiverCocktail = new CocktailService();
