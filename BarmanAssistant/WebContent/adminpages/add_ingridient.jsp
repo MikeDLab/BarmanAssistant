@@ -162,7 +162,8 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
+				<div>
+				<p>${Errormessage}</p>
 					<form action="MainServlet" method="post" name="PushIngredient">
 						<div class="form-group">
 							<input type="hidden" name="command" value="Push_Ingredient" /> <input

@@ -3,6 +3,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Set;
 
+import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Rating;
 import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.NoJDBCDriverException;
@@ -20,6 +21,7 @@ public class RatingRepository {
 	}
 	private final static String INSERT_BARMAN_RATING = "INSERT INTO BarmanRating(barman_rating, barman_id, user_id) VALUES (?,?,?)";
 	private final static String INSERT_COCKTAIL_RATING = "INSERT INTO CocktailRating(user_id, cocktail_id, cocktail_rating) VALUES (?,?,?)";
+	private final static String DELETE_COCKTAIL_RATING = "DELETE FROM CocktailRating Where cocktail_id = ?";
 	public static RatingRepository getInstance() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
 		PoolConnection pool = PoolConnection.POOL;
 		pool.initialization();
@@ -37,6 +39,18 @@ public class RatingRepository {
 				preparedStatement.setInt(1, item.getRating());
 				preparedStatement.setInt(2, item.getEstimated());
 				preparedStatement.setInt(3, item.getEstimating());
+				preparedStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	public void removeCocktailRating(Cocktail item) throws RepositoryException {
+		// TODO Auto-generated method stub
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COCKTAIL_RATING);) {
+			if (preparedStatement != null) {
+				preparedStatement.setInt(1, item.getCocktailId());
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {

@@ -172,7 +172,7 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
+				<div>
 					<form action="MainServlet" method="post" name="PushIngredient">
 						<div class="form-group">
 							<input type="hidden" name="command" value="Edit_Ingredient" /> <input

@@ -23,7 +23,6 @@ public class DeleteIngredientByCocktailId extends AbstractIngredientSpecificatio
 
 	@Override
 	public Set<Ingredient> querry() {
-		Set<Ingredient> ingredients = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_INGREDIENT_BY_COCKTAIL_ID);) {
 			if (preparedStatement != null) {

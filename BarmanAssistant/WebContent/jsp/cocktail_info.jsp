@@ -179,54 +179,79 @@
 					<p>${Errormessage}</p>
 					<div class="form-group">
 						<c:if test="${!empty cocktail}">
-							<table class="table table-bordered">
-								<tr class="bg-info row">
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Volume</th>
+							<table>
+								<tr>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Volume</th>
+									<th>Image</th>
+									<th>Rating</th>
 								</tr>
 								<tr class="row">
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${cocktail.cocktailName}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${cocktail.cocktailDescription}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${cocktail.cocktailVol}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><img
-										src="ImageServlet?imageId=${cocktail.cocktailId}" /></td>
+									<td>${cocktail.cocktailName}</td>
+									<td>${cocktail.cocktailDescription}</td>
+									<td>${cocktail.cocktailVol}</td>
+									<td><img src="ImageServlet?imageId=${cocktail.cocktailId}" /></td>
+									<td><c:if test="${!empty cocktailRatingMap}">
+											<c:forEach items="${cocktailRatingMap}"
+												var="cocktailRatingMap">
+												<c:if
+													test="${cocktailRatingMap.key.cocktailId == cocktail.cocktailId}">
+													<c:if test="${!empty cocktailRatingMap.value}">${cocktailRatingMap.value.rating}</c:if>
+													<c:if test="${empty cocktailRatingMap.value}">
+														<c:if
+															test="${sessionScope.Role != 'GUEST' && sessionScope.User.userId != user.userId }">
+															<form action="MainServlet" method="post">
+																<input type="number" min="0" max="10"
+																	placeholder="Inter vol" class="edit"
+																	name="cocktail_rating" id="vol"> <input
+																	type="hidden" name="test" value="number" /> <input
+																	type="hidden" name="command"
+																	value="Add_Cocktail_Rating" /> <input type="hidden"
+																	name="cocktail_id" value="${cocktail.cocktailId}" />
+																<button type="submit" class="active">Оценить</button>
+															</form>
+														</c:if>
+													</c:if>
 
+												</c:if>
+											</c:forEach>
+										</c:if></td>
 								</tr>
 							</table>
 						</c:if>
 					</div>
-					<div class="form-group">
+					<div>
 						<c:if test="${!empty user}">
-							<table class="table table-bordered">
-								<tr class="bg-info row">
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Email</th>
+							<table>
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
 								</tr>
-								<tr class="row">
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${user.userName}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${user.userEmail}</td>
+								<tr>
+									<td>${user.userName}</td>
+									<td>${user.userEmail}</td>
 								</tr>
 
 							</table>
 						</c:if>
 					</div>
-					<div class="form-group">
+					<div>
 						<c:if test="${!empty setIngredient}">
-							<table class="table table-bordered" border="1">
-								<tr class="bg-info row">
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
+							<table border="1">
+								<tr>
+									<th>Name</th>
+									<th>Description</th>
 								</tr>
 								<c:forEach items="${setIngredient}" var="setIngredient">
-									<tr class="row">
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientName}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientDescription}</td>
+									<tr>
+										<td>${setIngredient.ingredientName}</td>
+										<td>${setIngredient.ingredientDescription}</td>
 									</tr>
 								</c:forEach>
-
 							</table>
 						</c:if>
+						<div></div>
 					</div>
 				</div>
 			</blockquote>

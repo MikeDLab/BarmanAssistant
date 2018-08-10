@@ -162,28 +162,13 @@
 		</aside>
 		<section>
 			<blockquote>
+			<p>${Errormessage}</p>
 				<div class="ingredient">
 					<li class="inactive">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="Check_Cocktail_List" />
 							<button type="submit">
 								<fmt:message bundle="${locale}" key="adminpanel.barmanlist" />
-							</button>
-						</form>
-					</li>
-					<li class="inactive">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="homepage.addingredientpage" />
-							</button>
-						</form>
-					</li>
-					<li class="inactive">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button type="submit">
-								<fmt:message bundle="${locale}" key="homepage.addingredientpage" />
 							</button>
 						</form>
 					</li>

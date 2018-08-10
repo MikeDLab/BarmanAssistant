@@ -173,22 +173,21 @@
 			<blockquote>
 				<div class="ingredient">
 					<c:if test="${!empty setIngredient}">
-						<table class="table table-bordered">
-							<tr class="bg-info row">
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-								<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
+						<table>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
 							</tr>
 							<c:forEach items="${setIngredient}" var="setIngredient">
-								<tr class="row">
-									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${setIngredient.ingredientName}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${setIngredient.ingredientDescription}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><c:if
-											test="${sessionScope.Role == 'ADMIN'}">
+								<tr>
+									<td>${setIngredient.ingredientName}</td>
+									<td>${setIngredient.ingredientDescription}</td>
+									<td><c:if test="${sessionScope.Role == 'ADMIN'}">
 											<form action="MainServlet" method="post">
-												<input type="hidden" name="command" value="Edit_Ingredient_Page" />
-												<input type="hidden" name="ingredient_id"
-													value="${setIngredient.ingredientId}" /> <input
-													type="hidden" name="ingredient_name"
+												<input type="hidden" name="command"
+													value="Edit_Ingredient_Page" /> <input type="hidden"
+													name="ingredient_id" value="${setIngredient.ingredientId}" />
+												<input type="hidden" name="ingredient_name"
 													value="${setIngredient.ingredientName}" /> <input
 													type="hidden" name="ingredient_description"
 													value="${setIngredient.ingredientDescription}" />

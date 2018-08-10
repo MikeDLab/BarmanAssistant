@@ -179,26 +179,37 @@
 					<p>${Errormessage}</p>
 					<div class="form-group">
 						<c:if test="${!empty userCocktailMap}">
-							<table class="table table-bordered">
-								<tr class="bg-info row">
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Id</th>
-									<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Description</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">Volume</th>
-									<th class="col-xs-3 col-sm-3 col-md-3  col-lg-3 ">UserName</th>
+							<table>
+								<tr>
+									<td>Id</td>
+									<td>Name</td>
+									<td>Description</td>
+									<td>Volume</td>
+									<td>UserName</td>
+									<td>Image</td>
+									<td>AverageRating</td>
 								</tr>
 								<c:forEach items="${userCocktailMap}" var="userCocktailMap">
-									<tr class="row">
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailId}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailName}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailDescription}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.key.cocktailVol}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userCocktailMap.value.userName}</td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><img
+									<tr>
+										<td>${userCocktailMap.key.cocktailId}</td>
+										<td>${userCocktailMap.key.cocktailName}</td>
+										<td>${userCocktailMap.key.cocktailDescription}</td>
+										<td>${userCocktailMap.key.cocktailVol}</td>
+										<td>${userCocktailMap.value.userName}</td>
+										<td><img
 											src="MainServlet?imageId=${userCocktailMap.key.cocktailId}&command=Show_Cocktail_Image"
 											width="200" /></td>
-										<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
-												action="MainServlet" method="post">
+										<td><c:if test="${!empty cocktailAverageRatingMap}">
+												<c:forEach items="${cocktailAverageRatingMap}"
+													var="cocktailAverageRatingMap">
+													<c:if
+														test="${userCocktailMap.key.cocktailId == cocktailAverageRatingMap.key.cocktailId}">
+									${cocktailAverageRatingMap.value}
+									</c:if>
+												</c:forEach>
+											</c:if>
+										<td>
+										<td><form action="MainServlet" method="post">
 												<input type="hidden" name="command" value="Cocktail_Info" />
 												<input type="hidden" name="cocktail_id"
 													value="${userCocktailMap.key.cocktailId}" /> <input
@@ -207,8 +218,7 @@
 												<button type="submit">INFO</button>
 											</form></td>
 										<c:if test="${sessionScope.Role == 'ADMIN'}">
-											<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><form
-													action="MainServlet" method="post">
+											<td><form action="MainServlet" method="post">
 													<input type="hidden" name="command" value="Delete_Cocktail" />
 													<input type="hidden" name="cocktail_id"
 														value="${userCocktailMap.key.cocktailId}" />

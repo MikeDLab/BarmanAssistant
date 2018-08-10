@@ -23,9 +23,9 @@ public class EnumSetBuilder extends AbstractEnumSetBuilder {
 			break;
 		case USER:
 			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
-					TypeCommand.ADD_COCKTAIL, TypeCommand.ADD_COCKTAIL_RATING, TypeCommand.COCKTAIL_LIST,
-					TypeCommand.SHOW_COCKTAIL_IMAGE, TypeCommand.COCKTAIL_INFO, TypeCommand.ADD_BARMAN_RATING,
-					TypeCommand.SHOW_BARMAN);
+					TypeCommand.ADD_COCKTAIL, TypeCommand.PUSH_COCKTAIL, TypeCommand.ADD_COCKTAIL_RATING,
+					TypeCommand.COCKTAIL_LIST, TypeCommand.SHOW_COCKTAIL_IMAGE, TypeCommand.COCKTAIL_INFO,
+					TypeCommand.ADD_BARMAN_RATING, TypeCommand.SHOW_BARMAN);
 			break;
 		case BARMAN:
 			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,

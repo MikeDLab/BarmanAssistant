@@ -14,8 +14,8 @@ img {
 	color: white;
 	opacity: 3; /* Firefox */
 }
-.ingredient
-{
+
+.ingredient {
 	color: white;
 	text-align: center;
 	font-size: 20px;
@@ -26,7 +26,8 @@ img {
 	height: 50px;
 	width: 100%;
 	background-color: transparent;
-	color: white; border : none;
+	color: white;
+	border: none;
 	border-bottom: 1px solid white;
 	border: none;
 }
@@ -36,7 +37,8 @@ textarea {
 	color: white;
 	resize: none;
 	border: 0 none;
-	box-shadow: 0 1px 10px 0 rgba(255, 255, 255, 0.5); width : 100%;
+	box-shadow: 0 1px 10px 0 rgba(255, 255, 255, 0.5);
+	width: 100%;
 	font-size: 12px;
 	outline: none;
 	height: 100px;
@@ -107,6 +109,7 @@ aside>p {
 
 section {
 	margin-left: 280px;
+	margin-right: 0px;
 	padding-bottom: 50px;
 }
 
@@ -132,11 +135,12 @@ nav li {
 	list-style-position: inside;
 	font: 14px 'Oswald', sans-serif;
 }
-li.inactive
-{
+
+li.inactive {
 	color: white;
 	background: #daa520;
 }
+
 .top-menu li {
 	display: inline-block;
 	margin: 0;

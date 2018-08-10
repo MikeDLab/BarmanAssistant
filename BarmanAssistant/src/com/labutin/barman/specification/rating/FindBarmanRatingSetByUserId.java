@@ -15,12 +15,12 @@ import com.labutin.barman.entity.User;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
-public class FindBarmanRatingSet implements RatingSpecification {
+public class FindBarmanRatingSetByUserId implements RatingSpecification {
 	private static Logger logger = LogManager.getLogger();
 	private final static String FIND_BARMAN_RATING_SET_BY_USER_ID = "Select * from BarmanRating Where user_id = ?";
 	private int userId;
 
-	public FindBarmanRatingSet(int userId) {
+	public FindBarmanRatingSetByUserId(int userId) {
 		this.userId = userId;
 	}
 

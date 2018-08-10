@@ -34,21 +34,25 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Sign_In" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Log_Out" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Sign_In" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Log_Out" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
 						<button type="submit">Es</button>
@@ -68,29 +72,36 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="User_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
-					</form>
-				</li>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="User_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
 				</c:if>
-				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Barman_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Admin_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Admin_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -112,43 +123,42 @@
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Show_Barman" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Show_Barman" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="Show_Ingredient" />
 							<button class="side" type="submit">
-								<fmt:message bundle="${locale}"
-									key="sidebar.ingredientlist" />
+								<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
 							</button>
 						</form>
 					</li>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Ingredient" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Ingredient" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Add_Cocktail" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
-							</button>
-						</form>
-					</li>
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Add_Cocktail" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
+								</button>
+							</form>
+						</li>
 					</c:if>
 				</ul>
 			</nav>
@@ -162,36 +172,43 @@
 			<blockquote>
 				<div class="ingredient">
 					<c:if test="${!empty userRatingMap}">
-						<table class="table table-bordered">
-							<tr class="bg-info row">
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Login</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Name</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Email</th>
-								<th class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Role</th>
-								<c:if test="${sessionScope.Role != 'GUEST'}">
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">Rating</td>
-								</c:if>
+						<table>
+							<tr>
+								<th>Login</th>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Role</th>
+								<td>Rating</td>
+								<td>Average Rating</td>
 							</tr>
 							<c:forEach items="${userRatingMap}" var="userRatingMap">
 								<tr class="row">
-									<td class="col-xs-3 col-sm-3 col-md-3  col-lg-3">${userRatingMap.key.userLogin}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userRatingMap.key.userName}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userRatingMap.key.userEmail}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 ">${userRatingMap.key.userRole}</td>
-									<td class="col-xs-1 col-sm-1 col-md-1  col-lg-1 "><c:if
-											test="${!empty userRatingMap.value}">${userRatingMap.value.rating}</c:if>
+									<td>${userRatingMap.key.userLogin}</td>
+									<td>${userRatingMap.key.userName}</td>
+									<td>${userRatingMap.key.userEmail}</td>
+									<td>${userRatingMap.key.userRole}</td>
+									<td><c:if test="${!empty userRatingMap.value}">${userRatingMap.value.rating}</c:if>
 										<c:if test="${empty userRatingMap.value}">
 											<c:if test="${sessionScope.Role != 'GUEST'}">
 												<form action="MainServlet" method="post">
 													<input type="number" min="0" max="10"
-														placeholder="Inter vol" class="edit" name="cocktailvol"
+														placeholder="Inter vol" class="edit" name="barman_rating"
 														id="vol"> <input type="hidden" name="test"
 														value="number" /> <input type="hidden" name="command"
 														value="Add_Barman_Rating" /> <input type="hidden"
-														name="barmanid" value="${userRatingMap.key.userId}" />
+														name="barman_id" value="${userRatingMap.key.userId}" />
 													<button type="submit" class="active">Оценить</button>
 												</form>
 											</c:if>
+										</c:if></td>
+									<td><c:if test="${!empty userAverageRatingMap}">
+											<c:forEach items="${userAverageRatingMap}"
+												var="userAverageRatingMap">
+												<c:if
+													test="${userAverageRatingMap.key.userId == userRatingMap.key.userId}">
+									${userAverageRatingMap.value}
+									</c:if>
+											</c:forEach>
 										</c:if></td>
 								</tr>
 							</c:forEach>

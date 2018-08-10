@@ -104,6 +104,7 @@ public class CocktailService {
 
 	public void removeCocktail(int cocktailId) throws ServiceException {
 		try {
+			System.out.println("TRY TO DELETE COKCTIAL");
 			Cocktail item = new Cocktail();
 			item.setCocktailId(cocktailId);
 			cocktailRepository.remove(item);

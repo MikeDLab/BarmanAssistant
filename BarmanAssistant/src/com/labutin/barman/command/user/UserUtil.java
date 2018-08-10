@@ -29,26 +29,27 @@ class UserUtil {
 	public UserUtil() {
 		// TODO Auto-generated constructor stub
 	}
+
 	void checkUser(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			receiver = new UserService();
 			User user = (User) request.getSession().getAttribute("User");
-			if(user != null)
-			{
-			System.out.println("User session to string: " + user);
-			User userBd = receiver.receiveUserById(user.getUserId());
-			System.out.println("User from bd to string: " + user);
+			if (user != null) {
+				System.out.println("User session to string: " + user);
+				User userBd = receiver.receiveUserById(user.getUserId());
+				System.out.println("User from bd to string: " + user);
 			}
 		} catch (ServiceException | NumberFormatException e) {
 			request.setAttribute("Errormessage", "Cannot update set rating to barman");
 		}
 	}
+
 	void addBarmanRating(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			receiver = new UserService();
 			User user = (User) request.getSession().getAttribute("User");
-			int barmanId = Integer.parseInt(request.getParameter("barmanid"));
-			int barmanRating = Integer.parseInt(request.getParameter("cocktailvol"));
+			int barmanId = Integer.parseInt(request.getParameter("barman_id"));
+			int barmanRating = Integer.parseInt(request.getParameter("barman_rating"));
 			receiver.addBarmanRating(barmanRating, barmanId, user.getUserId());
 		} catch (ServiceException | NumberFormatException e) {
 			request.setAttribute("Errormessage", "Cannot update set rating to barman");
@@ -161,22 +162,15 @@ class UserUtil {
 			User user = (User) request.getSession().getAttribute("User");
 			if (user != null) {
 				setBarman = receiver.receiveBarman(user.getUserId());
-				setRating = receiverRating.receiveBarmanRatingSet(user.getUserId());
+				setRating = receiverRating.receiveBarmanRatingSetByUserId(user.getUserId());
 				Map<User, Rating> userRatingMap = new HashMap<>();
+				Map<User, Integer> userAverageRatingMap = new HashMap<>();
 				if (setBarman != null) {
-					for (User usr : setBarman) {
-						userRatingMap.put(usr, null);
-						if (setRating != null) {
-							for (Rating rating : setRating) {
-								if (usr != null && rating != null && usr.getUserId() == rating.getEstimated()) {
-									userRatingMap.replace(usr, rating);
-								}
-							}
-						}
-					}
+					userAverageRatingMap = receiveAverageRatingMap(setBarman);
+					userRatingMap = receiveBarmanRatingByUser(setBarman, setRating);
 				}
-
 				request.setAttribute("userRatingMap", userRatingMap);
+				request.setAttribute("userAverageRatingMap", userAverageRatingMap);
 				request.setAttribute("setBarman", setBarman);
 			} else {
 				request.setAttribute("Errormessage", "Sorry try later");
@@ -187,10 +181,57 @@ class UserUtil {
 		}
 	}
 
+	private Map<User, Rating> receiveBarmanRatingByUser(Set<User> setBarman, Set<Rating> setRating) {
+		Map<User, Rating> userRatingMap = new HashMap<>();
+		if (setBarman != null) {
+			for (User usr : setBarman) {
+				userRatingMap.put(usr, null);
+				if (setRating != null) {
+					for (Rating rating : setRating) {
+						if (usr != null && rating != null && usr.getUserId() == rating.getEstimated()) {
+							userRatingMap.replace(usr, rating);
+						}
+					}
+				}
+			}
+		}
+		return userRatingMap;
+	}
+
+	private Map<User, Integer> receiveAverageRatingMap(Set<User> barmanSet) {
+		try {
+			receiverRating = new RatingService();
+			Map<User, Integer> userAverageRatingMap = new HashMap<>();
+			for (User usr : barmanSet) {
+
+				Set<Rating> averageRating = receiverRating.receiveBarmanRatingSetByBarmanId(usr.getUserId());
+				userAverageRatingMap.put(usr, averageRating(averageRating));
+			}
+			return userAverageRatingMap;
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+
+	}
+
+	private Integer averageRating(Set<Rating> rating) {
+		if (rating.isEmpty()) {
+			return null;
+		}
+		Integer sum = 0;
+		for (Rating r : rating) {
+			sum += r.getRating();
+		}
+		return sum / rating.size();
+	}
+
 	void showUserSet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			receiver = new UserService();
 			Set<User> setUser = receiver.receiveAllUsers();
+			Map<User, Integer> userAverageRatingMap = receiveAverageRatingMap(setUser);
+			request.setAttribute("userAverageRatingMap", userAverageRatingMap);
 			request.setAttribute("setUser", setUser);
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block

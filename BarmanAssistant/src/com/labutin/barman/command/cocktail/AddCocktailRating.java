@@ -15,8 +15,8 @@ public class AddCocktailRating extends CocktailCommand {
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		util.addCocktailRating(request, response);
-		util.showPublishedCocktail(request, response);
-		return PageEnum.COCKTAIL_LIST_PAGE;
+		util.showCocktailInfo(request, response);
+		return PageEnum.COCKTAIL_INFO_PAGE;
 	}
 
 }

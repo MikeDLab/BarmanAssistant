@@ -92,7 +92,6 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 				preparedStatement.setInt(1, item.getCocktailId());
 				preparedStatement.executeUpdate();
 			}
-
 		} catch (SQLException e) {
 			logger.info(" has problem");
 			throw new RepositoryException(e);
