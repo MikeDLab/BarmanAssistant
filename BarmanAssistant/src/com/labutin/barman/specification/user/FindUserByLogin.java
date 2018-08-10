@@ -15,7 +15,7 @@ import com.labutin.barman.pool.ProxyConnection;
 public class FindUserByLogin extends AbstractUserSpecification implements UserSpecification {
 	private static Logger logger = LogManager.getLogger();
 	private String userLogin;
-	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role FROM User WHERE user_login = ?";
+	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User WHERE user_login = ?";
 
 	public FindUserByLogin(String login) {
 		// TODO Auto-generated constructor stubt

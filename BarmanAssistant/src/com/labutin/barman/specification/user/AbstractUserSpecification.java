@@ -15,6 +15,7 @@ public abstract class AbstractUserSpecification {
 	protected final String USER_PASSWORD = "user_password";
 	protected final String USER_EMAIL = "user_email";
 	protected final String USER_ROLE = "user_role";
+	protected final String USER_AVAIBLE = "user_isAvaible";
 	protected ResultSet resultSet;
 	private static Logger logger = LogManager.getLogger();
 	public AbstractUserSpecification() {
@@ -44,6 +45,7 @@ public abstract class AbstractUserSpecification {
 				user.setUserPassword(resultSet.getString(USER_PASSWORD));
 				user.setUserEmail(resultSet.getString(USER_EMAIL));
 				user.setUserRole(resultSet.getInt(USER_ROLE));
+				user.setAvaible(resultSet.getBoolean(USER_AVAIBLE));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

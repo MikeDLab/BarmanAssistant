@@ -32,35 +32,25 @@ public class MainServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		getCommand(request, response);
+		doPost(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// doGet(request, response);
 		System.out.println("COMMAND: " + request.getParameter("command"));
-		TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
-		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
-		logger.info("Command type: " + commandType.getValue());
-		CommandBuilder commandBuilder = new CommandBuilder(commandType);
-		Command command = Director.createCommand(commandBuilder);
-		PageEnum page = command.execute(request, response);
-		if (page != null) {
-			request.getRequestDispatcher(page.getValue()).forward(request, response);
-		}
-	}
-
-	protected void getCommand(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
-		TypeCommand commandType = Director.createTypeCommand(typeBuilder);
-		if (commandType == TypeCommand.SHOW_COCKTAIL_IMAGE) {
+		if (request.getParameter("command") == null) {
+			request.getRequestDispatcher(PageEnum.HOME_PAGE.getValue()).forward(request, response);
+		} else {
+			TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
+			TypeCommand commandType = Director.createTypeCommand(typeBuilder);
 			logger.info("Command type: " + commandType.getValue());
 			CommandBuilder commandBuilder = new CommandBuilder(commandType);
 			Command command = Director.createCommand(commandBuilder);
 			PageEnum page = command.execute(request, response);
+			if (page != null) {
+				request.getRequestDispatcher(page.getValue()).forward(request, response);
+			}
 		}
 	}
-
 }

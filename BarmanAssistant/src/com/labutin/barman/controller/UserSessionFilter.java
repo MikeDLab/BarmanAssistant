@@ -1,30 +1,29 @@
 package com.labutin.barman.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.labutin.barman.command.PageEnum;
+import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.ServiceException;
+import com.labutin.barman.service.UserService;
 
 @WebFilter(filterName = "UserSessionFilter")
 public class UserSessionFilter implements Filter {
 	private FilterConfig filterConfig;
 	private static Logger logger = LogManager.getLogger();
+	private UserService receiver;
+
 	public UserSessionFilter() {
 	}
 
@@ -36,20 +35,50 @@ public class UserSessionFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException {
-		// Если фильтр активной, то выполнить проверку
+		System.out.println("SessionFilter");
 		HttpServletRequest request = (HttpServletRequest) arg0;
-		logger.info("UserSessionFilet");
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
 			if (request.getSession().getAttribute("Role") == null) {
 				logger.info("UserSession: " + UserType.GUEST);
-				request.getSession(true).setAttribute("Role", UserType.GUEST);
-			}
-			else
-			{
+				request.getSession().setAttribute("Role", UserType.GUEST);
+			} else {
+				try {
+					receiver = new UserService();
+					User user = (User) request.getSession().getAttribute("User");
+					if (user != null) {
+						User userBd = receiver.receiveUserById(user.getUserId());
+						if (userBd.getUserRole() != user.getUserRole()) {
+							UserType userRole = getUserType(userBd);
+							request.getSession().setAttribute("Role", userRole);
+							request.getSession().setAttribute("User", userBd);
+						} else {
+							if (!userBd.isAvaible()) {
+								request.getSession().setAttribute("Role", UserType.GUEST);
+								request.getSession().removeAttribute("User");
+							}
+						}
+					}
+				} catch (ServiceException | NumberFormatException e) {
+					request.setAttribute("Errormessage", "Cannot update set rating to barman");
+				}
 				logger.info("UserSession: " + request.getSession().getAttribute("Role"));
 			}
 		}
 		arg2.doFilter(arg0, arg1);
+	}
+
+	private UserType getUserType(User user) {
+		switch (user.getUserRole()) {
+		case 0:
+			return UserType.ADMIN;
+		case 1:
+			return UserType.BARMAN;
+		case 2:
+			return UserType.USER;
+		default:
+			return UserType.GUEST;
+		}
+
 	}
 
 }

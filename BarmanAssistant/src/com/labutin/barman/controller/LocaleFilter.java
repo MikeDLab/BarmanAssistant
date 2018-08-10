@@ -45,7 +45,7 @@ public class LocaleFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		HttpServletResponse response = (HttpServletResponse) arg1;
 		// Если фильтр активной, то выполнить проверку
-		logger.info("LocaleFilter");
+		System.out.println("LocaleFilter");
 		logger.info("Locale: " + request.getSession().getAttribute("language"));
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
 			HttpServletRequest req = (HttpServletRequest) arg0;
@@ -61,7 +61,7 @@ public class LocaleFilter implements Filter {
 					rb = ResourceBundle.getBundle("resources.locale", l);
 					request.getSession(true).setAttribute("language", localeLanguage);
 					request.getSession(true).setAttribute("locale", rb);
-					response.sendRedirect("index.jsp");
+					response.sendRedirect(PageEnum.HOME_PAGE.getValue());
 					return;
 				}
 			}

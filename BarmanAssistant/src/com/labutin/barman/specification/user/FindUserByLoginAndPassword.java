@@ -17,7 +17,7 @@ public class FindUserByLoginAndPassword extends AbstractUserSpecification implem
 	private String login;
 	private String password;
 	private static Logger logger = LogManager.getLogger();
-	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role FROM User WHERE user_login = ? AND user_password= ? AND user_isAvaible != 0";
+	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User WHERE user_login = ? AND user_password= ? AND user_isAvaible != 0";
 
 	public FindUserByLoginAndPassword(String login, String password) {
 		// TODO Auto-generated constructor stubt

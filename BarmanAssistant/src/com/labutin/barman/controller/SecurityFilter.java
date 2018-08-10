@@ -2,6 +2,9 @@ package com.labutin.barman.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -16,7 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.labutin.barman.builder.Director;
+import com.labutin.barman.builder.EnumSetBuilder;
+import com.labutin.barman.builder.TypeCommandBuilder;
+import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
+import com.labutin.barman.command.TypeCommand;
 
 @WebFilter(filterName = "SecurityFilter")
 public class SecurityFilter implements Filter {
@@ -40,42 +48,32 @@ public class SecurityFilter implements Filter {
 		// Если фильтр активной, то выполнить проверку
 		System.out.println("SecurityFilter");
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
-			System.out.println("Filert usss");
+			HttpServletResponse response = (HttpServletResponse) arg1;
 			HttpServletRequest req = (HttpServletRequest) arg0;
-			// Раскладываем адрес на составляющие
-			System.out.println(req.getRequestURI());
-			System.out.println(req.getRequestURL());
-			String[] list = req.getRequestURI().split("/");
-			for(String l: list)
-			{
-				System.out.println("Page: " + l);
-			}
-			// Извлекаем наименование страницы
-			String page = null;
-			if (list[list.length - 1].indexOf(".jsp") > 0) {
-				page = list[list.length - 1];
-			}
-			// Если открывается главная страница, то выполняем проверку
-			if ((page != null) && page.equalsIgnoreCase("index.jsp")) {
-				// Если была предварительно открыта одна из страниц
-				// login.jsp или registration.jsp, то передаем управление
-				// следующему элементу цепочки фильтра
-				if (pages.contains("login.jsp") || pages.contains("register.jsp")) {
-					arg2.doFilter(arg0, arg1);
-					return;
-				} else {
-					// Перенаправление на страницу login.jsp
-					ServletContext ctx = filterConfig.getServletContext();
-					arg0.getRequestDispatcher(PageEnum.HOME_PAGE.getValue()).forward(arg0, arg1);
-					RequestDispatcher dispatcher = ctx.getRequestDispatcher("index.jsp");
-					dispatcher.forward(arg0, arg1);
-					return;
+			UserType type = (UserType) req.getSession().getAttribute("Role");
+			if (type != null) {
+				EnumSetBuilder builder = new EnumSetBuilder(type);
+				EnumSet<TypeCommand> commands = Director.createEnumTypeCommandSet(builder);
+				String commandName = req.getParameter("command");
+				if (commandName != null) {
+					TypeCommandBuilder typeBuilder = new TypeCommandBuilder(commandName);
+					TypeCommand commandType = Director.createTypeCommand(typeBuilder);
+					if (!commands.contains(commandType)) {
+						response.sendRedirect(req.getContextPath() + "/index.jsp");
+						return;
+					}
 				}
-			} else if (page != null) {
-				// Добавляем страницу в список
-				if (!pages.contains(page))
-					pages.add(page);
 			}
+			// Раскладываем адрес на составляющие
+			ArrayList<String> pageList = new ArrayList<>(Arrays.asList(req.getRequestURI().split("/")));
+			for (String page : pageList) {
+				System.out.println("Page: " + page);
+			}
+			if (pageList.contains("adminpages")) {
+				response.sendRedirect(req.getContextPath() + "/index.jsp");
+				return;
+			}
+
 		}
 		arg2.doFilter(arg0, arg1);
 	}

@@ -13,7 +13,7 @@ import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindCocktailAuthrorSet extends AbstractUserSpecification implements UserSpecification {
-	private final static String FIND_COCKTAIL_AUTHOR_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role FROM User INNER JOIN Cocktail USING(user_id)";
+	private final static String FIND_COCKTAIL_AUTHOR_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User INNER JOIN Cocktail USING(user_id)";
 	private static Logger logger = LogManager.getLogger();
 
 	public FindCocktailAuthrorSet() {

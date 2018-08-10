@@ -41,6 +41,7 @@ public class CommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public void buildCommand() {
+		
 		switch (typeCommand) {
 		case HOME:
 			command = new RedirectToHomePageCommand();

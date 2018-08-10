@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
+import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.ServiceException;
+import com.labutin.barman.service.UserService;
 
 public class RedirectToHomePageCommand implements Command {
 	public RedirectToHomePageCommand() {
