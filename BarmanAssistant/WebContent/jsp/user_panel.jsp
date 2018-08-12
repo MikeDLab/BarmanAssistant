@@ -3,13 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -34,63 +35,77 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Sign_In" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Log_Out" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Sign_In" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Log_Out" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="User_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role == 'ADMIN'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Admin_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
-						<button type="submit">Es</button>
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
 					</form>
 				</li>
-				<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="User_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
-					</form>
-				</li>
-				</c:if>
-				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Barman_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
-					</form>
-				</li>
-			</c:if>
-				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Admin_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -163,10 +178,10 @@
 		<section>
 			<blockquote>
 				<div>
-				<p>User login: ${User.userLogin}</p>
-				<p>User name: ${User.userName}</p>
-				<p>User email: ${User.userEmail}</p>
-				<form action="MainServlet" method="post">
+				<p><fmt:message bundle="${locale}" key="user.login" />: ${User.userLogin}</p>
+				<p><fmt:message bundle="${locale}" key="user.name" />: ${User.userName}</p>
+				<p><fmt:message bundle="${locale}" key="user.email" />: ${User.userEmail}</p>
+			<!-- 	<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="AddCocktail" />
 							<button type="submit">Cnage email
 							</button>
@@ -175,10 +190,15 @@
 							<input type="hidden" name="command" value="AddCocktail" />
 							<button type="submit">Cnage password
 							</button>
-						</form>
+						</form> -->
 				</div>
 			</blockquote>
 		</section>
+		<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

@@ -18,16 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.filters.SetCharacterEncodingFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.command.PageEnum;
 
 public class LocaleFilter implements Filter {
 	private FilterConfig filterConfig;
 	private static Logger logger = LogManager.getLogger();
 	private static ArrayList<String> pages; // хранилище страниц
-
+	private String encoding;
 	public LocaleFilter() {
 		// TODO Auto-generated constructor stub
 		if (pages == null)
@@ -42,14 +44,12 @@ public class LocaleFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException {
+		arg0.setCharacterEncoding("utf-8");
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		HttpServletResponse response = (HttpServletResponse) arg1;
-		// Если фильтр активной, то выполнить проверку
-		System.out.println("LocaleFilter");
-		logger.info("Locale: " + request.getSession().getAttribute("language"));
+		logger.info("Locale: " + request.getSession().getAttribute(JspParameter.LANGUAGE.getValue()));
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
-			HttpServletRequest req = (HttpServletRequest) arg0;
-			String[] list = req.getRequestURI().split("/");
+			String[] list = request.getRequestURI().split("/");
 			Locale l;
 			ResourceBundle rb;
 			for (String localeLanguage : list) {
@@ -59,8 +59,8 @@ public class LocaleFilter implements Filter {
 				case "En":
 					l = new Locale(localeLanguage);
 					rb = ResourceBundle.getBundle("resources.locale", l);
-					request.getSession(true).setAttribute("language", localeLanguage);
-					request.getSession(true).setAttribute("locale", rb);
+					request.getSession(true).setAttribute(JspParameter.LANGUAGE.getValue(), localeLanguage);
+					request.getSession(true).setAttribute(JspParameter.LOCALE.getValue(), rb);
 					response.sendRedirect(PageEnum.HOME_PAGE.getValue());
 					return;
 				}
@@ -70,3 +70,4 @@ public class LocaleFilter implements Filter {
 	}
 
 }
+

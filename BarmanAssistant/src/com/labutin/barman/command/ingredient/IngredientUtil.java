@@ -11,7 +11,7 @@ import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.util.XssParser;
 
-class IngredientUtil {
+public class IngredientUtil {
 	private IngredientService receiver;
 
 	public IngredientUtil() {
@@ -30,11 +30,11 @@ class IngredientUtil {
 		}
 	}
 
-	void showIngredientSet(HttpServletRequest request, HttpServletResponse response) {
+	public void showIngredientSet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			receiver = new IngredientService();
 			Set<Ingredient> setIngredient = receiver.receiveIngredient();
-			request.setAttribute("setIngredient", setIngredient);
+			request.setAttribute(JspParameter.INGREDIENT_SET.getValue(), setIngredient);
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,7 +44,7 @@ class IngredientUtil {
 	void editIngredient(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		try {
-			int ingredientId = Integer.parseInt(request.getParameter("ingredient_id"));
+			int ingredientId = Integer.parseInt(request.getParameter(JspParameter.INGREDIENT_ID.getValue()));
 			String ingredientName = XssParser.parse(request.getParameter(JspParameter.INGREDIENT_NAME.getValue()));
 			String ingredientDescription = XssParser
 					.parse(request.getParameter(JspParameter.INGREDIENT_DESCRIPTION.getValue()));

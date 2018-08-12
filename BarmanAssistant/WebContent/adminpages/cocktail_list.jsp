@@ -3,13 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -56,24 +57,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -105,6 +88,27 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -181,11 +185,17 @@
 						<c:if test="${!empty userCocktailMap}">
 							<table>
 								<tr>
-									<th>Id</th>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Volume</th>
-									<th>UserName</th>
+									<th><fmt:message bundle="${locale}" key="cocktaillist.id" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.name" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.description" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.vol" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.author" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.image" /></th>
 								</tr>
 								<c:forEach items="${userCocktailMap}" var="userCocktailMap">
 									<tr class="row">
@@ -203,13 +213,15 @@
 													value="${userCocktailMap.key.cocktailId}" /> <input
 													type="hidden" name="user_id"
 													value="${userCocktailMap.value.userId}" />
-												<button type="submit">INFO</button>
+												<button type="submit"><fmt:message bundle="${locale}" key="cocktaillist.info" /></button>
 											</form></td>
 										<td><form action="MainServlet" method="post">
 												<input type="hidden" name="command" value="Publish_Cocktail" />
 												<input type="hidden" name="cocktail_id"
 													value="${userCocktailMap.key.cocktailId}" />
-												<button type="submit">PUBLISHED</button>
+												<button type="submit">
+													<fmt:message bundle="${locale}" key="button.publish" />
+												</button>
 											</form></td>
 									</tr>
 								</c:forEach>
@@ -219,6 +231,11 @@
 				</div>
 			</blockquote>
 		</section>
+		<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!doctype html>
 <%@ page isELIgnored="false"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:setLocale value="${language}" />
@@ -9,7 +10,7 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -23,7 +24,7 @@
 		<header>
 			<img src="images/logo.png" alt="Whitesquare logo">
 		</header>
-		<nav>
+	<nav>
 			<ul class="top-menu">
 				<li class="active">
 					<form action="MainServlet" method="post">
@@ -53,24 +54,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -102,6 +85,27 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -172,26 +176,26 @@
 		<section>
 			<blockquote>
 				<div class="ingredient">
-					<c:if test="${!empty setIngredient}">
+					<c:if test="${!empty ingredientSet}">
 						<table>
 							<tr>
-								<th>Name</th>
-								<th>Description</th>
+								<th><fmt:message bundle="${locale}" key="ingredientlist.name" /></th>
+								<th><fmt:message bundle="${locale}" key="ingredientlist.description" /></th>
 							</tr>
-							<c:forEach items="${setIngredient}" var="setIngredient">
+							<c:forEach items="${ingredientSet}" var="ingredientSet">
 								<tr>
-									<td>${setIngredient.ingredientName}</td>
-									<td>${setIngredient.ingredientDescription}</td>
+									<td>${ingredientSet.ingredientName}</td>
+									<td>${ingredientSet.ingredientDescription}</td>
 									<td><c:if test="${sessionScope.Role == 'ADMIN'}">
 											<form action="MainServlet" method="post">
 												<input type="hidden" name="command"
 													value="Edit_Ingredient_Page" /> <input type="hidden"
-													name="ingredient_id" value="${setIngredient.ingredientId}" />
+													name="ingredient_id" value="${ingredientSet.ingredientId}" />
 												<input type="hidden" name="ingredient_name"
-													value="${setIngredient.ingredientName}" /> <input
+													value="${ingredientSet.ingredientName}" /> <input
 													type="hidden" name="ingredient_description"
-													value="${setIngredient.ingredientDescription}" />
-												<button type="submit">Edit</button>
+													value="${ingredientSet.ingredientDescription}" />
+												<button type="submit"><fmt:message bundle="${locale}" key="ingredientlist.edit" /></button>
 											</form>
 										</c:if></td>
 								</tr>
@@ -201,6 +205,11 @@
 				</div>
 			</blockquote>
 		</section>
+		<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

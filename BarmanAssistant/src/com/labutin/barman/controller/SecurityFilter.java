@@ -23,6 +23,7 @@ import com.labutin.barman.builder.Director;
 import com.labutin.barman.builder.EnumSetBuilder;
 import com.labutin.barman.builder.TypeCommandBuilder;
 import com.labutin.barman.command.Command;
+import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.command.TypeCommand;
 
@@ -50,11 +51,11 @@ public class SecurityFilter implements Filter {
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
 			HttpServletResponse response = (HttpServletResponse) arg1;
 			HttpServletRequest req = (HttpServletRequest) arg0;
-			UserType type = (UserType) req.getSession().getAttribute("Role");
+			UserType type = (UserType) req.getSession().getAttribute(JspParameter.ROLE.getValue());
 			if (type != null) {
 				EnumSetBuilder builder = new EnumSetBuilder(type);
 				EnumSet<TypeCommand> commands = Director.createEnumTypeCommandSet(builder);
-				String commandName = req.getParameter("command");
+				String commandName = req.getParameter(JspParameter.COMMAND.getValue());
 				if (commandName != null) {
 					TypeCommandBuilder typeBuilder = new TypeCommandBuilder(commandName);
 					TypeCommand commandType = Director.createTypeCommand(typeBuilder);
@@ -66,9 +67,9 @@ public class SecurityFilter implements Filter {
 			}
 			// Раскладываем адрес на составляющие
 			ArrayList<String> pageList = new ArrayList<>(Arrays.asList(req.getRequestURI().split("/")));
-			for (String page : pageList) {
-				System.out.println("Page: " + page);
-			}
+//			for (String page : pageList) {
+//				System.out.println("Page: " + page);
+//			}
 			if (pageList.contains("adminpages")) {
 				response.sendRedirect(req.getContextPath() + "/index.jsp");
 				return;

@@ -7,12 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.labutin.barman.command.PageEnum;
 
 public class AddCocktailCommand extends CocktailCommand {
-
-	public AddCocktailCommand() {
-		// TODO Auto-generated constructor stub
-
-	}
-
+	
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
 		if (util.addCocktail(request, response)) {

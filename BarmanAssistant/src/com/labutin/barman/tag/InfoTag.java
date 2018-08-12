@@ -1,4 +1,4 @@
-package com.labutin.barman.controller;
+package com.labutin.barman.tag;
 
 import java.io.IOException;
 

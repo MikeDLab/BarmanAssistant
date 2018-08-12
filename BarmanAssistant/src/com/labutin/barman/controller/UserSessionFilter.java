@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.UserService;
@@ -38,30 +39,30 @@ public class UserSessionFilter implements Filter {
 		System.out.println("SessionFilter");
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
-			if (request.getSession().getAttribute("Role") == null) {
+			if (request.getSession().getAttribute(JspParameter.ROLE.getValue()) == null) {
 				logger.info("UserSession: " + UserType.GUEST);
-				request.getSession().setAttribute("Role", UserType.GUEST);
+				request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
 			} else {
 				try {
 					receiver = new UserService();
-					User user = (User) request.getSession().getAttribute("User");
+					User user = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
 					if (user != null) {
 						User userBd = receiver.receiveUserById(user.getUserId());
 						if (userBd.getUserRole() != user.getUserRole()) {
 							UserType userRole = getUserType(userBd);
-							request.getSession().setAttribute("Role", userRole);
-							request.getSession().setAttribute("User", userBd);
+							request.getSession().setAttribute(JspParameter.ROLE.getValue(), userRole);
+							request.getSession().setAttribute(JspParameter.USER.getValue(), userBd);
 						} else {
 							if (!userBd.isAvaible()) {
-								request.getSession().setAttribute("Role", UserType.GUEST);
-								request.getSession().removeAttribute("User");
+								request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
+								request.getSession().removeAttribute(JspParameter.USER.getValue());
 							}
 						}
 					}
 				} catch (ServiceException | NumberFormatException e) {
 					request.setAttribute("Errormessage", "Cannot update set rating to barman");
 				}
-				logger.info("UserSession: " + request.getSession().getAttribute("Role"));
+				logger.info("UserSession: " + request.getSession().getAttribute(JspParameter.ROLE.getValue()));
 			}
 		}
 		arg2.doFilter(arg0, arg1);

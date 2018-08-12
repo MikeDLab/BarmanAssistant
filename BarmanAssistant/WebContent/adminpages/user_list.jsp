@@ -3,13 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -53,24 +54,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -102,6 +85,27 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -175,58 +179,64 @@
 		<section>
 			<blockquote>
 				<div class="ingredient">
-					<c:if test="${!empty setUser}">
+					<c:if test="${!empty userSet}">
 						<table>
 							<tr>
-								<th>Id</th>
-								<th>Login</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Role</th>
-								<th>AverageRating</th>
+								<th><fmt:message bundle="${locale}" key="user.login" /></th>
+								<th><fmt:message bundle="${locale}" key="user.name" /></th>
+								<th><fmt:message bundle="${locale}" key="user.email" /></th>
+								<th><fmt:message bundle="${locale}" key="user.averagerating" /></th>
+								<th><fmt:message bundle="${locale}" key="user.cocktailnumber" /></th>
 							</tr>
-							<c:forEach items="${setUser}" var="setUser">
+							<c:forEach items="${userSet}" var="userSet">
 								<tr>
-									<td>${setUser.userId}</td>
-									<td>${setUser.userLogin}</td>
-									<td>${setUser.userName}</td>
-									<td>${setUser.userEmail}</td>
-									<td>${setUser.userRole}</td>
+									<td>${userSet.userLogin}</td>
+									<td>${userSet.userName}</td>
+									<td>${userSet.userEmail}</td>
 									<td><c:if test="${!empty userAverageRatingMap}">
 											<c:forEach items="${userAverageRatingMap}"
 												var="userAverageRatingMap">
 												<c:if
-													test="${userAverageRatingMap.key.userId == setUser.userId}">
+													test="${userAverageRatingMap.key.userId == userSet.userId}">
 									${userAverageRatingMap.value}
 									</c:if>
 											</c:forEach>
 										</c:if></td>
-									<td><c:if test="${setUser.userRole == 2 }">
+									<td><c:if test="${!empty userCocktailNumberMap}">
+											<c:forEach items="${userCocktailNumberMap}"
+												var="userCocktailNumberMap">
+												<c:if
+													test="${userCocktailNumberMap.key.userId == userSet.userId}">
+									${userCocktailNumberMap.value}
+									</c:if>
+											</c:forEach>
+										</c:if></td>
+									<td><c:if test="${userSet.userRole == 2 }">
 											<li class="active">
 												<form action="MainServlet" method="post">
-													<input type="hidden" name="userId"
-														value="${setUser.userId}" /> <input type="hidden"
+													<input type="hidden" name="user_id"
+														value="${userSet.userId}" /> <input type="hidden"
 														name="command" value="Update_To_Barman" />
-													<button type="submit">Update to barman</button>
+													<button type="submit"><fmt:message bundle="${locale}" key="button.upgrade" /></button>
 												</form>
 											</li>
-										</c:if> <c:if test="${setUser.userRole == 1 }">
+										</c:if> <c:if test="${userSet.userRole == 1 }">
 											<li class="active">
 												<form action="MainServlet" method="post">
-													<input type="hidden" name="userId"
-														value="${setUser.userId}" /> <input type="hidden"
+													<input type="hidden" name="user_id"
+														value="${userSet.userId}" /> <input type="hidden"
 														name="command" value="Downgrade_To_User" />
-													<button type="submit">Downgrade to user</button>
+													<button type="submit"><fmt:message bundle="${locale}" key="button.downgrade" /></button>
 												</form>
 											</li>
 										</c:if></td>
 									<td><form action="MainServlet" method="post">
 											<input type="hidden" name="command" value="Delete_User" /> <input
-												type="hidden" name="user_id" value="${setUser.userId}" />
+												type="hidden" name="user_id" value="${userSet.userId}" />
 											<button type="submit" onclick="return check();">Delete</button>
 										</form> <script type="text/javascript">
 											function check() {
-												if (confirm("Подтвердить")) {
+												if (confirm("<fmt:message bundle="${locale}" key="check" />")) {
 													return true;
 												} else {
 													return false;
@@ -240,6 +250,11 @@
 				</div>
 			</blockquote>
 		</section>
+			<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

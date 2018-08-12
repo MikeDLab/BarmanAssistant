@@ -22,16 +22,16 @@ public class RatingService {
 	private static Logger logger = LogManager.getLogger();
 	private final RatingRepository utilRepository;
 
-	public RatingService() throws ServiceException{
+	public RatingService() throws ServiceException {
 		try {
 			utilRepository = RatingRepository.getInstance();
 		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
 			// TODO Auto-generated catch block
-			throw new ServiceException(e); 
+			throw new ServiceException(e);
 		}
 	}
-	public Set<Rating> receiveBarmanRatingSetByUserId(int userId) throws ServiceException
-	{
+
+	public Set<Rating> receiveBarmanRatingSetByUserId(int userId) throws ServiceException {
 		try {
 			return utilRepository.query(new FindBarmanRatingSetByUserId(userId));
 		} catch (RepositoryException e) {
@@ -39,8 +39,8 @@ public class RatingService {
 			throw new ServiceException(e);
 		}
 	}
-	public Set<Rating> receiveBarmanRatingSetByBarmanId(int userId) throws ServiceException
-	{
+
+	public Set<Rating> receiveBarmanRatingSetByBarmanId(int userId) throws ServiceException {
 		try {
 			return utilRepository.query(new FindAverageBarmanRatingSet(userId));
 		} catch (RepositoryException e) {
@@ -49,24 +49,23 @@ public class RatingService {
 		}
 	}
 
-	public Rating receiveCocktailRatingSetByUserIdAndCocktailId(int userId,int cocktailId) throws ServiceException
-	{
+	public Rating receiveCocktailRatingSetByUserIdAndCocktailId(int userId, int cocktailId) throws ServiceException {
 		try {
-			if(utilRepository.query(new FindCocktailRatingSetByUserIdAndCocktailId(userId, cocktailId)).iterator().hasNext())
-			{
-			return utilRepository.query(new FindCocktailRatingSetByUserIdAndCocktailId(userId, cocktailId)).iterator().next();
-			}
-			else
-			{
+			if (utilRepository.query(new FindCocktailRatingSetByUserIdAndCocktailId(userId, cocktailId)).iterator()
+					.hasNext()) {
+				return utilRepository.query(new FindCocktailRatingSetByUserIdAndCocktailId(userId, cocktailId))
+						.iterator().next();
+			} else {
 				return null;
 			}
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
+			System.out.println("EXCEPTTT");
 			throw new ServiceException(e);
 		}
 	}
-	public Set<Rating> receiveCocktailRatingSetByUserId(int userId) throws ServiceException
-	{
+
+	public Set<Rating> receiveCocktailRatingSetByUserId(int userId) throws ServiceException {
 		try {
 			return utilRepository.query(new FindCocktailRatingSetByUserId(userId));
 		} catch (RepositoryException e) {
@@ -74,8 +73,8 @@ public class RatingService {
 			throw new ServiceException(e);
 		}
 	}
-	public Set<Rating> receiveCocktailRatingSetByCocktailId(int cocktailId) throws ServiceException
-	{
+
+	public Set<Rating> receiveCocktailRatingSetByCocktailId(int cocktailId) throws ServiceException {
 		try {
 			return utilRepository.query(new FindAverageCocktailRatingSet(cocktailId));
 		} catch (RepositoryException e) {
@@ -83,16 +82,16 @@ public class RatingService {
 			throw new ServiceException(e);
 		}
 	}
-	public void removeCocktailRating(int cocktailId) throws ServiceException
-	{
-		
+
+	public void removeCocktailRating(int cocktailId) throws ServiceException {
+
 		try {
 			Cocktail cocktail = new Cocktail();
 			cocktail.setCocktailId(cocktailId);
 			utilRepository.removeCocktailRating(cocktail);
 		} catch (RepositoryException e) {
 			throw new ServiceException(e);
-		}	
+		}
 	}
-	
+
 }

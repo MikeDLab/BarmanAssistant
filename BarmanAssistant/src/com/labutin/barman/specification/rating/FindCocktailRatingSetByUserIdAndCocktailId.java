@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.Rating;
 import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
@@ -27,7 +28,7 @@ public class FindCocktailRatingSetByUserIdAndCocktailId implements RatingSpecifi
 	}
 
 	@Override
-	public Set<Rating> querry() {
+	public Set<Rating> querry() throws RepositoryException {
 		ResultSet resultSet = null;
 		Set<Rating> ratingSet = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
@@ -38,18 +39,17 @@ public class FindCocktailRatingSetByUserIdAndCocktailId implements RatingSpecifi
 				preparedStatement.setInt(2, cocktailId);
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
-					if (resultSet != null) {
 						Rating barmanRating = new Rating();
 						barmanRating.setEstimating(resultSet.getInt("user_id"));
 						barmanRating.setEstimated(resultSet.getInt("cocktail_id"));
 						barmanRating.setRating(resultSet.getInt("cocktail_rating"));
 						ratingSet.add(barmanRating);
-					}
 				}
 				return ratingSet;
 			}
 		} catch (SQLException e) {
+			throw new RepositoryException(e);
 		}
-		throw new RuntimeException();
+		return ratingSet;
 	}
 }

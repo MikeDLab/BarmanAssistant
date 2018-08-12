@@ -14,6 +14,7 @@ import com.labutin.barman.repository.RatingRepository;
 import com.labutin.barman.specification.cocktail.FindCocktailById;
 import com.labutin.barman.specification.cocktail.FindCocktailForBarmenAccept;
 import com.labutin.barman.specification.cocktail.FindCocktailPublishedSet;
+import com.labutin.barman.specification.cocktail.FindCocktailSetByBarmanId;
 
 public class CocktailService {
 	private final CocktailRepositoryImpl cocktailRepository;
@@ -109,6 +110,15 @@ public class CocktailService {
 			item.setCocktailId(cocktailId);
 			cocktailRepository.remove(item);
 		} catch (RepositoryException e) {
+			throw new ServiceException(e);
+		}
+	}
+	public Set<Cocktail> receiveCocktailSetByUserId(int userId) throws ServiceException
+	{
+		try {
+			return cocktailRepository.query(new FindCocktailSetByBarmanId(userId));
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}

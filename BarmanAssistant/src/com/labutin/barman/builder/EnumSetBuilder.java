@@ -22,27 +22,27 @@ public class EnumSetBuilder extends AbstractEnumSetBuilder {
 					TypeCommand.SHOW_COCKTAIL_IMAGE, TypeCommand.COCKTAIL_INFO);
 			break;
 		case USER:
-			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
+			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.USER_PANEL,TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
 					TypeCommand.ADD_COCKTAIL, TypeCommand.PUSH_COCKTAIL, TypeCommand.ADD_COCKTAIL_RATING,
 					TypeCommand.COCKTAIL_LIST, TypeCommand.SHOW_COCKTAIL_IMAGE, TypeCommand.COCKTAIL_INFO,
 					TypeCommand.ADD_BARMAN_RATING, TypeCommand.SHOW_BARMAN);
 			break;
 		case BARMAN:
-			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
+			typeCommand = EnumSet.of(TypeCommand.HOME,TypeCommand.USER_PANEL, TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
 					TypeCommand.ADD_COCKTAIL, TypeCommand.ADD_COCKTAIL_RATING, TypeCommand.COCKTAIL_LIST,
 					TypeCommand.SHOW_COCKTAIL_IMAGE, TypeCommand.COCKTAIL_INFO, TypeCommand.ADD_BARMAN_RATING,
 					TypeCommand.CHECK_COCKTAIL_LIST, TypeCommand.BARMAN_PANEL, TypeCommand.SHOW_BARMAN,
 					TypeCommand.PUBLISH_COCKTAIL, TypeCommand.PUSH_COCKTAIL);
 			break;
 		case ADMIN:
-			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
-					TypeCommand.EDIT_INGREDIENT_PAGE, TypeCommand.EDIT_INGREDIENT, TypeCommand.ADD_COCKTAIL,
-					TypeCommand.ADD_COCKTAIL_RATING, TypeCommand.COCKTAIL_LIST, TypeCommand.SHOW_COCKTAIL_IMAGE,
-					TypeCommand.COCKTAIL_INFO, TypeCommand.DELETE_COCKTAIL, TypeCommand.ADD_BARMAN_RATING,
-					TypeCommand.CHECK_COCKTAIL_LIST, TypeCommand.BARMAN_PANEL, TypeCommand.SHOW_BARMAN,
-					TypeCommand.PUBLISH_COCKTAIL, TypeCommand.PUSH_COCKTAIL, TypeCommand.ADMIN_PANEL,
-					TypeCommand.SHOW_USER_LIST, TypeCommand.DELETE_USER, TypeCommand.UPDATE_TO_BARMAN,
-					TypeCommand.DOWNGRADE_TO_USER);
+			typeCommand = EnumSet.of(TypeCommand.HOME, TypeCommand.USER_PANEL,TypeCommand.LOG_OUT, TypeCommand.SHOW_INGREDIENT,
+					TypeCommand.ADD_INGREDIENT, TypeCommand.PUSH_INGREDIENT, TypeCommand.EDIT_INGREDIENT_PAGE,
+					TypeCommand.EDIT_INGREDIENT, TypeCommand.ADD_COCKTAIL, TypeCommand.ADD_COCKTAIL_RATING,
+					TypeCommand.COCKTAIL_LIST, TypeCommand.SHOW_COCKTAIL_IMAGE, TypeCommand.COCKTAIL_INFO,
+					TypeCommand.DELETE_COCKTAIL, TypeCommand.ADD_BARMAN_RATING, TypeCommand.CHECK_COCKTAIL_LIST,
+					TypeCommand.BARMAN_PANEL, TypeCommand.SHOW_BARMAN, TypeCommand.PUBLISH_COCKTAIL,
+					TypeCommand.PUSH_COCKTAIL, TypeCommand.ADMIN_PANEL, TypeCommand.SHOW_USER_LIST,
+					TypeCommand.DELETE_USER, TypeCommand.UPDATE_TO_BARMAN, TypeCommand.DOWNGRADE_TO_USER);
 			break;
 
 		}

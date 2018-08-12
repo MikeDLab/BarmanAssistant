@@ -9,14 +9,11 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
 	type="text/css">
-<!--[if lt IE 9]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
 </head>
 <body>
 	<div id="wrapper">
@@ -34,63 +31,77 @@
 					</form>
 				</li>
 				<c:if test="${sessionScope.Role == 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Sign_In" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.login" /></button>
-					</form>
-				</li>
-			</c:if>
-			<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Log_Out" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.logout" /></button>
-					</form>
-				</li>
-			</c:if>
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Sign_In" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.login" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Log_Out" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.logout" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role != 'GUEST'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="User_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.userpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if
+					test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Barman_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
+				<c:if test="${sessionScope.Role == 'ADMIN'}">
+					<li class="active">
+						<form action="MainServlet" method="post">
+							<input type="hidden" name="command" value="Admin_Panel" />
+							<button type="submit">
+								<fmt:message bundle="${locale}" key="menubar.adminpanel" />
+							</button>
+						</form>
+					</li>
+				</c:if>
 				<li class="active">
 					<form action="Es" method="get">
-						<button type="submit">Es</button>
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
 					</form>
 				</li>
 				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
 					</form>
 				</li>
-				<c:if test="${sessionScope.Role != 'GUEST'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="User_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.userpanel" /></button>
-					</form>
-				</li>
-				</c:if>
-				<c:if test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Barman_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.barmanpanel" /></button>
-					</form>
-				</li>
-			</c:if>
-				<c:if test="${sessionScope.Role == 'ADMIN'}">
-				<li class="active">
-					<form action="MainServlet" method="post">
-						<input type="hidden" name="command" value="Admin_Panel" />
-						<button type="submit"><fmt:message bundle="${locale}" key="menubar.adminpanel" /></button>
-					</form>
-				</li>
-			</c:if>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -164,14 +175,14 @@
 			<blockquote>
 				<div>
 				<p>${Errormessage}</p>
-					<form action="MainServlet" method="post" name="PushIngredient">
+					<form action="MainServlet" method="post">
 						<div class="form-group">
 							<input type="hidden" name="command" value="Push_Ingredient" /> <input
-								type="text" class="edit" name="ingredientname" id="name"
-								placeholder="Inter name" maxlength="45">
-							<textarea rows="10" cols="45" name="ingredientdesc"
-								maxlength="255">Add description</textarea>
-							<button type="submit" class="active">Add</button>
+								type="text" class="edit" name="ingredient_name" id="name"
+								placeholder=<fmt:message bundle="${locale}" key="name.placeholder" /> maxlength="45">
+							<textarea rows="10" cols="45" name="ingredient_description"
+								maxlength="255"><fmt:message bundle="${locale}" key="addingredientpage.description" /></textarea>
+							<button type="submit" class="active"><fmt:message bundle="${locale}" key="button.add" /></button>
 						</div>
 					</form>
 				</div>

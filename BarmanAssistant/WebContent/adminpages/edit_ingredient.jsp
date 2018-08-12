@@ -3,13 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -53,24 +54,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -102,6 +85,27 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -176,22 +180,27 @@
 					<form action="MainServlet" method="post" name="PushIngredient">
 						<div class="form-group">
 							<input type="hidden" name="command" value="Edit_Ingredient" /> <input
-								type="text" class="edit" name="ingredientname" id="name"
+								type="text" class="edit" name="ingredient_name" id="name"
 								placeholder="${ingredient.ingredientName}" maxlength="45">
-							<textarea rows="10" cols="45" name="ingredientdesc"
+							<textarea rows="10" cols="45" name="ingredient_description"
 								maxlength="255">${ingredient.ingredientDescription}</textarea>
 							<input type="hidden" name="ingredient_id"
 								value="${ingredient.ingredientId}" /> <input type="hidden"
 								name="ingredient_name" value="${ingredient.ingredientName}" />
 							<input type="hidden" name="ingredient_description"
 								value="${ingredient.ingredientDescription}" />
-							<button type="submit">Edit</button>
+							<button type="submit"><fmt:message bundle="${locale}" key="button.edit" /></button>
 
 						</div>
 					</form>
 				</div>
 			</blockquote>
 		</section>
+		<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

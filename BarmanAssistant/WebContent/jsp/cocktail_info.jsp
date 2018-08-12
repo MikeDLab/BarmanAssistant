@@ -9,7 +9,7 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -56,24 +56,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -105,6 +87,27 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -175,17 +178,21 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
+				<div>
 					<p>${Errormessage}</p>
 					<div class="form-group">
 						<c:if test="${!empty cocktail}">
 							<table>
 								<tr>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Volume</th>
-									<th>Image</th>
-									<th>Rating</th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.name" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.description" /></th>
+									<th><fmt:message bundle="${locale}" key="cocktaillist.vol" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.image" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="cocktaillist.rating" /></th>
 								</tr>
 								<tr class="row">
 									<td>${cocktail.cocktailName}</td>
@@ -202,14 +209,17 @@
 														<c:if
 															test="${sessionScope.Role != 'GUEST' && sessionScope.User.userId != user.userId }">
 															<form action="MainServlet" method="post">
-																<input type="number" min="0" max="10"
-																	placeholder="Inter vol" class="edit"
+																<input type="number" min="0" max="10" class="edit"
 																	name="cocktail_rating" id="vol"> <input
 																	type="hidden" name="test" value="number" /> <input
 																	type="hidden" name="command"
 																	value="Add_Cocktail_Rating" /> <input type="hidden"
-																	name="cocktail_id" value="${cocktail.cocktailId}" />
-																<button type="submit" class="active">Оценить</button>
+																	name="cocktail_id" value="${cocktail.cocktailId}" /> <input
+																	type="hidden" name="user_id" value="${author.userId}" />
+																<button type="submit" class="active">
+																	<fmt:message bundle="${locale}"
+																		key="button.estimate" />
+																</button>
 															</form>
 														</c:if>
 													</c:if>
@@ -222,31 +232,33 @@
 						</c:if>
 					</div>
 					<div>
-						<c:if test="${!empty user}">
+						<c:if test="${!empty author}">
 							<table>
 								<tr>
-									<th>Name</th>
-									<th>Email</th>
+									<th><fmt:message bundle="${locale}" key="user.name" /></th>
+									<th><fmt:message bundle="${locale}" key="user.email" /></th>
 								</tr>
 								<tr>
-									<td>${user.userName}</td>
-									<td>${user.userEmail}</td>
+									<td>${author.userName}</td>
+									<td>${author.userEmail}</td>
 								</tr>
 
 							</table>
 						</c:if>
 					</div>
 					<div>
-						<c:if test="${!empty setIngredient}">
+						<c:if test="${!empty ingredientSet}">
 							<table border="1">
 								<tr>
-									<th>Name</th>
-									<th>Description</th>
+									<th><fmt:message bundle="${locale}"
+											key="ingredientlist.name" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="ingredientlist.description" /></th>
 								</tr>
-								<c:forEach items="${setIngredient}" var="setIngredient">
+								<c:forEach items="${ingredientSet}" var="ingredientSet">
 									<tr>
-										<td>${setIngredient.ingredientName}</td>
-										<td>${setIngredient.ingredientDescription}</td>
+										<td>${ingredientSet.ingredientName}</td>
+										<td>${ingredientSet.ingredientDescription}</td>
 									</tr>
 								</c:forEach>
 							</table>

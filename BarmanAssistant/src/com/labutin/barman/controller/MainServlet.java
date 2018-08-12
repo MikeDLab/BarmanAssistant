@@ -1,10 +1,6 @@
 package com.labutin.barman.controller;
 
 import java.io.IOException;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -18,9 +14,9 @@ import com.labutin.barman.builder.CommandBuilder;
 import com.labutin.barman.builder.Director;
 import com.labutin.barman.builder.TypeCommandBuilder;
 import com.labutin.barman.command.Command;
+import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.command.TypeCommand;
-import com.labutin.barman.entity.User;
 
 /**
  * Servlet implementation class First
@@ -38,11 +34,10 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("COMMAND: " + request.getParameter("command"));
-		if (request.getParameter("command") == null) {
+		if (request.getParameter(JspParameter.COMMAND.getValue()) == null) {
 			request.getRequestDispatcher(PageEnum.HOME_PAGE.getValue()).forward(request, response);
 		} else {
-			TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter("command"));
+			TypeCommandBuilder typeBuilder = new TypeCommandBuilder(request.getParameter(JspParameter.COMMAND.getValue()));
 			TypeCommand commandType = Director.createTypeCommand(typeBuilder);
 			logger.info("Command type: " + commandType.getValue());
 			CommandBuilder commandBuilder = new CommandBuilder(commandType);

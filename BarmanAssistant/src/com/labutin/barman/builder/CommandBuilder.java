@@ -35,7 +35,6 @@ public class CommandBuilder extends AbstractCommandBuilder {
 	private TypeCommand typeCommand;
 
 	public CommandBuilder(TypeCommand typeCommand) {
-		// TODO Auto-generated constructor stub
 		this.typeCommand = typeCommand;
 	}
 

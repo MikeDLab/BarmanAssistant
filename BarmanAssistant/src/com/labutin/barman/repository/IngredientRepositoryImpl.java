@@ -76,7 +76,6 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 	public void update(Ingredient item) throws RepositoryException {
 
 		// TODO Auto-generated method stub
-		System.out.println("Try to change ");
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INGREDIENT);) {
 			preparedStatement.setString(1, item.getIngredientName());

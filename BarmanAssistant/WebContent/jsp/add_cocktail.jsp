@@ -3,13 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -19,7 +20,6 @@
 	<![endif]-->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
 </head>
 <body>
 	<div id="wrapper">
@@ -56,24 +56,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -105,6 +87,27 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
@@ -127,14 +130,16 @@
 							</button>
 						</form>
 					</li>
-					<li class="active">
-						<form action="MainServlet" method="post">
-							<input type="hidden" name="command" value="Show_Barman" />
-							<button class="side" type="submit">
-								<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
-							</button>
-						</form>
-					</li>
+					<c:if test="${sessionScope.Role != 'GUEST'}">
+						<li class="active">
+							<form action="MainServlet" method="post">
+								<input type="hidden" name="command" value="Show_Barman" />
+								<button class="side" type="submit">
+									<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
+								</button>
+							</form>
+						</li>
+					</c:if>
 					<li class="active">
 						<form action="MainServlet" method="post">
 							<input type="hidden" name="command" value="Show_Ingredient" />
@@ -173,45 +178,58 @@
 		</aside>
 		<section>
 			<blockquote>
-				<div class="col-6 col-sm-3">
+				<div>
 					<p>${Errormessage}</p>
 					<form action="MainServlet" method="post" name="PushCocktail"
 						enctype="multipart/form-data">
 						<input type="hidden" name="command" value="Push_Cocktail"><br>
-						<br> <input type="text" class="edit" name="cocktailname"
-							id="name" placeholder="Inter cocktail name" maxlength="45"><br>
-						<br> <input type="number" min="0" max="100"
-							placeholder="Inter vol" class="edit" name="cocktailvol" id="vol"
-							required><br> <br>
-						<textarea rows="10" cols="45" name="cocktaildesc" maxlength="255">Add description</textarea>
-						<br> <br> <input type="hidden" name="cocktailId"
-							value="44"><br> <br>
-						 	<c:if test="${!empty setIngredient}">
-								<table>
-									<tr>
-										<th>Name</th>
-										<th>Description</th>
+						<br> <input type="text" class="edit" name="cocktail_name"
+							id="name"
+							placeholder="<fmt:message bundle="${locale}" key="addcocktail.name" />"
+							maxlength="45"><br> <br> <input type="number"
+							min="0" max="100"
+							placeholder="<fmt:message bundle="${locale}" key="addcocktail.vol" />"
+							class="edit" name="cocktail_vol" id="vol" required><br>
+						<br>
+						<textarea rows="10" cols="45" name="cocktail_description"
+							maxlength="255"><fmt:message bundle="${locale}"
+								key="addcocktail.description" /></textarea>
+						<br> <br>
+						<c:if test="${!empty ingredientSet}">
+							<table>
+								<tr>
+									<th><fmt:message bundle="${locale}"
+											key="ingredientlist.name" /></th>
+									<th><fmt:message bundle="${locale}"
+											key="ingredientlist.description" /></th>
+								</tr>
+								<c:forEach items="${ingredientSet}" var="ingredientSet">
+									<tr class="row">
+										<td>${ingredientSet.ingredientName}</td>
+										<td>${ingredientSet.ingredientDescription}</td>
+										<td><input type="checkbox" name="cocktail_ingredients"
+											value="${ingredientSet.ingredientId}"></td>
 									</tr>
-									<c:forEach items="${setIngredient}" var="setIngredient">
-										<tr class="row">
-											<td>${setIngredient.ingredientName}</td>
-											<td>${setIngredient.ingredientDescription}</td>
-											<td><input
-												type="checkbox" name="selected"
-												value="${setIngredient.ingredientId}"></td>
-										</tr>
-									</c:forEach>
-								</table>
-							</c:if>
+								</c:forEach>
+							</table>
+						</c:if>
 						<div class="form-group">
 							<input type="file" name="photo" size="50"
-								placeholder="Upload Your Image" required />
-							<button type="submit" class="active">Add</button>
+								placeholder="<fmt:message bundle="${locale}" key="image.select" />"
+								required />
+							<button type="submit" class="active">
+								<fmt:message bundle="${locale}" key="button.add" />
+							</button>
 						</div>
 					</form>
 				</div>
 			</blockquote>
 		</section>
+		<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

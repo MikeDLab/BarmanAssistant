@@ -3,13 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<title>Barman Assistant</title>
+<title><fmt:message bundle="${locale}" key="title" /></title>
 <link rel="stylesheet" href="css/styles.css" type="text/css">
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
@@ -56,24 +57,6 @@
 						</form>
 					</li>
 				</c:if>
-				<li class="active">
-					<form action="Es" method="get">
-						<button type="submit">Es</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="Ru" /> <input
-							type="hidden" name="pageId" value="index.jsp" />
-						<button type="submit">Русский</button>
-					</form>
-				</li>
-				<li class="active">
-					<form action="MainServlet" method="get">
-						<input type="hidden" name="locale" value="En" />
-						<button type="submit">Eng</button>
-					</form>
-				</li>
 				<c:if test="${sessionScope.Role != 'GUEST'}">
 					<li class="active">
 						<form action="MainServlet" method="post">
@@ -105,13 +88,34 @@
 						</form>
 					</li>
 				</c:if>
+				<li class="active">
+					<form action="Es" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.spanish" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="Ru" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.russian" />
+						</button>
+					</form>
+				</li>
+				<li class="active">
+					<form action="En" method="get">
+						<button type="submit">
+							<fmt:message bundle="${locale}" key="menubar.english" />
+						</button>
+					</form>
+				</li>
 			</ul>
 		</nav>
 		<div id="heading">
 			<h1>${language}</h1>
 			<h1>
 				<label for="username"><fmt:message bundle="${locale}"
-						key="cocktaillist.title" />:</label>
+						key="cocktaillist.title" /></label>
 			</h1>
 			<h1>${Role}</h1>
 			<h1>${User.userName}</h1>
@@ -182,12 +186,17 @@
 							<table>
 								<tr>
 									<td>Id</td>
-									<td>Name</td>
-									<td>Description</td>
-									<td>Volume</td>
-									<td>UserName</td>
-									<td>Image</td>
-									<td>AverageRating</td>
+									<td><fmt:message bundle="${locale}"
+											key="cocktaillist.name" /></td>
+									<td><fmt:message bundle="${locale}"
+											key="cocktaillist.description" /></td>
+									<td><fmt:message bundle="${locale}" key="cocktaillist.vol" /></td>
+									<td><fmt:message bundle="${locale}"
+											key="cocktaillist.author" /></td>
+									<td><fmt:message bundle="${locale}"
+											key="cocktaillist.image" /></td>
+									<td><fmt:message bundle="${locale}"
+											key="cocktaillist.rating" /></td>
 								</tr>
 								<c:forEach items="${userCocktailMap}" var="userCocktailMap">
 									<tr>
@@ -215,17 +224,21 @@
 													value="${userCocktailMap.key.cocktailId}" /> <input
 													type="hidden" name="user_id"
 													value="${userCocktailMap.value.userId}" />
-												<button type="submit">INFO</button>
+												<button type="submit">
+													<fmt:message bundle="${locale}" key="cocktaillist.info" />
+												</button>
 											</form></td>
 										<c:if test="${sessionScope.Role == 'ADMIN'}">
 											<td><form action="MainServlet" method="post">
 													<input type="hidden" name="command" value="Delete_Cocktail" />
 													<input type="hidden" name="cocktail_id"
 														value="${userCocktailMap.key.cocktailId}" />
-													<button type="submit" onclick="return proverka();">Delete</button>
+													<button type="submit" onclick="return proverka();">
+														<fmt:message bundle="${locale}" key="cocktaillist.delete" />
+													</button>
 												</form> <script type="text/javascript">
 													function proverka() {
-														if (confirm("Подтвердить")) {
+														if (confirm("<fmt:message bundle="${locale}" key="check" />")) {
 															return true;
 														} else {
 															return false;
@@ -239,9 +252,13 @@
 						</c:if>
 					</div>
 				</div>
-
 			</blockquote>
 		</section>
+		<footer>
+			<div id="footer">
+				<ctg:info-tag />
+			</div>
+		</footer>
 	</div>
 </body>
 </html>

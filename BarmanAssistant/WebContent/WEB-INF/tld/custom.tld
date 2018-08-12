@@ -7,7 +7,7 @@
 	<uri>customtags</uri>
 	<tag>
 		<name>info-tag</name>
-		<tag-class>com.labutin.barman.controller.InfoTag</tag-class>
+		<tag-class>com.labutin.barman.tag.InfoTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 </taglib>
