@@ -29,7 +29,6 @@ public class LocaleFilter implements Filter {
 	private FilterConfig filterConfig;
 	private static Logger logger = LogManager.getLogger();
 	private static ArrayList<String> pages; // хранилище страниц
-	private String encoding;
 	public LocaleFilter() {
 		// TODO Auto-generated constructor stub
 		if (pages == null)
