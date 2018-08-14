@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
 
-public class RedirectToAdminPanel implements Command {
-	public RedirectToAdminPanel() {
+public class RedirectToAdminPanelPageCommand implements Command {
+	public RedirectToAdminPanelPageCommand() {
 		// TODO Auto-generated constructor stub
 	}
 	@Override

@@ -9,15 +9,16 @@ import org.apache.logging.log4j.Logger;
 import com.labutin.barman.entity.User;
 
 public abstract class AbstractUserSpecification {
-	protected final String USER_ID = "user_id";
-	protected final String USER_NAME = "user_name";
-	protected final String USER_LOGIN = "user_login";
-	protected final String USER_PASSWORD = "user_password";
-	protected final String USER_EMAIL = "user_email";
-	protected final String USER_ROLE = "user_role";
-	protected final String USER_AVAIBLE = "user_isAvaible";
+	protected static final String USER_ID = "user_id";
+	protected static final String USER_NAME = "user_name";
+	protected static final String USER_LOGIN = "user_login";
+	protected static final String USER_PASSWORD = "user_password";
+	protected static final String USER_EMAIL = "user_email";
+	protected static final String USER_ROLE = "user_role";
+	protected static final String USER_AVAIBLE = "user_isAvaible";
 	protected ResultSet resultSet;
 	private static Logger logger = LogManager.getLogger();
+
 	public AbstractUserSpecification() {
 		// TODO Auto-generated constructor stub
 	}
@@ -27,17 +28,15 @@ public abstract class AbstractUserSpecification {
 			try {
 				resultSet.close();
 			} catch (SQLException e) {
-				logger.warn("Result set close exception",e);
+				logger.warn("ResultSet close exception", e);
 			}
 		}
 	}
 
-	protected User loadUserData()
-	{
+	protected User loadUserData() {
 		User user = null;
 		try {
-			if (resultSet != null)
-			{
+			if (resultSet != null) {
 				user = new User();
 				user.setUserId(resultSet.getInt(USER_ID));
 				user.setUserLogin(resultSet.getString(USER_LOGIN));
@@ -48,9 +47,8 @@ public abstract class AbstractUserSpecification {
 				user.setAvaible(resultSet.getBoolean(USER_AVAIBLE));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.warn("Load user data exception",e);
+			logger.warn("Load user data exception", e);
 		}
-	return user;
+		return user;
 	}
 }

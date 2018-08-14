@@ -2,28 +2,24 @@ package com.labutin.barman.specification.ingredient;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Comparator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 import com.labutin.barman.entity.Ingredient;
-import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindIngredientSet extends AbstractIngredientSpecification implements IngredientSpecification {
 	private final static String FIND_INGREDIENT_SET = "SELECT Ingredient_id, Ingredient_name, Ingredient_description FROM Ingredient";
-	private static Logger logger = LogManager.getLogger();
 
 	public FindIngredientSet() {
 	}
 
 	@Override
-	public Set<Ingredient> querry() {
+	public Set<Ingredient> query() throws RepositoryException {
 		Comparator<Ingredient> comparator = Comparator.comparing(obj -> obj.getIngredientId());
 		TreeSet<Ingredient> ingredients = new TreeSet<>(comparator);
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
@@ -35,7 +31,7 @@ public class FindIngredientSet extends AbstractIngredientSpecification implement
 				ingredients.add(loadIngredientData(resultSet));
 			}
 		} catch (SQLException e) {
-			logger.info("Sqlexception", e);
+			throw new RepositoryException(e);
 		} finally {
 			closeResultSet();
 		}

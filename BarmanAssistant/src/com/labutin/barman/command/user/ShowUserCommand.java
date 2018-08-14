@@ -12,6 +12,7 @@ public class ShowUserCommand extends AbstractUserCommand {
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
+		userUtil.init(request, response);
 		userUtil.showUserSet(request, response);
 		 return PageEnum.USER_LIST;
 	}

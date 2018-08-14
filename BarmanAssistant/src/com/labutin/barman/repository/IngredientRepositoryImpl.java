@@ -4,9 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
@@ -17,23 +14,30 @@ import com.labutin.barman.specification.ingredient.FindIngredientByName;
 import com.labutin.barman.specification.ingredient.IngredientSpecification;
 
 public class IngredientRepositoryImpl implements IngredientRepository {
-	private static Logger logger = LogManager.getLogger();
-	private final static String INSERT_INGREDIENT = "INSERT INTO Ingredient(Ingredient_name, Ingredient_description) VALUES (?,?)";
-	private final static String REMOVE_INGREDIENT = "DELETE FROM Ingredient WHERE Ingredient_name = ?";
-	private final static String UPDATE_INGREDIENT = "Update Ingredient Set Ingredient_name = ? ,Ingredient_description= ? Where Ingredient_id= ?";
-
-	private IngredientRepositoryImpl() {
-		// TODO Auto-generated constructor stub
-	}
-
 	private static class SingletonHandler {
 		private final static IngredientRepositoryImpl INSTANCE = new IngredientRepositoryImpl();
 	}
 
-	public static IngredientRepositoryImpl getInstance() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
-		PoolConnection pool = PoolConnection.POOL;
-		pool.initialization();
-		return SingletonHandler.INSTANCE;
+	private final static String INSERT_INGREDIENT = "INSERT INTO Ingredient(Ingredient_name, Ingredient_description) VALUES (?,?)";
+	private final static String REMOVE_INGREDIENT = "DELETE FROM Ingredient WHERE Ingredient_name = ?";
+
+	private final static String UPDATE_INGREDIENT = "UPDATE Ingredient SET Ingredient_name = ? ,Ingredient_description= ? WHERE Ingredient_id= ?";
+
+	public static IngredientRepositoryImpl getInstance() throws RepositoryException {
+
+		try {
+			PoolConnection pool = PoolConnection.POOL;
+			pool.initialization();
+			return SingletonHandler.INSTANCE;
+		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+			// TODO Auto-generated catch block
+			throw new RepositoryException(e);
+		}
+
+	}
+
+	private IngredientRepositoryImpl() {
+
 	}
 
 	@Override
@@ -46,12 +50,16 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 					preparedStatement.setString(1, item.getIngredientName());
 					preparedStatement.setString(2, item.getIngredientDescription());
 					preparedStatement.executeUpdate();
-					logger.info(item + " inseted");
 				}
 			}
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}
+	}
+
+	@Override
+	public Set<Ingredient> query(IngredientSpecification specification) throws RepositoryException {
+		return specification.query();
 	}
 
 	@Override
@@ -67,15 +75,8 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 
 	}
 
-	@Override
-	public Set<Ingredient> query(IngredientSpecification specification) throws RepositoryException {
-		// TODO Auto-generated method stub
-		return specification.querry();
-	}
-
 	public void update(Ingredient item) throws RepositoryException {
 
-		// TODO Auto-generated method stub
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INGREDIENT);) {
 			preparedStatement.setString(1, item.getIngredientName());
@@ -83,7 +84,6 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 			preparedStatement.setInt(3, item.getIngredientId());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			throw new RepositoryException(e);
 		}
 	}

@@ -23,7 +23,7 @@ public class UpdateUserToBarman extends AbstractUserSpecification implements Use
 	}
 
 	@Override
-	public Set<User> querry() throws RepositoryException {
+	public Set<User> query() throws RepositoryException {
 		Set<User> users = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TO_BARMAN)) {
@@ -33,7 +33,7 @@ public class UpdateUserToBarman extends AbstractUserSpecification implements Use
 			}
 		} catch (SQLException e) {
 			logger.info("Cannot update user to barman with user_id=" + userId);
-			throw new RepositoryException();
+			throw new RepositoryException(e);
 		} finally {
 			closeResultSet();
 		}

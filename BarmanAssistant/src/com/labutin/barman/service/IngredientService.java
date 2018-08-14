@@ -3,56 +3,55 @@ package com.labutin.barman.service;
 import java.util.Set;
 
 import com.labutin.barman.entity.Ingredient;
-import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.RepositoryException;
-import com.labutin.barman.exception.NoJDBCDriverException;
-import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.repository.IngredientRepositoryImpl;
-import com.labutin.barman.repository.UserRepositoryImpl;
 import com.labutin.barman.specification.ingredient.AddIngredientHasCocktail;
 import com.labutin.barman.specification.ingredient.DeleteIngredientByCocktailId;
+import com.labutin.barman.specification.ingredient.FindIngredientById;
 import com.labutin.barman.specification.ingredient.FindIngredientSet;
 import com.labutin.barman.specification.ingredient.FindIngredientSetByCocktailId;
 
 public class IngredientService {
+	private static IngredientService INSTANCE;
 	private final IngredientRepositoryImpl ingredientRepository;
 
 	public IngredientService() throws ServiceException {
 		try {
 			ingredientRepository = IngredientRepositoryImpl.getInstance();
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+		} catch (RepositoryException e) {
 			throw new ServiceException(e);
 		}
 	}
-
+	public static IngredientService getInstance() throws ServiceException
+	{
+		return (INSTANCE == null) ? INSTANCE = new IngredientService() : INSTANCE;
+	}
 	public Ingredient add(String ingredientName, String ingredientDescription) throws ServiceException {
-		Ingredient ingredient = new Ingredient();
-		ingredient.setIngredientName(ingredientName);
-		ingredient.setIngredientDescription(ingredientDescription);
 		try {
+			Ingredient ingredient = new Ingredient();
+			ingredient.setIngredientName(ingredientName);
+			ingredient.setIngredientDescription(ingredientDescription);
 			ingredientRepository.add(ingredient);
+			return ingredient;
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException();
-		}
-		return ingredient;
-	}
-
-	public Set<Ingredient> receiveIngredient() throws ServiceException {
-		try {
-			return ingredientRepository.query(new FindIngredientSet());
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
+
 	}
 
 	public void insertIngredientCocktail(int ingredientId, int cocktailId) throws ServiceException {
 		try {
 			ingredientRepository.query(new AddIngredientHasCocktail(ingredientId, cocktailId));
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
+	}
+
+	public Set<Ingredient> receiveIngredienSet() throws ServiceException {
+		try {
+			return ingredientRepository.query(new FindIngredientSet());
+		} catch (RepositoryException e) {
 			throw new ServiceException(e);
 		}
 	}
@@ -61,7 +60,19 @@ public class IngredientService {
 		try {
 			return ingredientRepository.query(new FindIngredientSetByCocktailId(cocktailId));
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
+	}
+	public Ingredient receiveIngredientById(int ingredientId) throws ServiceException
+	{
+		try {
+			Set<Ingredient> setIngredient = ingredientRepository.query(new FindIngredientById(ingredientId));
+			if (setIngredient.iterator().hasNext()) {
+				return setIngredient.iterator().next();
+			} else {
+				return null;
+			}
+		} catch (RepositoryException e) {
 			throw new ServiceException(e);
 		}
 	}
@@ -70,12 +81,12 @@ public class IngredientService {
 		try {
 			ingredientRepository.query(new DeleteIngredientByCocktailId(cocktailId));
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}
 
-	public void updateIngredient(int ingredientId, String ingredientName, String ingredientDescription) throws ServiceException {	
+	public void updateIngredient(int ingredientId, String ingredientName, String ingredientDescription)
+			throws ServiceException {
 		try {
 			Ingredient item = new Ingredient();
 			item.setIngredientId(ingredientId);
@@ -83,7 +94,6 @@ public class IngredientService {
 			item.setIngredientDescription(ingredientDescription);
 			ingredientRepository.update(item);
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}

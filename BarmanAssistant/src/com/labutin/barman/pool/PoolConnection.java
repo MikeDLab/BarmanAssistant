@@ -39,8 +39,7 @@ public enum PoolConnection {
 			logger.info("Connections: " + availableConnetion.size());
 			logger.info("Unvaible: " + unavailableConnetion.size());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			logger.info("Interruptedexception", e);
+			logger.info("Interrupted exception", e);
 		}
 		return connection;
 	}
@@ -79,7 +78,6 @@ public enum PoolConnection {
 					ProxyConnection connection = new ProxyConnection(DriverManager.getConnection(URL, user, password));
 					availableConnetion.add(connection);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					throw new NoJDBCDriverException(e);
 				}
 			}
@@ -100,4 +98,5 @@ public enum PoolConnection {
 		}
 
 	}
+
 }

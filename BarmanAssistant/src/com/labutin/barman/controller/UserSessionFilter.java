@@ -1,6 +1,8 @@
 package com.labutin.barman.controller;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -15,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.command.JspParameter;
+import com.labutin.barman.command.LocaleKey;
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.service.UserService;
@@ -38,29 +41,39 @@ public class UserSessionFilter implements Filter {
 			throws IOException, ServletException {
 		System.out.println("SessionFilter");
 		HttpServletRequest request = (HttpServletRequest) arg0;
-		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
+		Locale locale = new Locale((String) request.getSession().getAttribute(JspParameter.LANGUAGE.getValue()));
+		ResourceBundle resourceBundle = ResourceBundle.getBundle(LocaleKey.LOCALE_PROPERTIES.getValue(), locale);
+		if (Boolean.parseBoolean(filterConfig.getInitParameter("active"))) {
 			if (request.getSession().getAttribute(JspParameter.ROLE.getValue()) == null) {
 				logger.info("UserSession: " + UserType.GUEST);
 				request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
 			} else {
 				try {
-					receiver = new UserService();
+					receiver = UserService.getInstance();
 					User user = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
 					if (user != null) {
 						User userBd = receiver.receiveUserById(user.getUserId());
-						if (userBd.getUserRole() != user.getUserRole()) {
-							UserType userRole = getUserType(userBd);
-							request.getSession().setAttribute(JspParameter.ROLE.getValue(), userRole);
-							request.getSession().setAttribute(JspParameter.USER.getValue(), userBd);
-						} else {
-							if (!userBd.isAvaible()) {
-								request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
-								request.getSession().removeAttribute(JspParameter.USER.getValue());
+						if (userBd != null) {
+							if (userBd.getUserRole() != user.getUserRole()) {
+								UserType userRole = getUserType(userBd);
+								request.getSession().setAttribute(JspParameter.ROLE.getValue(), userRole);
+								request.getSession().setAttribute(JspParameter.USER.getValue(), userBd);
+							} else {
+								if (!userBd.isAvaible()) {
+									request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
+									request.getSession().removeAttribute(JspParameter.USER.getValue());
+								}
 							}
+						} else {
+							request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
+							request.getSession().removeAttribute(JspParameter.USER.getValue());
 						}
+					} else {
+						request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
 					}
 				} catch (ServiceException | NumberFormatException e) {
-					request.setAttribute("Errormessage", "Cannot update set rating to barman");
+					request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+							resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 				}
 				logger.info("UserSession: " + request.getSession().getAttribute(JspParameter.ROLE.getValue()));
 			}

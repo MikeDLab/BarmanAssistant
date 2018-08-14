@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
+
 @SuppressWarnings("serial")
 public class InfoTag extends TagSupport {
 
@@ -20,8 +21,7 @@ public class InfoTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		// TODO Auto-generated method stub
-		String author = "<p> <b>Mike Labutin</b> , Emap Trainig 2018</p>";
+		String author = "<p>©<b>Mike Labutin</b> , Epam Training 2018</p>";
 
 		try {
 			JspWriter out = pageContext.getOut();

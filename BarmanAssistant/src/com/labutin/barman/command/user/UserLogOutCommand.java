@@ -9,6 +9,7 @@ public class UserLogOutCommand extends AbstractUserCommand {
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
+		userUtil.init(request, response);
 		userUtil.logOut(request, response);
 		return PageEnum.HOME_PAGE;
 	}

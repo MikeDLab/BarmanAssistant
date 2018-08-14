@@ -8,7 +8,11 @@
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous">
 
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -21,13 +25,16 @@
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 </head>
-<body style="display: flex; flex-flow: column; justify-content: space-between">
+<body
+	style="display: flex; flex-flow: column; justify-content: space-between">
 	<section>
 		<header>
 			<div class="container">
 				<div class="logo">
 					<i class="fa fa-glass logo-img"></i>
-					<p class="logo-text"><fmt:message bundle="${locale}" key="title" /></p>
+					<p class="logo-text">
+						<fmt:message bundle="${locale}" key="title" />
+					</p>
 				</div>
 			</div>
 		</header>
@@ -35,7 +42,7 @@
 			<div class="container">
 				<ul class="top-menu">
 					<li class="active">
-						<form action="MainServlet" method="post">
+						<form action="app" method="post">
 							<input type="hidden" name="command" value="Home" />
 							<button type="submit">
 								<fmt:message bundle="${locale}" key="menubar.homebutton" />
@@ -44,7 +51,7 @@
 					</li>
 					<c:if test="${sessionScope.Role == 'GUEST'}">
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="Sign_In" />
 								<button type="submit">
 									<fmt:message bundle="${locale}" key="menubar.login" />
@@ -54,7 +61,7 @@
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="Log_Out" />
 								<button class="menu-text" type="submit">
 									<fmt:message bundle="${locale}" key="menubar.logout" />
@@ -64,7 +71,7 @@
 					</c:if>
 					<c:if test="${sessionScope.Role != 'GUEST'}">
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="User_Panel" />
 								<button type="submit">
 									<fmt:message bundle="${locale}" key="menubar.userpanel" />
@@ -75,7 +82,7 @@
 					<c:if
 						test="${(sessionScope.Role == 'ADMIN') || sessionScope.Role == 'BARMAN' }">
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="Barman_Panel" />
 								<button type="submit">
 									<fmt:message bundle="${locale}" key="menubar.barmanpanel" />
@@ -85,7 +92,7 @@
 					</c:if>
 					<c:if test="${sessionScope.Role == 'ADMIN'}">
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="Admin_Panel" />
 								<button type="submit">
 									<fmt:message bundle="${locale}" key="menubar.adminpanel" />
@@ -122,7 +129,7 @@
 		<div class="container">
 			<div id="heading">
 				<h1>${language}</h1>
-		
+
 				<h1>
 					<label for="username"><fmt:message bundle="${locale}"
 							key="homepage.title" /></label>
@@ -134,7 +141,7 @@
 				<nav>
 					<ul class="aside-menu">
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="Cocktail_List" />
 								<button class="side" type="submit">
 									<fmt:message bundle="${locale}" key="sidebar.cocktaillist" />
@@ -143,7 +150,7 @@
 						</li>
 						<c:if test="${sessionScope.Role != 'GUEST'}">
 							<li class="active">
-								<form action="MainServlet" method="post">
+								<form action="app" method="post">
 									<input type="hidden" name="command" value="Show_Barman" />
 									<button class="side" type="submit">
 										<fmt:message bundle="${locale}" key="sidebar.barmanlist" />
@@ -152,7 +159,7 @@
 							</li>
 						</c:if>
 						<li class="active">
-							<form action="MainServlet" method="post">
+							<form action="app" method="post">
 								<input type="hidden" name="command" value="Show_Ingredient" />
 								<button class="side" type="submit">
 									<fmt:message bundle="${locale}" key="sidebar.ingredientlist" />
@@ -161,17 +168,18 @@
 						</li>
 						<c:if test="${sessionScope.Role == 'ADMIN'}">
 							<li class="active">
-								<form action="MainServlet" method="post">
+								<form action="app" method="post">
 									<input type="hidden" name="command" value="Add_Ingredient" />
 									<button class="side" type="submit">
-										<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+										<fmt:message bundle="${locale}"
+											key="sidebar.addingredientpage" />
 									</button>
 								</form>
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.Role != 'GUEST'}">
 							<li class="active">
-								<form action="MainServlet" method="post">
+								<form action="app" method="post">
 									<input type="hidden" name="command" value="Add_Cocktail" />
 									<button class="side" type="submit">
 										<fmt:message bundle="${locale}" key="sidebar.addcocktail" />
@@ -181,33 +189,36 @@
 						</c:if>
 					</ul>
 				</nav>
-		<!-- 			<h2>OUR OFFICES</h2>
+				<!-- 			<h2>OUR OFFICES</h2>
 					<p>
 						<img src="images/sample.png" width="230" height="180"
 							alt="Our offices">
 					</p> -->
 			</aside>
-			<div  style="float: left; width: 73%;">
-			<blockquote>
-				<div>
-					<form action="MainServlet" method="post" name="PushIngredient">
-						<div class="form-group">
-							<input type="hidden" name="command" value="Edit_Ingredient" /> <input
-								type="text" class="edit" name="ingredient_name" id="name"
-								placeholder="${ingredient.ingredientName}" maxlength="45">
-							<textarea rows="10" cols="45" name="ingredient_description"
-								maxlength="255">${ingredient.ingredientDescription}</textarea>
-							<input type="hidden" name="ingredient_id"
-								value="${ingredient.ingredientId}" /> <input type="hidden"
-								name="ingredient_name" value="${ingredient.ingredientName}" />
-							<input type="hidden" name="ingredient_description"
-								value="${ingredient.ingredientDescription}" />
-							<button type="submit"><fmt:message bundle="${locale}" key="button.edit" /></button>
+			<div style="float: left; width: 73%;">
+				<blockquote>
+						<p>${Errormessage}</p>
+					<div>
+						<form action="app" method="post">
+							<div class="form-group">
+								<input type="hidden" name="command" value="Edit_Ingredient" />
+								<input type="text" class="edit" name="ingredient_name" id="name"
+									placeholder="${ingredient.ingredientName}" maxlength="45">
+								<textarea rows="10" cols="45" name="ingredient_description"
+									maxlength="255">${ingredient.ingredientDescription}</textarea>
+								<input type="hidden" name="ingredient_id"
+									value="${ingredient.ingredientId}" /> <input type="hidden"
+									name="ingredient_name" value="${ingredient.ingredientName}" />
+								<input type="hidden" name="ingredient_description"
+									value="${ingredient.ingredientDescription}" />
+								<button type="submit">
+									<fmt:message bundle="${locale}" key="button.edit" />
+								</button>
 
-						</div>
-					</form>
-				</div>
-			</blockquote>
+							</div>
+						</form>
+					</div>
+				</blockquote>
 			</div>
 		</div>
 	</section>

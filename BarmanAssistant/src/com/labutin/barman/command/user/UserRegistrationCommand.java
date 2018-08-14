@@ -11,6 +11,7 @@ public class UserRegistrationCommand extends AbstractUserCommand {
 	
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {	
+		userUtil.init(request, response);
 		UserType userType =  userUtil.registerUser(request, response);
 		 if(userType == UserType.GUEST)
 		 {

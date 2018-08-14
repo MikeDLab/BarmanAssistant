@@ -5,15 +5,12 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindUserByLogin extends AbstractUserSpecification implements UserSpecification {
-	private static Logger logger = LogManager.getLogger();
 	private String userLogin;
 	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User WHERE user_login = ?";
 
@@ -23,7 +20,7 @@ public class FindUserByLogin extends AbstractUserSpecification implements UserSp
 	}
 
 	@Override
-	public Set<User> querry() {
+	public Set<User> query() throws RepositoryException {
 		Set<User> users = new HashSet<>();
 
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
@@ -38,7 +35,7 @@ public class FindUserByLogin extends AbstractUserSpecification implements UserSp
 			}
 
 		} catch (SQLException e) {
-			logger.info("Sqlexception", e);
+			throw new RepositoryException(e);
 		} finally {
 			closeResultSet();
 		}

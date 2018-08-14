@@ -12,7 +12,7 @@ public enum PageEnum {
 	COCKTAIL_LIST_PAGE("/jsp/cocktail_list.jsp"),
 	COCKTAIL_LIST_FOR_BARMAN("/adminpages/cocktail_list.jsp"),
 	COCKTAIL_INFO_PAGE("jsp/cocktail_info.jsp"),
-	HOME_PAGE("index.jsp"),
+	HOME_PAGE("/index.jsp"),
 	LOGIN_PAGE("/jsp/login.jsp"),
 	REGISTRATION_PAGE("/jsp/register.jsp"),
 	EDIT_INGREDIENT_PAGE("/adminpages/edit_ingredient.jsp"),

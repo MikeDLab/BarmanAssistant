@@ -15,6 +15,7 @@ public class ShowIngredientCommand extends IngredientCommand {
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
+		util.init(request, response);
 		util.showIngredientSet(request, response);
 		return PageEnum.INGREDIENT_LIST;
 	}

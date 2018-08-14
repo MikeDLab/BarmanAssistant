@@ -6,6 +6,8 @@ public enum JspParameter {
 	INGREDIENT_NAME("ingredient_name"),
 	INGREDIENT_DESCRIPTION("ingredient_description"),
 	INGREDIENT_SET("ingredientSet"),
+	IMAGE("photo"),
+	IMAGE_ID("imageId"),
 	COCKTAIL("cocktail"),
 	COCKTAIL_INGREDIENT_ARRAY("cocktail_ingredients"),
 	COCKTAIL_ID("cocktail_id"),

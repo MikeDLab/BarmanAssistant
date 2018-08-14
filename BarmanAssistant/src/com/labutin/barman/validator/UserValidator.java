@@ -8,7 +8,7 @@ public class UserValidator {
 	private Matcher matcher;
 	private static final String EMAIL_REGEX = "^[_A-Za-z\\d-\\+]+(\\.[_A-Za-z\\d-]+)*@"
 			+ "[A-Za-z\\d-]+(\\.[A-Za-z\\d]+)*(\\.[A-Za-z]{2,})$";
-	private static final String USER_LOGIN_REGEX = "[\\p{Lower}\\p{Upper}\\d]{3,45}";
+	private static final String USER_LOGIN_REGEX = "[a-zA-Z\\d]{3,45}";
 	private static final String USER_NAME_REGEX = "[a-zA-Z\\._\\-]{3,45}";
 	private static final String USER_PASSWORD_REGEX= "((?=.*\\d)(?=.*[a-z]).{6,45})";
 

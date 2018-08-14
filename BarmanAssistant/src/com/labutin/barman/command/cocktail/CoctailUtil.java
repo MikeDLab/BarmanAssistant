@@ -3,8 +3,6 @@ package com.labutin.barman.command.cocktail;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +10,13 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.labutin.barman.command.ImageUtil;
 import com.labutin.barman.command.JspParameter;
-import com.labutin.barman.command.PageEnum;
+import com.labutin.barman.command.LocaleKey;
+import com.labutin.barman.command.UtilCommand;
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.Rating;
@@ -25,22 +28,43 @@ import com.labutin.barman.service.RatingService;
 import com.labutin.barman.service.UserService;
 import com.labutin.barman.util.XssParser;
 
-class CoctailUtil {
+class CoctailUtil extends  UtilCommand {
+	private static Logger logger = LogManager.getLogger();
+	private CocktailService cocktailService;
 	private ImageUtil imageUtil = new ImageUtil();
-	private CocktailService receiverCocktail;
-	private IngredientService receiverIngredient;
-	private UserService receiverUser;
-	private RatingService receiverRating;
+	private IngredientService ingredientService;
+	private RatingService ratingService;
+	private UserService userService;
 
 	public CoctailUtil() {
 		// TODO Auto-generated constructor stub
 	}
 
 	boolean addCocktail(HttpServletRequest request, HttpServletResponse response) {
-		String cocktailName = XssParser.parse(request.getParameter(JspParameter.COCKTAIL_NAME.getValue()));
-		String cocktailDescription = XssParser
-				.parse(request.getParameter(JspParameter.COCKTAIL_DESCRIPTION.getValue()));
-		int cocktailVol = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_VOL.getValue()));
+		String cocktailName = request.getParameter(JspParameter.COCKTAIL_NAME.getValue());
+		String cocktailDescription = request.getParameter(JspParameter.COCKTAIL_DESCRIPTION.getValue());
+		String cocktailVolParameter = request.getParameter(JspParameter.COCKTAIL_VOL.getValue());
+		/*
+		 * Null verfication
+		 */
+		if (cocktailName == null || cocktailDescription == null || cocktailVolParameter == null) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+		} /*
+			 * Protection from JS injection.
+			 */
+		/*
+		 * Load Cocktail image from Servlet
+		 */
+		InputStream inputStream = imageUtil.getInputStream(request);
+		if (inputStream == null) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.NO_IMAGE.getValue()));
+			return false;
+		}
+		cocktailName = XssParser.parse(cocktailName);
+		cocktailDescription = XssParser.parse(cocktailDescription);
+		int cocktailVol = Integer.parseInt(cocktailVolParameter);
 		User userSession = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
 		int userId;
 		boolean isPublished;
@@ -48,117 +72,189 @@ class CoctailUtil {
 			userId = userSession.getUserId();
 			isPublished = userSession.getUserRole() != 2;
 		} else {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Login pls");
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.USER_NO_SESSION.getValue()));
 			return false;
 		}
 
 		String[] cocktailIngredientArray = request
 				.getParameterValues(JspParameter.COCKTAIL_INGREDIENT_ARRAY.getValue());
+		/*
+		 * Ad
+		 */
 		try {
-			receiverIngredient = new IngredientService();
+			ingredientService = new IngredientService();
 			if (cocktailIngredientArray == null) {
-				Set<Ingredient> setIngredient = receiverIngredient.receiveIngredient();
+				Set<Ingredient> setIngredient = ingredientService.receiveIngredienSet();
 				request.setAttribute(JspParameter.INGREDIENT_SET.getValue(), setIngredient);
-				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Не выбрано ни 1 ингредиента");
+				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+						resourceBundle.getString(LocaleKey.COCKTAIL_WITHOUT_INGREDIENT.getValue()));
 				return false;
 			}
-
-			InputStream inputStream = imageUtil.getInputStream(request);
-			if (inputStream == null) {
-				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "No image selected");
-				return false;
-			}
-			receiverCocktail = new CocktailService();
-			Cocktail cocktail = receiverCocktail.add(cocktailName, userId, cocktailDescription, cocktailVol,
-					isPublished, inputStream);
+			cocktailService = CocktailService.getInstance();
+			Cocktail cocktail = cocktailService.add(cocktailName, userId, cocktailDescription, cocktailVol, isPublished,
+					inputStream);
 			int cocktailId = cocktail.getCocktailId();
-			for (String selected : cocktailIngredientArray) {
-				receiverIngredient.insertIngredientCocktail(Integer.parseInt(selected), cocktailId);
+			for (String selectedIngredient : cocktailIngredientArray) {
+				ingredientService.insertIngredientCocktail(Integer.parseInt(selectedIngredient), cocktailId);
 			}
 		} catch (ServiceException | NumberFormatException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+			logger.warn("Add cocktail exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 		return true;
 	}
 
 	void addCocktailRating(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
-			receiverUser = new UserService();
-			receiverRating = new RatingService();
-			receiverCocktail = new CocktailService();
+			userService = UserService.getInstance();
+			ratingService = RatingService.getInstance();
+			cocktailService = CocktailService.getInstance();
 			User user = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
 			int cocktailId = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_ID.getValue()));
 			int cocktailRating = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_RATING.getValue()));
 			if (user != null) {
-				receiverCocktail.addCocktailRating(cocktailRating, cocktailId, user.getUserId());
+				cocktailService.addCocktailRating(cocktailRating, cocktailId, user.getUserId());
 			}
 		} catch (ServiceException | NumberFormatException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Cannot update set rating to barman");
+			logger.warn("Add cocktail rating exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
-	public void deleteCocktail(HttpServletRequest request, HttpServletResponse response) {
+	private Integer countAverageRating(Set<Rating> setRating) {
+		if (setRating.isEmpty()) {
+			return null;
+		}
+		Integer sum = 0;
+		for (Rating rating : setRating) {
+			sum += rating.getRating();
+		}
+		return sum / setRating.size();
+	}
+
+	 void deleteCocktail(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		int cocktailId = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_ID.getValue()));
 		try {
 			// TODO Auto-generated method stub
-			receiverIngredient = new IngredientService();
-			receiverIngredient.removeIngredient(cocktailId);
-			receiverRating = new RatingService();
-			receiverRating.removeCocktailRating(cocktailId);
-			receiverCocktail = new CocktailService();
-			receiverCocktail.removeCocktail(cocktailId);
+			ingredientService = new IngredientService();
+			ingredientService.removeIngredient(cocktailId);
+			ratingService = RatingService.getInstance();
+			ratingService.removeCocktailRating(cocktailId);
+			cocktailService = CocktailService.getInstance();
+			cocktailService.removeCocktail(cocktailId);
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+			logger.warn("Delete cocktail exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
-	public void findCocktailImage(HttpServletRequest request, HttpServletResponse response) {
-		int cocktailId = Integer.parseInt(request.getParameter("imageId"));
+	 void findCocktailImage(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
+		int cocktailId = Integer.parseInt(request.getParameter(JspParameter.IMAGE_ID.getValue()));
 		try {
-			receiverCocktail = new CocktailService();
-			Cocktail cocktail = receiverCocktail.receiveCocktailById(cocktailId);
+			cocktailService = CocktailService.getInstance();
+			Cocktail cocktail = cocktailService.receiveCocktailById(cocktailId);
 			if (cocktail != null) {
 				byte[] img = cocktail.getImage().readAllBytes();
 				response.setContentType("image/jpeg");
-				OutputStream os = response.getOutputStream();
-				os.write(img);
-				os.flush();
-				os.close();
+				OutputStream outputStream = response.getOutputStream();
+				outputStream.write(img);
+				outputStream.flush();
+				outputStream.close();
 			}
 		} catch (ServiceException | IOException e) {
+			logger.info("Image not found", e);
 		}
 	}
-
-	public void publishCocktail(HttpServletRequest request, HttpServletResponse response) {
+	 void publishCocktail(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		int cocktailId = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_ID.getValue()));
 		try {
-			// TODO Auto-generated method stub
-			receiverCocktail = new CocktailService();
-			receiverCocktail.publishCocktail(cocktailId);
+			cocktailService = CocktailService.getInstance();
+			cocktailService.publishCocktail(cocktailId);
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+			logger.warn("Publish cocktail exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
-	public void showCocktailInfo(HttpServletRequest request, HttpServletResponse response) {
+	private Map<Cocktail, Integer> receiveAverageCockatilRating(Set<Cocktail> cocktailSet) {
 		try {
+			ratingService = RatingService.getInstance();
+			Map<Cocktail, Integer> userAverageRatingMap = new HashMap<>();
+			for (Cocktail cocktail : cocktailSet) {
+				Set<Rating> averageRating = ratingService
+						.receiveCocktailRatingSetByCocktailId(cocktail.getCocktailId());
+				userAverageRatingMap.put(cocktail, countAverageRating(averageRating));
+			}
+			return userAverageRatingMap;
+		} catch (ServiceException e) {
+			logger.warn("Average cocktail rating exception", e);
+			return null;
+		}
+	}
+
+	private Map<Cocktail, User> receiveUserCocktailMap(Set<User> setUser, Set<Cocktail> setCocktail) {
+		Map<Cocktail, User> userCocktailMap = new HashMap<>();
+		for (User user : setUser) {
+			for (Cocktail cocktail : setCocktail) {
+				if (user.getUserId() == cocktail.getUserId()) {
+					userCocktailMap.put(cocktail, user);
+				}
+			}
+		}
+		return userCocktailMap;
+
+	}
+
+	 void showCocktailInfo(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (!checkRequestParameterSetOnNull(request, response)) {
+				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+						resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+				return;
+			}
 			int cocktailId = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_ID.getValue()));
 			int userId = Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue()));
 			User currentUser = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
-			receiverRating = new RatingService();
-			receiverCocktail = new CocktailService();
-			Cocktail cocktail = receiverCocktail.receiveCocktailById(cocktailId);
+			ratingService = RatingService.getInstance();
+			cocktailService = CocktailService.getInstance();
+			Cocktail cocktail = cocktailService.receiveCocktailById(cocktailId);
 			if (cocktail == null) {
-				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+						resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 				return;
 			}
-			receiverUser = new UserService();
-			User user = receiverUser.receiveUserById(userId);
-			receiverIngredient = new IngredientService();
-			Set<Ingredient> setIngredient = receiverIngredient.receiveIngredientByCocktailId(cocktailId);
+			userService = UserService.getInstance();
+			User user = userService.receiveUserById(userId);
+			ingredientService = new IngredientService();
+			Set<Ingredient> setIngredient = ingredientService.receiveIngredientByCocktailId(cocktailId);
 			Rating rating = null;
 			if (currentUser != null) {
-				rating = receiverRating.receiveCocktailRatingSetByUserIdAndCocktailId(currentUser.getUserId(),
+				rating = ratingService.receiveCocktailRatingSetByUserIdAndCocktailId(currentUser.getUserId(),
 						cocktailId);
 			}
 			Map<Cocktail, Rating> cocktailRatingMap = new HashMap<>();
@@ -168,97 +264,72 @@ class CoctailUtil {
 			request.setAttribute(JspParameter.AUTHOR.getValue(), user);
 			request.setAttribute(JspParameter.COCKTAIL.getValue(), cocktail);
 		} catch (ServiceException | NumberFormatException e) {
-			e.printStackTrace();
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+			logger.warn("Show cocktail info exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
-	public void showNotPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
+	 void showNotPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
-			receiverCocktail = new CocktailService();
-			Set<Cocktail> setCocktail = receiverCocktail.receiveNotPublishedCocktail();
+			cocktailService = CocktailService.getInstance();
+			Set<Cocktail> setCocktail = cocktailService.receiveNotPublishedCocktail();
 			Set<User> setUser = null;
 			if (setCocktail != null) {
-				receiverUser = new UserService();
-				setUser = receiverUser.receiveCocktailAuthorSet();
+				userService = UserService.getInstance();
+				setUser = userService.receiveCocktailAuthorSet();
 
 			}
-			Map<Cocktail, User> userCocktailMap = new HashMap<>();
+			Map<Cocktail, User> userCocktailMap;
 			if (setUser != null) {
-				for (User user : setUser) {
-					for (Cocktail cocktail : setCocktail) {
-						if (user.getUserId() == cocktail.getUserId()) {
-							userCocktailMap.put(cocktail, user);
-						}
-					}
-				}
-
+				userCocktailMap = receiveUserCocktailMap(setUser, setCocktail);
 				request.setAttribute(JspParameter.COCKTAIL_USER_MAP.getValue(), userCocktailMap);
-				// request.setAttribute(JspParameter.COCKTAIL_SET.getValue(), setCocktail);
 			} else {
-				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+						resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 			}
 
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+			logger.warn("Show not published cocktail exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
-	public void showPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
+	 void showPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
-			receiverCocktail = new CocktailService();
-			receiverRating = new RatingService();
-			Set<Cocktail> setCocktail = receiverCocktail.receivePublishedCocktail();
+			cocktailService = CocktailService.getInstance();
+			ratingService = RatingService.getInstance();
+			Set<Cocktail> setCocktail = cocktailService.receivePublishedCocktail();
 			Set<User> setUser = null;
 			if (setCocktail != null) {
-				receiverUser = new UserService();
-				setUser = receiverUser.receiveCocktailAuthorSet();
+				userService = UserService.getInstance();
+				setUser = userService.receiveCocktailAuthorSet();
 			}
-			Map<Cocktail, User> userCocktailMap = new HashMap<>();
+			Map<Cocktail, User> userCocktailMap;
 			if (setUser != null) {
-				for (User user : setUser) {
-					for (Cocktail cocktail : setCocktail) {
-						if (user.getUserId() == cocktail.getUserId()) {
-							userCocktailMap.put(cocktail, user);
-						}
-					}
-				}
+				userCocktailMap = receiveUserCocktailMap(setUser, setCocktail);
 				Map<Cocktail, Integer> cocktailAverageRatingMap = receiveAverageCockatilRating(setCocktail);
 				request.setAttribute(JspParameter.COCKTAIL_AVERAGE_RATING_MAP.getValue(), cocktailAverageRatingMap);
 				request.setAttribute(JspParameter.COCKTAIL_USER_MAP.getValue(), userCocktailMap);
-				// request.setAttribute("setCocktail", setCocktail);
 			} else {
-				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+						resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 			}
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
-		}
-	}
-
-	private Integer averageRating(Set<Rating> rating) {
-		if (rating.isEmpty()) {
-			return null;
-		}
-		Integer sum = 0;
-		for (Rating r : rating) {
-			sum += r.getRating();
-		}
-		return sum / rating.size();
-	}
-
-	private Map<Cocktail, Integer> receiveAverageCockatilRating(Set<Cocktail> cocktailSet) {
-		try {
-			receiverRating = new RatingService();
-			Map<Cocktail, Integer> userAverageRatingMap = new HashMap<>();
-			for (Cocktail cocktail : cocktailSet) {
-				Set<Rating> averageRating = receiverRating
-						.receiveCocktailRatingSetByCocktailId(cocktail.getCocktailId());
-				userAverageRatingMap.put(cocktail, averageRating(averageRating));
-			}
-			return userAverageRatingMap;
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			return null;
+			logger.warn("Show published cocktail exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 

@@ -8,17 +8,12 @@ import java.util.ResourceBundle;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.filters.SetCharacterEncodingFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +24,7 @@ public class LocaleFilter implements Filter {
 	private FilterConfig filterConfig;
 	private static Logger logger = LogManager.getLogger();
 	private static ArrayList<String> pages; // хранилище страниц
+
 	public LocaleFilter() {
 		// TODO Auto-generated constructor stub
 		if (pages == null)
@@ -46,22 +42,35 @@ public class LocaleFilter implements Filter {
 		arg0.setCharacterEncoding("utf-8");
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		HttpServletResponse response = (HttpServletResponse) arg1;
+		response.setLocale(request.getLocale());
 		logger.info("Locale: " + request.getSession().getAttribute(JspParameter.LANGUAGE.getValue()));
-		if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
+		if (Boolean.parseBoolean(filterConfig.getInitParameter("active"))) {
 			String[] list = request.getRequestURI().split("/");
-			Locale l;
+			Locale locale;
 			ResourceBundle rb;
 			for (String localeLanguage : list) {
 				switch (localeLanguage) {
 				case "Es":
 				case "Ru":
 				case "En":
-					l = new Locale(localeLanguage);
-					rb = ResourceBundle.getBundle("resources.locale", l);
+					locale = new Locale(localeLanguage);
+					response.setLocale(locale);
+					rb = ResourceBundle.getBundle("resources.locale", locale);
 					request.getSession(true).setAttribute(JspParameter.LANGUAGE.getValue(), localeLanguage);
 					request.getSession(true).setAttribute(JspParameter.LOCALE.getValue(), rb);
 					response.sendRedirect(PageEnum.HOME_PAGE.getValue());
 					return;
+					default:
+						if(request.getSession().getAttribute(JspParameter.LANGUAGE.getValue()) == null)
+						{
+						locale = new Locale("Ru");
+						response.setLocale(locale);
+						rb = ResourceBundle.getBundle("resources.locale", locale);
+						request.getSession(true).setAttribute(JspParameter.LANGUAGE.getValue(), localeLanguage);
+						request.getSession(true).setAttribute(JspParameter.LOCALE.getValue(), rb);
+						response.sendRedirect(PageEnum.HOME_PAGE.getValue());
+						return;
+						}
 				}
 			}
 		}
@@ -69,4 +78,3 @@ public class LocaleFilter implements Filter {
 	}
 
 }
-

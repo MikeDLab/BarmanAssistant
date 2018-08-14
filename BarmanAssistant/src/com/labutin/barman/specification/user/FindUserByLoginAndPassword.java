@@ -6,27 +6,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindUserByLoginAndPassword extends AbstractUserSpecification implements UserSpecification {
 	private String login;
 	private String password;
-	private static Logger logger = LogManager.getLogger();
 	private final static String FIND_USER_BY_LOGIN = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User WHERE user_login = ? AND user_password= ? AND user_isAvaible != 0";
 
 	public FindUserByLoginAndPassword(String login, String password) {
-		// TODO Auto-generated constructor stubt
 		this.login = login;
 		this.password = password;
 	}
 
 	@Override
-	public Set<User> querry() {
+	public Set<User> query() throws RepositoryException {
 		Set<User> users = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN);) {
@@ -37,10 +34,9 @@ public class FindUserByLoginAndPassword extends AbstractUserSpecification implem
 			}
 			if (resultSet.next()) {
 				users.add(loadUserData());
-				return users;
 			}
 		} catch (SQLException e) {
-			logger.warn("Sql exception", e);
+			throw new RepositoryException(e);
 		} finally {
 			closeResultSet();
 		}

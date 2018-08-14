@@ -7,8 +7,8 @@ import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
 import com.labutin.barman.entity.Ingredient;
 
-public class RedirectToEditIngredient implements Command {
-	public RedirectToEditIngredient() {
+public class RedirectToEditIngredientPageCommand implements Command {
+	public RedirectToEditIngredientPageCommand() {
 		// TODO Auto-generated constructor stub
 	}
 	@Override

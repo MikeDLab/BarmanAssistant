@@ -6,14 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 import com.labutin.barman.command.Command;
 import com.labutin.barman.command.PageEnum;
 
-public class RedirectToBarmanPanel implements Command {
-	public RedirectToBarmanPanel() {
+public class RedirectToAddIngredientPageCommand implements Command {
+	public RedirectToAddIngredientPageCommand() {
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		return PageEnum.BARMAN_PANEL;
+		return PageEnum.ADD_INGRIDIENT_PAGE;
 	}
 
 }

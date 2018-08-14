@@ -11,6 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.labutin.barman.command.JspParameter;
+import com.labutin.barman.command.LocaleKey;
+import com.labutin.barman.command.UtilCommand;
 import com.labutin.barman.controller.UserType;
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Rating;
@@ -23,25 +25,28 @@ import com.labutin.barman.util.MailSender;
 import com.labutin.barman.util.XssParser;
 import com.labutin.barman.validator.UserValidator;
 
-class UserUtil {
+class UserUtil extends UtilCommand {
 	private static Logger logger = LogManager.getLogger();
-	private UserService receiver;
-	private CocktailService receiverCocktail;
-	private RatingService receiverRating;
-
-	public UserUtil() {
-		// TODO Auto-generated constructor stub
-	}
+	private UserService userService;
+	private CocktailService cocktailService;
+	private RatingService ratingService;
 
 	void addBarmanRating(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
-			receiver = new UserService();
+			userService = UserService.getInstance();
 			User user = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
 			int barmanId = Integer.parseInt(request.getParameter(JspParameter.BARMAN_ID.getValue()));
 			int barmanRating = Integer.parseInt(request.getParameter(JspParameter.BARMAN_RATING.getValue()));
-			receiver.addBarmanRating(barmanRating, barmanId, user.getUserId());
+			userService.addBarmanRating(barmanRating, barmanId, user.getUserId());
 		} catch (ServiceException | NumberFormatException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Cannot update set rating to barman");
+			logger.warn("Add barman rating exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
@@ -56,23 +61,27 @@ class UserUtil {
 		return sum / rating.size();
 	}
 
-	void delete(HttpServletRequest request, HttpServletResponse response) {
+	void deleteUser(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			int userId = Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue()));
-			receiver = new UserService();
-			receiver.removeUser(userId);
+			userService = UserService.getInstance();
+			userService.removeUser(userId);
 		} catch (ServiceException | NumberFormatException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry,try later");
+			logger.warn("Delete exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
 	void downgradeToUser(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			receiver = new UserService();
-			receiver.downgradeToUser(Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue())));
+			userService = UserService.getInstance();
+			userService.downgradeToUser(Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue())));
 		} catch (ServiceException | NumberFormatException e) {
 			// TODO Auto-generated catch block
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Cannot downgrade barman to user");
+			logger.warn("Downgrade to user exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
@@ -81,8 +90,8 @@ class UserUtil {
 		String userPassword = XssParser.parse(request.getParameter(JspParameter.USER_PASSWORD.getValue()));
 		UserType userRole;
 		try {
-			receiver = new UserService();
-			User user = receiver.login(userLogin, userPassword);
+			userService = UserService.getInstance();
+			User user = userService.login(userLogin, userPassword);
 			if (user != null) {
 				switch (user.getUserRole()) {
 				case 0:
@@ -101,11 +110,13 @@ class UserUtil {
 				request.getSession().setAttribute(JspParameter.USER.getValue(), user);
 			} else {
 				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
-						"Incorrect user login or password, or your accoun is banned");
+						resourceBundle.getString(LocaleKey.INVALID_USER.getValue()));
 				userRole = UserType.GUEST;
 			}
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry,try later");
+			logger.warn("Login exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 			userRole = UserType.GUEST;
 		}
 		return userRole;
@@ -118,16 +129,15 @@ class UserUtil {
 
 	private Map<User, Integer> receiveAverageRatingMap(Set<User> barmanSet) {
 		try {
-			receiverRating = new RatingService();
+			ratingService = RatingService.getInstance();
 			Map<User, Integer> userAverageRatingMap = new HashMap<>();
 			for (User usr : barmanSet) {
 
-				Set<Rating> averageRating = receiverRating.receiveBarmanRatingSetByBarmanId(usr.getUserId());
+				Set<Rating> averageRating = ratingService.receiveBarmanRatingSetByBarmanId(usr.getUserId());
 				userAverageRatingMap.put(usr, averageRating(averageRating));
 			}
 			return userAverageRatingMap;
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			return null;
 		}
 
@@ -157,32 +167,38 @@ class UserUtil {
 		String userPassword = XssParser.parse(request.getParameter(JspParameter.USER_PASSWORD.getValue()));
 		String userEmail = XssParser.parse(request.getParameter(JspParameter.USER_EMAIL.getValue()));
 		if (!validator.isLogin(userLogin)) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Incorrect login");
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.INCORRECT_LOGIN.getValue()));
 			return UserType.GUEST;
 		}
 		if (!validator.isName(userName)) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Incorrect name");
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.INCORRECT_NAME.getValue()));
 			return UserType.GUEST;
 		}
 		if (!validator.isPassword(userPassword)) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Incorrect password");
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.INCORRECT_PASSWORD.getValue()));
 			return UserType.GUEST;
 		}
 		if (!validator.isEmail(userEmail)) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Incorrect Email");
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.INCORRECT_EMAIL.getValue()));
 			return UserType.GUEST;
 		}
 		// TODO Auto-generated method stub
 		try {
-			receiver = new UserService();
-			User user = receiver.registration(userLogin, userName, userPassword, userEmail);
+			userService = UserService.getInstance();
+			User user = userService.registration(userLogin, userName, userPassword, userEmail);
 			new Thread(new MailSender(userEmail, userName)).start();
-			request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.USER);
-			request.getSession().setAttribute(JspParameter.USER.getValue(), user);
+			request.getSession(true).setAttribute(JspParameter.ROLE.getValue(), UserType.USER);
+			request.getSession(true).setAttribute(JspParameter.USER.getValue(), user);
 			return UserType.USER;
 
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry,try later");
+			logger.warn("Register user exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 			return UserType.GUEST;
 		}
 
@@ -190,14 +206,14 @@ class UserUtil {
 
 	void showBarmanSet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			receiver = new UserService();
-			receiverRating = new RatingService();
+			userService = UserService.getInstance();
+			ratingService = RatingService.getInstance();
 			Set<User> setBarman = null;
 			Set<Rating> setRating = null;
 			User user = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
 			if (user != null) {
-				setBarman = receiver.receiveBarman(user.getUserId());
-				setRating = receiverRating.receiveBarmanRatingSetByUserId(user.getUserId());
+				setBarman = userService.receiveBarman(user.getUserId());
+				setRating = ratingService.receiveBarmanRatingSetByUserId(user.getUserId());
 				Map<User, Rating> userRatingMap = new HashMap<>();
 				Map<User, Integer> userAverageRatingMap = new HashMap<>();
 				if (setBarman != null) {
@@ -208,43 +224,48 @@ class UserUtil {
 				request.setAttribute(JspParameter.USER_AVERAGE_RATING_MAP.getValue(), userAverageRatingMap);
 				request.setAttribute(JspParameter.BARMAN_SET.getValue(), setBarman);
 			} else {
-				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+						resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 			}
 
 		} catch (ServiceException e) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Sorry try later");
+			logger.warn("Show barman set exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
 	void showUserSet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			receiver = new UserService();
-			receiverCocktail = new CocktailService();
-			Set<User> setUser = receiver.receiveAllUsers();
+			userService = UserService.getInstance();
+			cocktailService = CocktailService.getInstance();
+			Set<User> setUser = userService.receiveAllUsers();
 			Map<User, Integer> userAverageRatingMap = receiveAverageRatingMap(setUser);
 			Set<Cocktail> cocktailSet;
 			Map<User, Integer> userCocktailNumberMap = new HashMap<>();
 			for (User usr : setUser) {
-				cocktailSet = receiverCocktail.receiveCocktailSetByUserId(usr.getUserId());
+				cocktailSet = cocktailService.receiveCocktailSetByUserId(usr.getUserId());
 				userCocktailNumberMap.put(usr, cocktailSet.size());
 			}
 			request.setAttribute(JspParameter.USER_AVERAGE_RATING_MAP.getValue(), userAverageRatingMap);
 			request.setAttribute(JspParameter.USER_COCKTAIL_NUMBER_MAP.getValue(), userCocktailNumberMap);
 			request.setAttribute(JspParameter.USER_SET.getValue(), setUser);
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Some problem");
+			logger.warn("Show user set exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 
 	void updateToBarman(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			receiver = new UserService();
+			userService = UserService.getInstance();
 			int userId = Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue()));
-			receiver.updateToBarman(userId);
+			userService.updateToBarman(userId);
 		} catch (ServiceException | NumberFormatException e) {
-			// TODO Auto-generated catch block
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(), "Cannot update user to barman");
+			logger.warn("Update user to Barman exception", e);
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
 		}
 	}
 }

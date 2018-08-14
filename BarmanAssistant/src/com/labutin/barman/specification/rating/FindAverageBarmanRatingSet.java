@@ -1,23 +1,17 @@
 package com.labutin.barman.specification.rating;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.Rating;
-import com.labutin.barman.entity.User;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
-public class FindAverageBarmanRatingSet implements RatingSpecification {
-	private static Logger logger = LogManager.getLogger();
-	private final static String FIND_BARMAN_RATING_SET_BY_USER_ID = "SELECT * FROM (Select user_id as barman_id From User) User  Inner Join BarmanRating Using(barman_id) Where barman_id = ?";
+public class FindAverageBarmanRatingSet extends AbstractRatingSpecification implements RatingSpecification {
+	private final static String FIND_BARMAN_RATING_SET_BY_USER_ID = "SELECT barman_rating, barman_id, user_id FROM (SELECT user_id as barman_id FROM User) User  INNER JOIN BarmanRating USING(barman_id) WHERE barman_id = ?";
 	private int userId;
 
 	public FindAverageBarmanRatingSet(int userId) {
@@ -25,8 +19,7 @@ public class FindAverageBarmanRatingSet implements RatingSpecification {
 	}
 
 	@Override
-	public Set<Rating> querry() {
-		ResultSet resultSet = null;
+	public Set<Rating> query() throws RepositoryException {
 		Set<Rating> ratingSet = new HashSet<>();
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(FIND_BARMAN_RATING_SET_BY_USER_ID)) {
@@ -35,17 +28,13 @@ public class FindAverageBarmanRatingSet implements RatingSpecification {
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					if (resultSet != null) {
-						Rating barmanRating = new Rating();
-						barmanRating.setEstimating(resultSet.getInt("user_id"));
-						barmanRating.setEstimated(resultSet.getInt("barman_id"));
-						barmanRating.setRating(resultSet.getInt("barman_rating"));
-						ratingSet.add(barmanRating);
+						ratingSet.add(loadBarmanRatingData());
 					}
 				}
-				return ratingSet;
 			}
 		} catch (SQLException e) {
+			throw new RepositoryException(e);
 		}
-		throw new RuntimeException();
+		return ratingSet;
 	}
 }

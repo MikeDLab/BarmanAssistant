@@ -5,16 +5,13 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.labutin.barman.entity.Cocktail;
+import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindCocktailSetByBarmanId extends AbstractCocktailSpecification implements CocktailSpecification {
 	private final static String FIND_COCKTAIL_SET = "SELECT cocktail_id,cocktail_name,user_id,cocktail_description,cocktail_vol,cocktail_isPublished,cocktail_img  From Cocktail Inner Join User USING(user_id) Where user_id = ?";
-	private static Logger logger = LogManager.getLogger();
 	private int userId;
 
 	public FindCocktailSetByBarmanId(int userId) {
@@ -22,7 +19,7 @@ public class FindCocktailSetByBarmanId extends AbstractCocktailSpecification imp
 	}
 
 	@Override
-	public Set<Cocktail> querry() {
+	public Set<Cocktail> query() throws RepositoryException {
 		Set<Cocktail> cocktails = new HashSet<>();
 
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
@@ -35,7 +32,7 @@ public class FindCocktailSetByBarmanId extends AbstractCocktailSpecification imp
 				cocktails.add(loadCocktailData(resultSet));
 			}
 		} catch (SQLException e) {
-			logger.info("Sqlexception", e);
+			throw new RepositoryException(e);
 		} finally {
 			closeResultSet();
 		}

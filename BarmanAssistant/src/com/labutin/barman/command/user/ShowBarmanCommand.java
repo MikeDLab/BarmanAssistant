@@ -8,6 +8,7 @@ import com.labutin.barman.command.PageEnum;
 public class ShowBarmanCommand extends AbstractUserCommand {
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
+		userUtil.init(request, response);
 		userUtil.showBarmanSet(request, response);
 		return PageEnum.BARMAN_LIST;
 

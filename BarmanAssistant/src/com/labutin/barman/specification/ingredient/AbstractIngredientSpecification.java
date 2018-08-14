@@ -6,10 +6,11 @@ import java.sql.SQLException;
 import com.labutin.barman.entity.Ingredient;
 
 public abstract class AbstractIngredientSpecification {
+	protected final static String INGREDIENT_DESCRIPTION = "Ingredient_description";
+	protected final static String INGREDIENT_ID = "Ingredient_id";
+	protected final static String INGREDIENT_NAME = "Ingredient_name";
 	protected ResultSet resultSet;
-	protected final String INGREDIENT_ID="Ingredient_id";
-	protected final String INGREDIENT_NAME = "Ingredient_name";
-	protected final String INGREDIENT_DESCRIPTION = "Ingredient_description";
+
 	public AbstractIngredientSpecification() {
 		// TODO Auto-generated constructor stub
 	}
@@ -25,12 +26,10 @@ public abstract class AbstractIngredientSpecification {
 		}
 	}
 
-	protected Ingredient loadIngredientData(ResultSet resultSet)
-	{
+	protected Ingredient loadIngredientData(ResultSet resultSet) {
 		Ingredient ingredient = null;
 		try {
-			if (resultSet != null)
-			{
+			if (resultSet != null) {
 				ingredient = new Ingredient();
 				ingredient.setIngredientId(resultSet.getInt(INGREDIENT_ID));
 				ingredient.setIngredientName(resultSet.getString(INGREDIENT_NAME));
@@ -40,6 +39,6 @@ public abstract class AbstractIngredientSpecification {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	return ingredient;
+		return ingredient;
 	}
 }

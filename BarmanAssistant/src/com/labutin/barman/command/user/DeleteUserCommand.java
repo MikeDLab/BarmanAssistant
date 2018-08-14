@@ -1,20 +1,21 @@
-package com.labutin.barman.command.cocktail;
+package com.labutin.barman.command.user;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.labutin.barman.command.PageEnum;
 
-public class ShowNotPublishedCocktailList extends CocktailCommand {
-	public ShowNotPublishedCocktailList() {
+public class DeleteUserCommand extends AbstractUserCommand {
+	public DeleteUserCommand() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
-		util.showNotPublishedCocktail(request, response);
-		return PageEnum.COCKTAIL_LIST_FOR_BARMAN;
-
+		userUtil.init(request, response);
+		userUtil.deleteUser(request, response);
+		userUtil.showUserSet(request, response);
+		return PageEnum.USER_LIST;
 	}
 
 }

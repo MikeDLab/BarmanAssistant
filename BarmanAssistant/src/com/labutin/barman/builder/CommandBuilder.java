@@ -2,27 +2,27 @@ package com.labutin.barman.builder;
 
 import com.labutin.barman.command.TypeCommand;
 import com.labutin.barman.command.cocktail.AddCocktailCommand;
-import com.labutin.barman.command.cocktail.AddCocktailRating;
-import com.labutin.barman.command.cocktail.DeleteCocktail;
-import com.labutin.barman.command.cocktail.PublishCocktail;
-import com.labutin.barman.command.cocktail.ShowCocktailImage;
-import com.labutin.barman.command.cocktail.ShowCocktailInfo;
-import com.labutin.barman.command.cocktail.ShowNotPublishedCocktailList;
-import com.labutin.barman.command.cocktail.ShowPublishedCocktailList;
+import com.labutin.barman.command.cocktail.AddCocktailRatingCommand;
+import com.labutin.barman.command.cocktail.DeleteCocktailCommand;
+import com.labutin.barman.command.cocktail.PublishCocktailCommand;
+import com.labutin.barman.command.cocktail.ShowCocktailImageCommand;
+import com.labutin.barman.command.cocktail.ShowCocktailInfoCommand;
+import com.labutin.barman.command.cocktail.ShowNotPublishedCocktailListCommand;
+import com.labutin.barman.command.cocktail.ShowPublishedCocktailListCommand;
 import com.labutin.barman.command.ingredient.AddIngredientCommand;
-import com.labutin.barman.command.ingredient.EditIngredient;
+import com.labutin.barman.command.ingredient.EditIngredientCommand;
 import com.labutin.barman.command.ingredient.ShowIngredientCommand;
-import com.labutin.barman.command.redirect.RedirectToAddCocktailPage;
-import com.labutin.barman.command.redirect.RedirectToAddIngredientPage;
-import com.labutin.barman.command.redirect.RedirectToAdminPanel;
-import com.labutin.barman.command.redirect.RedirectToBarmanPanel;
-import com.labutin.barman.command.redirect.RedirectToEditIngredient;
+import com.labutin.barman.command.redirect.RedirectToAddCocktailPageCommand;
+import com.labutin.barman.command.redirect.RedirectToAddIngredientPageCommand;
+import com.labutin.barman.command.redirect.RedirectToAdminPanelPageCommand;
+import com.labutin.barman.command.redirect.RedirectToBarmanPanelPageCommand;
+import com.labutin.barman.command.redirect.RedirectToEditIngredientPageCommand;
 import com.labutin.barman.command.redirect.RedirectToHomePageCommand;
 import com.labutin.barman.command.redirect.RedirectToLoginPageCommand;
 import com.labutin.barman.command.redirect.RedirectToRegisterPageCommand;
 import com.labutin.barman.command.redirect.RedirectToUserPanelCommand;
 import com.labutin.barman.command.user.AddBarmanRatingCommand;
-import com.labutin.barman.command.user.DeleteUser;
+import com.labutin.barman.command.user.DeleteUserCommand;
 import com.labutin.barman.command.user.DowngradeToUserCommand;
 import com.labutin.barman.command.user.ShowBarmanCommand;
 import com.labutin.barman.command.user.ShowUserCommand;
@@ -49,7 +49,7 @@ public class CommandBuilder extends AbstractCommandBuilder {
 			command = new RedirectToLoginPageCommand();
 			break;
 		case ADD_INGREDIENT:
-			command = new RedirectToAddIngredientPage();
+			command = new RedirectToAddIngredientPageCommand();
 			break;
 		case LOGIN:
 			command = new UserLoginCommand();
@@ -70,10 +70,10 @@ public class CommandBuilder extends AbstractCommandBuilder {
 			command = new ShowIngredientCommand();
 			break;
 		case ADMIN_PANEL:
-			command = new RedirectToAdminPanel();
+			command = new RedirectToAdminPanelPageCommand();
 			break;
 		case ADD_COCKTAIL:
-			command = new RedirectToAddCocktailPage();
+			command = new RedirectToAddCocktailPageCommand();
 			break;
 		case SHOW_BARMAN:
 			command = new ShowBarmanCommand();
@@ -97,37 +97,37 @@ public class CommandBuilder extends AbstractCommandBuilder {
 			command = new AddCocktailCommand();
 			break;
 		case COCKTAIL_LIST:
-			command = new ShowPublishedCocktailList();
+			command = new ShowPublishedCocktailListCommand();
 			break;
 		case COCKTAIL_INFO:
-			command = new ShowCocktailInfo();
+			command = new ShowCocktailInfoCommand();
 			break;
 		case CHECK_COCKTAIL_LIST:
-			command = new ShowNotPublishedCocktailList();
+			command = new ShowNotPublishedCocktailListCommand();
 			break;
 		case BARMAN_PANEL:
-			command = new RedirectToBarmanPanel();
+			command = new RedirectToBarmanPanelPageCommand();
 			break;
 		case PUBLISH_COCKTAIL:
-			command = new PublishCocktail();
+			command = new PublishCocktailCommand();
 			break;
 		case DELETE_COCKTAIL:
-			command = new DeleteCocktail();
+			command = new DeleteCocktailCommand();
 			break;
 		case DELETE_USER:
-			command = new DeleteUser();
+			command = new DeleteUserCommand();
 			break;
 		case EDIT_INGREDIENT_PAGE:
-			command = new RedirectToEditIngredient();
+			command = new RedirectToEditIngredientPageCommand();
 			break;
 		case EDIT_INGREDIENT:
-			command = new EditIngredient();
+			command = new EditIngredientCommand();
 			break;
 		case SHOW_COCKTAIL_IMAGE:
-			command = new ShowCocktailImage();
+			command = new ShowCocktailImageCommand();
 			break;
 		case ADD_COCKTAIL_RATING:
-			command = new AddCocktailRating();
+			command = new AddCocktailRatingCommand();
 			break;
 		}
 	}

@@ -5,8 +5,6 @@ import java.util.Set;
 
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Rating;
-import com.labutin.barman.exception.NoJDBCDriverException;
-import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.exception.ServiceException;
 import com.labutin.barman.repository.CocktailRepositoryImpl;
@@ -17,27 +15,22 @@ import com.labutin.barman.specification.cocktail.FindCocktailPublishedSet;
 import com.labutin.barman.specification.cocktail.FindCocktailSetByBarmanId;
 
 public class CocktailService {
+	private static CocktailService INSTANCE;
 	private final CocktailRepositoryImpl cocktailRepository;
 	private final RatingRepository ratingRepository;
-	public CocktailService() throws ServiceException {
+
+	private CocktailService() throws ServiceException {
 		try {
 			cocktailRepository = CocktailRepositoryImpl.getInstance();
 			ratingRepository = RatingRepository.getInstance();
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException(e);
-		}
-	}
-
-	public void addImage(int cocktailId, InputStream inputStream) throws ServiceException {
-		try {
-			cocktailRepository.addImage(cocktailId, inputStream);
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}
-
+	public static CocktailService getInstance() throws ServiceException
+	{
+		return (INSTANCE == null) ? INSTANCE = new CocktailService() : INSTANCE;
+	}
 	public Cocktail add(String cocktailName, int userId, String cocktailDescription, int cocktailVol,
 			boolean isPublished, InputStream imageStream) throws ServiceException {
 		try {
@@ -47,49 +40,29 @@ public class CocktailService {
 			cocktail.setUserId(userId);
 			cocktail.setCocktailVol(cocktailVol);
 			cocktail.setIsPublished(isPublished);
-			cocktail.setImage(imageStream);	
+			cocktail.setImage(imageStream);
 			cocktailRepository.add(cocktail);
 			return cocktail;
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 
 	}
-	public void addCocktailRating(int cocktailRating, int cocktailId, int userId) throws ServiceException
-	{
-		
+
+	public void addCocktailRating(int cocktailRating, int cocktailId, int userId) throws ServiceException {
+
 		try {
 			Rating rating = new Rating(userId, cocktailId, cocktailRating);
 			ratingRepository.addCocktailRating(rating);
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException(e);
-		}
-	}
-	public Set<Cocktail> receivePublishedCocktail() throws ServiceException {
-		try {
-			return cocktailRepository.query(new FindCocktailPublishedSet());
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}
 
-	public Set<Cocktail> receiveNotPublishedCocktail() throws ServiceException {
+	public void addImage(int cocktailId, InputStream image) throws ServiceException {
 		try {
-			return cocktailRepository.query(new FindCocktailForBarmenAccept());
+			cocktailRepository.addImage(cocktailId, image);
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException(e);
-		}
-	}
-
-	public Cocktail receiveCocktailById(int cocktailId) throws ServiceException {
-		try {
-			return cocktailRepository.query(new FindCocktailById(cocktailId)).iterator().next();
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}
@@ -98,27 +71,46 @@ public class CocktailService {
 		try {
 			cocktailRepository.setPublished(cocktailId);
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
+			throw new ServiceException(e);
+		}
+	}
+
+	public Cocktail receiveCocktailById(int cocktailId) throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailById(cocktailId)).iterator().next();
+		} catch (RepositoryException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	public Set<Cocktail> receiveCocktailSetByUserId(int userId) throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailSetByBarmanId(userId));
+		} catch (RepositoryException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	public Set<Cocktail> receiveNotPublishedCocktail() throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailForBarmenAccept());
+		} catch (RepositoryException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	public Set<Cocktail> receivePublishedCocktail() throws ServiceException {
+		try {
+			return cocktailRepository.query(new FindCocktailPublishedSet());
+		} catch (RepositoryException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	public void removeCocktail(int cocktailId) throws ServiceException {
 		try {
-			System.out.println("TRY TO DELETE COKCTIAL");
-			Cocktail item = new Cocktail();
-			item.setCocktailId(cocktailId);
-			cocktailRepository.remove(item);
+			cocktailRepository.remove(cocktailId);
 		} catch (RepositoryException e) {
-			throw new ServiceException(e);
-		}
-	}
-	public Set<Cocktail> receiveCocktailSetByUserId(int userId) throws ServiceException
-	{
-		try {
-			return cocktailRepository.query(new FindCocktailSetByBarmanId(userId));
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e);
 		}
 	}

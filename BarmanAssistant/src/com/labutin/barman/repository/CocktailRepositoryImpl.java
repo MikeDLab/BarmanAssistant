@@ -6,9 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.exception.NoJDBCDriverException;
 import com.labutin.barman.exception.NoJDBCPropertiesFileException;
@@ -19,44 +16,35 @@ import com.labutin.barman.specification.cocktail.CocktailSpecification;
 import com.mysql.jdbc.Statement;
 
 public class CocktailRepositoryImpl implements СocktailRepository {
-	private static Logger logger = LogManager.getLogger();
+	private static class SingletonHandler {
+		private final static CocktailRepositoryImpl INSTANCE = new CocktailRepositoryImpl();
+	}
+
+	private final static String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
 	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished,cocktail_img) VALUES (?,?,?,?,?,?)";
 	private final static String SET_COCKTAIL = "UPDATE Cocktail SET cocktail_isPublished=1 WHERE cocktail_id = ?";
+
 	private final static String SET_COCKTAIL_IMAGE = "UPDATE Cocktail SET cocktail_img= ? WHERE cocktail_id = ?";
-	private final static String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
+
+	public static CocktailRepositoryImpl getInstance() throws RepositoryException {
+
+		try {
+			PoolConnection pool = PoolConnection.POOL;
+			pool.initialization();
+			return SingletonHandler.INSTANCE;
+		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
+			// TODO Auto-generated catch bloc
+			throw new RepositoryException(e);
+		}
+
+	}
 
 	private CocktailRepositoryImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
-	private static class SingletonHandler {
-		private final static CocktailRepositoryImpl INSTANCE = new CocktailRepositoryImpl();
-	}
-
-	public static CocktailRepositoryImpl getInstance() throws NoJDBCDriverException, NoJDBCPropertiesFileException {
-		PoolConnection pool = PoolConnection.POOL;
-		pool.initialization();
-		return SingletonHandler.INSTANCE;
-	}
-
-	public void addImage(int cocktailId, InputStream inputStream) throws RepositoryException {
-		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL_IMAGE);) {
-			if (preparedStatement != null) {
-				preparedStatement.setBlob(1, inputStream);
-				preparedStatement.setInt(2, cocktailId);
-				preparedStatement.executeUpdate();
-			}
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-
 	@Override
 	public void add(Cocktail item) throws RepositoryException {
-
-		// TODO Auto-generated method stub
-		logger.info(item + " try to register");
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COCKTAIL,
 						Statement.RETURN_GENERATED_KEYS);) {
@@ -74,39 +62,44 @@ public class CocktailRepositoryImpl implements СocktailRepository {
 				} else {
 					throw new SQLException("Add cocktail failed");
 				}
-				logger.info(item + " inseted");
 			}
 		} catch (SQLException e) {
-			logger.info(item + " has problem");
 			throw new RepositoryException(e);
 		}
 	}
 
-	@Override
-	public void remove(Cocktail item) throws RepositoryException {
-		// TODO Auto-generated method stub
-		logger.info(" try to update");
+	public void addImage(int cocktailId, InputStream inputStream) throws RepositoryException {
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COCKTAIL);) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL_IMAGE);) {
 			if (preparedStatement != null) {
-				preparedStatement.setInt(1, item.getCocktailId());
+				preparedStatement.setBlob(1, inputStream);
+				preparedStatement.setInt(2, cocktailId);
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
-			logger.info(" has problem");
 			throw new RepositoryException(e);
 		}
 	}
 
 	@Override
 	public Set<Cocktail> query(CocktailSpecification specification) throws RepositoryException {
-		// TODO Auto-generated method stub
-		return specification.querry();
+		return specification.query();
+	}
+
+	@Override
+	public void remove(int cocktailId) throws RepositoryException {
+		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COCKTAIL);) {
+			if (preparedStatement != null) {
+				preparedStatement.setInt(1, cocktailId);
+				preparedStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
 	}
 
 	public void setPublished(int cocktailId) throws RepositoryException {
-		// TODO Auto-generated method stub
-		logger.info(" try to update");
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(SET_COCKTAIL);) {
 			if (preparedStatement != null) {
