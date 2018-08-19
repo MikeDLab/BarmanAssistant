@@ -1,9 +1,10 @@
 final_project 'Barman assistant'
  The application has four roles with the following responsibilities:
- Guest:
- View сocktails
- View ingredients
-User(Active):
+Guest:
+View сocktails
+View ingredients
+
+User:
 View сocktails
 View ingredients
 View barman list
