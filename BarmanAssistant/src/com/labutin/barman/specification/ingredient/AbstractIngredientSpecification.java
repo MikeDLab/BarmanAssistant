@@ -3,16 +3,19 @@ package com.labutin.barman.specification.ingredient;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.labutin.barman.entity.Ingredient;
 
 public abstract class AbstractIngredientSpecification {
-	protected final static String INGREDIENT_DESCRIPTION = "Ingredient_description";
-	protected final static String INGREDIENT_ID = "Ingredient_id";
-	protected final static String INGREDIENT_NAME = "Ingredient_name";
+	private static Logger logger = LogManager.getLogger();
+	protected static final String INGREDIENT_DESCRIPTION = "Ingredient_description";
+	protected static final String INGREDIENT_ID = "Ingredient_id";
+	protected static final String INGREDIENT_NAME = "Ingredient_name";
 	protected ResultSet resultSet;
 
 	public AbstractIngredientSpecification() {
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void closeResultSet() {
@@ -20,8 +23,7 @@ public abstract class AbstractIngredientSpecification {
 			try {
 				resultSet.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn(e);
 			}
 		}
 	}
@@ -36,8 +38,7 @@ public abstract class AbstractIngredientSpecification {
 				ingredient.setIngredientDescription(resultSet.getString(INGREDIENT_DESCRIPTION));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warn(e);
 		}
 		return ingredient;
 	}

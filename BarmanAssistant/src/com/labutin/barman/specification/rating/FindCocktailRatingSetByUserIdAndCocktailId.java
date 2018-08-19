@@ -12,7 +12,7 @@ import com.labutin.barman.pool.ProxyConnection;
 
 public class FindCocktailRatingSetByUserIdAndCocktailId extends AbstractRatingSpecification
 		implements RatingSpecification {
-	private final static String FIND_COCKTAIL_RATING_SET_BY_USER_ID = "SELECT cocktail_rating, cocktail_id, user_id FROM CocktailRating WHERE user_id = ? AND cocktail_id = ?";
+	private static final String FIND_COCKTAIL_RATING_SET_BY_USER_ID = "SELECT cocktail_rating, cocktail_id, user_id FROM CocktailRating WHERE user_id = ? AND cocktail_id = ?";
 	private int userId;
 	private int cocktailId;
 

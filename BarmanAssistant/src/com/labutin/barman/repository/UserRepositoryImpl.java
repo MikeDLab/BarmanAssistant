@@ -9,8 +9,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.labutin.barman.entity.User;
 import com.labutin.barman.exception.RepositoryException;
-import com.labutin.barman.exception.NoJDBCDriverException;
-import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 import com.labutin.barman.specification.user.UserSpecification;
@@ -18,27 +16,16 @@ import com.mysql.jdbc.Statement;
 
 public class UserRepositoryImpl implements UserRepository {
 	private static class SingletonHandler {
-		private final static UserRepositoryImpl INSTANCE = new UserRepositoryImpl();
+		private static final UserRepositoryImpl INSTANCE = new UserRepositoryImpl();
 	}
 
-	private final static String INSERT_USER = "INSERT INTO User(user_login, user_name, user_password, user_email) VALUES (?,?,?,?)";
-	private final static String REMOVE_USER = "UPDATE User SET user_isAvaible = 0 WHERE user_id = ?";
+	private static final String INSERT_USER = "INSERT INTO User(user_login, user_name, user_password, user_email) VALUES (?,?,?,?)";
+	private static final String REMOVE_USER = "UPDATE User SET user_isAvaible = 0 WHERE user_id = ?";
 
-	private final static String UPDATE_USER = "UPDATE User SET user_name = ?, user_password = ?, user_email = ?  WHERE user_id = ?";
+	private static final String UPDATE_USER = "UPDATE User SET user_name = ?, user_password = ?, user_email = ?  WHERE user_id = ?";
 
-	public static UserRepositoryImpl getInstance() throws RepositoryException {
-		try {
-			PoolConnection pool = PoolConnection.POOL;
-			pool.initialization();
-			return SingletonHandler.INSTANCE;
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
-			throw new RepositoryException(e);
-		}
-
-	}
-
-	private UserRepositoryImpl() {
-		// TODO Auto-generated constructor stub
+	public static UserRepositoryImpl getInstance() {
+		return SingletonHandler.INSTANCE;
 	}
 
 	@Override

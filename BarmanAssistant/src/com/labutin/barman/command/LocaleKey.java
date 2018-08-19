@@ -14,7 +14,6 @@ public enum LocaleKey {
 	COCKTAIL_WITHOUT_INGREDIENT("cocktail.noingredient");
 	private String value;
 	private LocaleKey(String value) {
-		// TODO Auto-generated constructor stub
 		this.value = value;
 	}
 	public String getValue()

@@ -9,7 +9,6 @@ import com.labutin.barman.command.PageEnum;
 public abstract class AbstractUserCommand implements Command {
 	protected UserUtil userUtil = new UserUtil();
 	public AbstractUserCommand() {
-		// TODO Auto-generated constructor stub
 	}
 	public abstract PageEnum execute(HttpServletRequest request,HttpServletResponse response);
 

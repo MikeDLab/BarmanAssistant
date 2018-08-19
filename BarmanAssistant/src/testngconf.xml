@@ -3,7 +3,8 @@
 <suite guice-stage="DEVELOPMENT" name="Default suite">
   <test verbose="2" name="Default test">
     <classes>
-      <class name="test.validatorTest"/>
+      <class name="test.com.labutin.barman.util.XssParserTes"/>
+       <class name="test.com.labutin.barman.validator.UserValidatorTest"/>
     </classes>
   </test> <!-- Default test -->
 </suite> <!-- Default suite -->

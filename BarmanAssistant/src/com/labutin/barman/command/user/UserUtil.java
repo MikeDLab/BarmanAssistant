@@ -50,15 +50,15 @@ class UserUtil extends UtilCommand {
 		}
 	}
 
-	private Integer averageRating(Set<Rating> rating) {
-		if (rating.isEmpty()) {
+	private Integer averageRating(Set<Rating> ratingSet) {
+		if (ratingSet.isEmpty()) {
 			return null;
 		}
 		Integer sum = 0;
-		for (Rating r : rating) {
-			sum += r.getRating();
+		for (Rating rating : ratingSet) {
+			sum += rating.getRating();
 		}
-		return sum / rating.size();
+		return sum / ratingSet.size();
 	}
 
 	void deleteUser(HttpServletRequest request, HttpServletResponse response) {
@@ -66,6 +66,9 @@ class UserUtil extends UtilCommand {
 			int userId = Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue()));
 			userService = UserService.getInstance();
 			userService.removeUser(userId);
+			if (UserService.getUserList().containsKey(userId)) {
+				UserService.getUserList().get(userId).setAvaible(false);
+			}
 		} catch (ServiceException | NumberFormatException e) {
 			logger.warn("Delete exception", e);
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
@@ -75,10 +78,13 @@ class UserUtil extends UtilCommand {
 
 	void downgradeToUser(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			int userId = Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue()));
 			userService = UserService.getInstance();
-			userService.downgradeToUser(Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue())));
+			userService.downgradeToUser(userId);
+			if (UserService.getUserList().containsKey(userId)) {
+				UserService.getUserList().get(userId).setUserRole(2);
+			}
 		} catch (ServiceException | NumberFormatException e) {
-			// TODO Auto-generated catch block
 			logger.warn("Downgrade to user exception", e);
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
@@ -108,6 +114,7 @@ class UserUtil extends UtilCommand {
 				}
 				request.getSession().setAttribute(JspParameter.ROLE.getValue(), userRole);
 				request.getSession().setAttribute(JspParameter.USER.getValue(), user);
+				UserService.addUser(user);
 			} else {
 				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 						resourceBundle.getString(LocaleKey.INVALID_USER.getValue()));
@@ -123,18 +130,23 @@ class UserUtil extends UtilCommand {
 	}
 
 	void logOut(HttpServletRequest request, HttpServletResponse response) {
+		User user = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
+		if (user != null) {
+			UserService.getUserList().remove(user.getUserId());
+		}
 		request.getSession().setAttribute(JspParameter.ROLE.getValue(), UserType.GUEST);
 		request.getSession().removeAttribute(JspParameter.USER.getValue());
+		logger.info("Users onine: " + UserService.getUserList().size());
+
 	}
 
 	private Map<User, Integer> receiveAverageRatingMap(Set<User> barmanSet) {
 		try {
 			ratingService = RatingService.getInstance();
 			Map<User, Integer> userAverageRatingMap = new HashMap<>();
-			for (User usr : barmanSet) {
-
-				Set<Rating> averageRating = ratingService.receiveBarmanRatingSetByBarmanId(usr.getUserId());
-				userAverageRatingMap.put(usr, averageRating(averageRating));
+			for (User user : barmanSet) {
+				Set<Rating> averageRating = ratingService.receiveBarmanRatingSetByBarmanId(user.getUserId());
+				userAverageRatingMap.put(user, averageRating(averageRating));
 			}
 			return userAverageRatingMap;
 		} catch (ServiceException e) {
@@ -186,7 +198,6 @@ class UserUtil extends UtilCommand {
 					resourceBundle.getString(LocaleKey.INCORRECT_EMAIL.getValue()));
 			return UserType.GUEST;
 		}
-		// TODO Auto-generated method stub
 		try {
 			userService = UserService.getInstance();
 			User user = userService.registration(userLogin, userName, userPassword, userEmail);
@@ -205,6 +216,11 @@ class UserUtil extends UtilCommand {
 	}
 
 	void showBarmanSet(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
 			userService = UserService.getInstance();
 			ratingService = RatingService.getInstance();
@@ -236,6 +252,11 @@ class UserUtil extends UtilCommand {
 	}
 
 	void showUserSet(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
 			userService = UserService.getInstance();
 			cocktailService = CocktailService.getInstance();
@@ -258,10 +279,18 @@ class UserUtil extends UtilCommand {
 	}
 
 	void updateToBarman(HttpServletRequest request, HttpServletResponse response) {
+		if (!checkRequestParameterSetOnNull(request, response)) {
+			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
+					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
+			return;
+		}
 		try {
 			userService = UserService.getInstance();
 			int userId = Integer.parseInt(request.getParameter(JspParameter.USER_ID.getValue()));
 			userService.updateToBarman(userId);
+			if (UserService.getUserList().containsKey(userId)) {
+				UserService.getUserList().get(userId).setUserRole(1);
+			}
 		} catch (ServiceException | NumberFormatException e) {
 			logger.warn("Update user to Barman exception", e);
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),

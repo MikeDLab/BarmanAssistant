@@ -8,14 +8,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 @SuppressWarnings("serial")
 public class InfoTag extends TagSupport {
-
-	public InfoTag() {
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	@Override
 	public int doEndTag() throws JspException {
-		// TODO Auto-generated method stub
 		return EVAL_PAGE;
 	}
 
@@ -27,7 +22,6 @@ public class InfoTag extends TagSupport {
 			JspWriter out = pageContext.getOut();
 			out.write(author);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return SKIP_BODY;

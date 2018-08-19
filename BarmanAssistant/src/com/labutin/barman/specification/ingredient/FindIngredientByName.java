@@ -5,19 +5,17 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindIngredientByName extends AbstractIngredientSpecification implements IngredientSpecification {
-	private final static String FIND_INGREDIENT_BY_NAME = "SELECT Ingredient_id,Ingredient_name,Ingredient_description FROM Ingredient WHERE Ingredient_name = ?";
+	private static final String FIND_INGREDIENT_BY_NAME = "SELECT Ingredient_id,Ingredient_name,Ingredient_description FROM Ingredient WHERE Ingredient_name = ?";
 	private String ingredientName;
 
-	public FindIngredientByName(String name) {
-		// TODO Auto-generated constructor stubt
-		this.ingredientName = name;
+	public FindIngredientByName(String ingreidentName) {
+		this.ingredientName = ingreidentName;
 	}
 
 	@Override

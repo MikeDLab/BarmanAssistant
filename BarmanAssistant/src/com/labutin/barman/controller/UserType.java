@@ -5,7 +5,6 @@ public enum UserType {
 	private String value;
 
 	private UserType(String value) {
-		// TODO Auto-generated constructor stub
 		this.value = value;
 	}
 

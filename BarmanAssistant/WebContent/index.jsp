@@ -8,7 +8,11 @@
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html>
 <head>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous">
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <title><fmt:message bundle="${locale}" key="title" /></title>
@@ -20,13 +24,16 @@
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 </head>
-<body style="display: flex; flex-flow: column; justify-content: space-between">
+<body
+	style="display: flex; flex-flow: column; justify-content: space-between">
 	<section>
 		<header>
 			<div class="container">
 				<div class="logo">
 					<i class="fa fa-glass logo-img"></i>
-					<p class="logo-text"><fmt:message bundle="${locale}" key="title" /></p>
+					<p class="logo-text">
+						<fmt:message bundle="${locale}" key="title" />
+					</p>
 				</div>
 			</div>
 		</header>
@@ -121,7 +128,7 @@
 		<div class="container">
 			<div id="heading">
 				<h1>${language}</h1>
-		
+
 				<h1>
 					<label for="username"><fmt:message bundle="${locale}"
 							key="homepage.title" /></label>
@@ -163,7 +170,8 @@
 								<form action="app" method="post">
 									<input type="hidden" name="command" value="Add_Ingredient" />
 									<button class="side" type="submit">
-										<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+										<fmt:message bundle="${locale}"
+											key="sidebar.addingredientpage" />
 									</button>
 								</form>
 							</li>
@@ -180,23 +188,24 @@
 						</c:if>
 					</ul>
 				</nav>
-		<!-- 			<h2>OUR OFFICES</h2>
+				<!-- 			<h2>OUR OFFICES</h2>
 						<p> 			alt="Our offices">
 					</p> -->
 			</aside>
-			<div  style="float: left; width: 73%;">
+			<div style="float: left; width: 73%;">
 				<blockquote>
 					<form method="post"></form>
 					<p>&ldquo;QUISQUE IN ENIM VELIT, AT DIGNISSIM EST. NULLA UL
 						CORPER, DOLOR AC PELLENTESQUE PLACERAT, JUSTO TELLUS GRAVIDA ERAT,
-						VEL PORTTITOR LIBERO ERAT.QUISQUE IN ENIM VELIT, AT DIGNISSIM EST. NULLA UL
-						CORPER, DOLOR AC PELLENTESQUE PLACERAT, JUSTO TELLUS GRAVIDA ERAT,
-						VEL PORTTITOR LIBERO ERAT.QUISQUE IN ENIM VELIT, AT DIGNISSIM EST. NULLA UL
-						CORPER, DOLOR AC PELLENTESQUE PLACERAT, JUSTO TELLUS GRAVIDA ERAT,
-						VEL PORTTITOR LIBERO ERAT.QUISQUE IN ENIM VELIT, AT DIGNISSIM EST. NULLA UL
-						CORPER, DOLOR AC PELLENTESQUE PLACERAT, JUSTO TELLUS GRAVIDA ERAT,
-						VEL PORTTITOR LIBERO ERAT.&rdquo;</p>
-		
+						VEL PORTTITOR LIBERO ERAT.QUISQUE IN ENIM VELIT, AT DIGNISSIM EST.
+						NULLA UL CORPER, DOLOR AC PELLENTESQUE PLACERAT, JUSTO TELLUS
+						GRAVIDA ERAT, VEL PORTTITOR LIBERO ERAT.QUISQUE IN ENIM VELIT, AT
+						DIGNISSIM EST. NULLA UL CORPER, DOLOR AC PELLENTESQUE PLACERAT,
+						JUSTO TELLUS GRAVIDA ERAT, VEL PORTTITOR LIBERO ERAT.QUISQUE IN
+						ENIM VELIT, AT DIGNISSIM EST. NULLA UL CORPER, DOLOR AC
+						PELLENTESQUE PLACERAT, JUSTO TELLUS GRAVIDA ERAT, VEL PORTTITOR
+						LIBERO ERAT.&rdquo;</p>
+
 				</blockquote>
 			</div>
 		</div>

@@ -13,20 +13,17 @@ import com.labutin.barman.specification.ingredient.FindIngredientSet;
 import com.labutin.barman.specification.ingredient.FindIngredientSetByCocktailId;
 
 public class IngredientService {
-	private static IngredientService INSTANCE;
+	private static IngredientService instance;
 	private final IngredientRepositoryImpl ingredientRepository;
 
-	public IngredientService() throws ServiceException {
-		try {
-			ingredientRepository = IngredientRepositoryImpl.getInstance();
-		} catch (RepositoryException e) {
-			throw new ServiceException(e);
-		}
+	public IngredientService() {
+		ingredientRepository = IngredientRepositoryImpl.getInstance();
 	}
-	public static IngredientService getInstance() throws ServiceException
-	{
-		return (INSTANCE == null) ? INSTANCE = new IngredientService() : INSTANCE;
+
+	public static IngredientService getInstance() {
+		return (instance == null) ? instance = new IngredientService() : instance;
 	}
+
 	public Ingredient add(String ingredientName, String ingredientDescription) throws ServiceException {
 		try {
 			Ingredient ingredient = new Ingredient();
@@ -63,8 +60,8 @@ public class IngredientService {
 			throw new ServiceException(e);
 		}
 	}
-	public Ingredient receiveIngredientById(int ingredientId) throws ServiceException
-	{
+
+	public Ingredient receiveIngredientById(int ingredientId) throws ServiceException {
 		try {
 			Set<Ingredient> setIngredient = ingredientRepository.query(new FindIngredientById(ingredientId));
 			if (setIngredient.iterator().hasNext()) {

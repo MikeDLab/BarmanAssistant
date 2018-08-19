@@ -6,31 +6,22 @@ import java.util.Set;
 
 import com.labutin.barman.entity.Rating;
 import com.labutin.barman.exception.RepositoryException;
-import com.labutin.barman.exception.NoJDBCDriverException;
-import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 import com.labutin.barman.specification.Specification;
 
-public class RatingRepository {
+public class RatingRepository implements Repository {
 
 	private static class SingletonHandler {
-		private final static RatingRepository INSTANCE = new RatingRepository();
+		private static final RatingRepository INSTANCE = new RatingRepository();
 	}
 
-	private final static String DELETE_COCKTAIL_RATING = "DELETE FROM CocktailRating WHERE cocktail_id = ?";
-	private final static String INSERT_BARMAN_RATING = "INSERT INTO BarmanRating(barman_rating, barman_id, user_id) VALUES (?,?,?)";
-	private final static String INSERT_COCKTAIL_RATING = "INSERT INTO CocktailRating(user_id, cocktail_id, cocktail_rating) VALUES (?,?,?)";
+	private static final String DELETE_COCKTAIL_RATING = "DELETE FROM CocktailRating WHERE cocktail_id = ?";
+	private static final String INSERT_BARMAN_RATING = "INSERT INTO BarmanRating(barman_rating, barman_id, user_id) VALUES (?,?,?)";
+	private static final String INSERT_COCKTAIL_RATING = "INSERT INTO CocktailRating(user_id, cocktail_id, cocktail_rating) VALUES (?,?,?)";
 
-	public static RatingRepository getInstance() throws RepositoryException {
-		try {
-			PoolConnection pool = PoolConnection.POOL;
-			pool.initialization();
-			return SingletonHandler.INSTANCE;
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
-			throw new RepositoryException(e);
-		}
-
+	public static RatingRepository getInstance() {
+		return SingletonHandler.INSTANCE;
 	}
 
 	public void addBarmanRating(Rating item) throws RepositoryException {

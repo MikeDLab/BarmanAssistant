@@ -9,7 +9,6 @@ public class EnumSetBuilder extends AbstractEnumSetBuilder {
 	private UserType userType;
 
 	public EnumSetBuilder(UserType userType) {
-		// TODO Auto-generated constructor stub
 		this.userType = userType;
 	}
 

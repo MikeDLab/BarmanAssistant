@@ -15,22 +15,19 @@ import com.labutin.barman.specification.cocktail.FindCocktailPublishedSet;
 import com.labutin.barman.specification.cocktail.FindCocktailSetByBarmanId;
 
 public class CocktailService {
-	private static CocktailService INSTANCE;
+	private static CocktailService instance;
 	private final CocktailRepositoryImpl cocktailRepository;
 	private final RatingRepository ratingRepository;
 
-	private CocktailService() throws ServiceException {
-		try {
-			cocktailRepository = CocktailRepositoryImpl.getInstance();
-			ratingRepository = RatingRepository.getInstance();
-		} catch (RepositoryException e) {
-			throw new ServiceException(e);
-		}
+	private CocktailService() {
+		cocktailRepository = CocktailRepositoryImpl.getInstance();
+		ratingRepository = RatingRepository.getInstance();
 	}
-	public static CocktailService getInstance() throws ServiceException
-	{
-		return (INSTANCE == null) ? INSTANCE = new CocktailService() : INSTANCE;
+
+	public static CocktailService getInstance() {
+		return (instance == null) ? instance = new CocktailService() : instance;
 	}
+
 	public Cocktail add(String cocktailName, int userId, String cocktailDescription, int cocktailVol,
 			boolean isPublished, InputStream imageStream) throws ServiceException {
 		try {

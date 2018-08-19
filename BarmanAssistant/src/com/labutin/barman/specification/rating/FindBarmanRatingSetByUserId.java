@@ -11,7 +11,7 @@ import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindBarmanRatingSetByUserId extends AbstractRatingSpecification implements RatingSpecification {
-	private final static String FIND_BARMAN_RATING_SET_BY_USER_ID = "SELECT barman_rating, barman_id, user_id FROM BarmanRating WHERE user_id = ?";
+	private static final String FIND_BARMAN_RATING_SET_BY_USER_ID = "SELECT barman_rating, barman_id, user_id FROM BarmanRating WHERE user_id = ?";
 	private int userId;
 
 	public FindBarmanRatingSetByUserId(int userId) {
@@ -26,8 +26,8 @@ public class FindBarmanRatingSetByUserId extends AbstractRatingSpecification imp
 			if (preparedStatement != null) {
 				preparedStatement.setInt(1, userId);
 				resultSet = preparedStatement.executeQuery();
-				while (resultSet.next()) {
-					if (resultSet != null) {
+				if (resultSet != null) {
+					while (resultSet.next()) {
 						ratingSet.add(loadBarmanRatingData());
 					}
 				}

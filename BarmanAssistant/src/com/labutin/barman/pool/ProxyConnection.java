@@ -9,7 +9,6 @@ public class ProxyConnection implements Connection {
 	private Connection connection;
 
 	public ProxyConnection(Connection connection) {
-		// TODO Auto-generated constructor stub
 		this.connection = connection;
 	}
 

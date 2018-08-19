@@ -1,6 +1,5 @@
 package com.labutin.barman.command.ingredient;
 
-
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,14 +17,9 @@ import com.labutin.barman.service.IngredientService;
 import com.labutin.barman.util.XssParser;
 
 public class IngredientUtil extends UtilCommand {
-	private static Logger logger = LogManager.getLogger();
+	private static final Logger logger = LogManager.getLogger();
 	private IngredientService ingredientService;
 
-
-	public IngredientUtil() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	boolean addIngredient(HttpServletRequest request, HttpServletResponse response) {
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
@@ -64,7 +58,6 @@ public class IngredientUtil extends UtilCommand {
 	}
 
 	boolean editIngredient(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));

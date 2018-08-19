@@ -8,12 +8,9 @@ import com.labutin.barman.command.PageEnum;
 public class AddIngredientCommand extends IngredientCommand {
 	// Service
 
-	public AddIngredientCommand() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {
+		util.init(request, response);
 		if (util.addIngredient(request, response)) {
 			util.showIngredientSet(request, response);
 			return PageEnum.INGREDIENT_LIST;

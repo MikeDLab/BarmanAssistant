@@ -8,7 +8,11 @@
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous">
 
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -193,7 +197,7 @@
 			</aside>
 			<div style="float: left; width: 73%;">
 				<blockquote>
-				<p>${Errormessage}</p>
+					<p>${Errormessage}</p>
 					<div class="ingredient">
 						<c:if test="${!empty ingredientSet}">
 							<table class="table">
@@ -221,7 +225,7 @@
 													</button>
 												</form>
 											</c:if></td>
-											<td><c:if test="${sessionScope.Role == 'ADMIN'}">
+										<td><c:if test="${sessionScope.Role == 'ADMIN'}">
 												<form action="app" method="post">
 													<input type="hidden" name="command"
 														value="Edit_Ingredient_Page" /> <input type="hidden"

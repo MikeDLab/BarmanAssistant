@@ -37,7 +37,6 @@ class CoctailUtil extends  UtilCommand {
 	private UserService userService;
 
 	public CoctailUtil() {
-		// TODO Auto-generated constructor stub
 	}
 
 	boolean addCocktail(HttpServletRequest request, HttpServletResponse response) {
@@ -79,9 +78,6 @@ class CoctailUtil extends  UtilCommand {
 
 		String[] cocktailIngredientArray = request
 				.getParameterValues(JspParameter.COCKTAIL_INGREDIENT_ARRAY.getValue());
-		/*
-		 * Ad
-		 */
 		try {
 			ingredientService = new IngredientService();
 			if (cocktailIngredientArray == null) {
@@ -148,7 +144,6 @@ class CoctailUtil extends  UtilCommand {
 		}
 		int cocktailId = Integer.parseInt(request.getParameter(JspParameter.COCKTAIL_ID.getValue()));
 		try {
-			// TODO Auto-generated method stub
 			ingredientService = new IngredientService();
 			ingredientService.removeIngredient(cocktailId);
 			ratingService = RatingService.getInstance();

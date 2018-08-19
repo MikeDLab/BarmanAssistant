@@ -20,24 +20,26 @@ public enum PoolConnection {
 	POOL;
 	private LinkedBlockingQueue<ProxyConnection> availableConnetion = new LinkedBlockingQueue<>();
 	private ArrayDeque<ProxyConnection> unavailableConnetion = new ArrayDeque<>();
-	private static final String DATABASE_URL = "db.URL";
-	private static final String DATABASE_USER_LOGIN = "db.Login";
-	private static final String DATABASE_USER_PASSWORD = "db.Password";
-	private static final String DATABASE_PROPERTIES = "resources/DataBase.properties";
+	private static final String DATABASE_URL_KEY = "db.URL";
+	private static final String DATABASE_USER_LOGIN_KEY = "db.Login";
+	private static final String DATABASE_USER_PASSWORD_KEY = "db.Password";
+	private static final String DATABASE_PROPERTIES_PATH = "resources/DataBase.properties";
 	private String user;
-	private String URL;
+	private String databaseURL;
 	private String password;
 	private static final int POOL_SIZE = 32;
 	private static Logger logger = LogManager.getLogger();
 	private AtomicBoolean isCreated = new AtomicBoolean(false);
+
+	public AtomicBoolean isCreated() {
+		return isCreated;
+	}
 
 	public ProxyConnection getConnection() {
 		ProxyConnection connection = null;
 		try {
 			connection = availableConnetion.take();
 			unavailableConnetion.add(connection);
-			logger.info("Connections: " + availableConnetion.size());
-			logger.info("Unvaible: " + unavailableConnetion.size());
 		} catch (InterruptedException e) {
 			logger.info("Interrupted exception", e);
 		}
@@ -52,10 +54,8 @@ public enum PoolConnection {
 			}
 			unavailableConnetion.remove(connection);
 			availableConnetion.put(connection);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException | SQLException e) {
 			logger.info("Connection ploblem", e);
-		} catch (SQLException e) {
-			throw new RuntimeException();
 		}
 	}
 
@@ -68,14 +68,14 @@ public enum PoolConnection {
 				throw new NoJDBCDriverException(e);
 			}
 			try {
-				DriverManager.registerDriver(DriverManager.getDriver(URL));
+				DriverManager.registerDriver(DriverManager.getDriver(databaseURL));
 			} catch (SQLException e) {
 				throw new NoJDBCDriverException(e);
 			}
 
 			for (int i = 0; i < POOL_SIZE; i++) {
 				try {
-					ProxyConnection connection = new ProxyConnection(DriverManager.getConnection(URL, user, password));
+					ProxyConnection connection = new ProxyConnection(DriverManager.getConnection(databaseURL, user, password));
 					availableConnetion.add(connection);
 				} catch (SQLException e) {
 					throw new NoJDBCDriverException(e);
@@ -87,16 +87,40 @@ public enum PoolConnection {
 
 	private void setConfing() throws NoJDBCPropertiesFileException {
 		Properties property = new Properties();
-		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(DATABASE_PROPERTIES);
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(DATABASE_PROPERTIES_PATH);
 		try {
 			property.load(inputStream);
-			URL = property.getProperty(DATABASE_URL);
-			user = property.getProperty(DATABASE_USER_LOGIN);
-			password = property.getProperty(DATABASE_USER_PASSWORD);
+			databaseURL = property.getProperty(DATABASE_URL_KEY);
+			user = property.getProperty(DATABASE_USER_LOGIN_KEY);
+			password = property.getProperty(DATABASE_USER_PASSWORD_KEY);
 		} catch (IOException e) {
-			throw new NoJDBCPropertiesFileException();
+			throw new NoJDBCPropertiesFileException(e);
 		}
 
+	}
+
+	public void closePool() {
+		ProxyConnection connection;
+		for (int i = 0; i < POOL_SIZE; i++) {
+			try {
+				connection = availableConnetion.take();
+				connection.closeInPool();
+			} catch (InterruptedException | SQLException e) {
+				logger.warn("Close pool problem",e);
+			} 
+
+		}
+		deregisterDriver();
+	}
+
+	private void deregisterDriver() {
+		DriverManager.drivers().forEach(driver -> {
+			try {
+				DriverManager.deregisterDriver(driver);
+			} catch (SQLException e) {
+				logger.warn("DriverManager cannot be deregister", e);
+			}
+		});
 	}
 
 }

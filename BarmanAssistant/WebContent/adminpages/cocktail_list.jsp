@@ -217,7 +217,7 @@
 										<td>${userCocktailMap.key.cocktailDescription}</td>
 										<td>${userCocktailMap.key.cocktailVol}</td>
 										<td>${userCocktailMap.value.userName}</td>
-										<td><img src="app?imageId=${userCocktailMap.key.cocktailId}&command=Show_Cocktail_Image" /></td>
+										<td><img src="app?imageId=${userCocktailMap.key.cocktailId}&command=Show_Cocktail_Image" width="100%" /></td>
 										<td><form action="app" method="post">
 												<input type="hidden" name="command" value="Cocktail_Info" />
 												<input type="hidden" name="cocktail_id"

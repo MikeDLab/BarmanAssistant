@@ -5,13 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.labutin.barman.command.PageEnum;
 
-
-
 public class ShowIngredientCommand extends IngredientCommand {
-
-	public ShowIngredientCommand() {
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	public PageEnum execute(HttpServletRequest request, HttpServletResponse response) {

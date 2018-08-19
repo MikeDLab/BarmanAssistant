@@ -9,10 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class UtilCommand {
 	protected Locale locale;
-	protected  ResourceBundle resourceBundle;
-	public UtilCommand() {
-		// TODO Auto-generated constructor stub
-	}
+	protected ResourceBundle resourceBundle;
+
 	protected boolean checkRequestParameterSetOnNull(HttpServletRequest request, HttpServletResponse response) {
 		Enumeration<String> parameterEnumeration = request.getParameterNames();
 		String parameterName;
@@ -24,6 +22,7 @@ public class UtilCommand {
 		}
 		return true;
 	}
+
 	public void init(HttpServletRequest request, HttpServletResponse response) {
 		locale = new Locale((String) request.getSession().getAttribute(JspParameter.LANGUAGE.getValue()));
 		resourceBundle = ResourceBundle.getBundle(LocaleKey.LOCALE_PROPERTIES.getValue(), locale);

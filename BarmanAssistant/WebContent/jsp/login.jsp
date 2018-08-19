@@ -13,7 +13,8 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <title><fmt:message bundle="${locale}" key="title" /></title>
-<link rel="stylesheet" href="css/styles.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css" /> 
+<%-- <link rel="stylesheet" href="css/styles.css" type="text/css"> --%>
 <link rel="stylesheet"
 	href="http://fonts.googleapis.com/css?family=Oswald:400,300"
 	type="text/css">

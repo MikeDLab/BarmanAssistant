@@ -10,11 +10,7 @@ public class UserValidator {
 			+ "[A-Za-z\\d-]+(\\.[A-Za-z\\d]+)*(\\.[A-Za-z]{2,})$";
 	private static final String USER_LOGIN_REGEX = "[a-zA-Z\\d]{3,45}";
 	private static final String USER_NAME_REGEX = "[a-zA-Z\\._\\-]{3,45}";
-	private static final String USER_PASSWORD_REGEX= "((?=.*\\d)(?=.*[a-z]).{6,45})";
-
-	public UserValidator() {
-		// TODO Auto-generated constructor stub
-	}
+	private static final String USER_PASSWORD_REGEX = "((?=.*\\d)(?=.*[a-z]).{6,45})";
 
 	public boolean isEmail(String email) {
 		pattern = Pattern.compile(EMAIL_REGEX);
@@ -33,8 +29,8 @@ public class UserValidator {
 		matcher = pattern.matcher(userName);
 		return matcher.matches();
 	}
-	public boolean isPassword(String userPassword)
-	{
+
+	public boolean isPassword(String userPassword) {
 		pattern = Pattern.compile(USER_PASSWORD_REGEX);
 		matcher = pattern.matcher(userPassword);
 		return matcher.matches();

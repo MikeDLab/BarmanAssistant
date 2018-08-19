@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.Set;
 
 import com.labutin.barman.entity.Cocktail;
-import com.labutin.barman.exception.NoJDBCDriverException;
-import com.labutin.barman.exception.NoJDBCPropertiesFileException;
 import com.labutin.barman.exception.RepositoryException;
 import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
@@ -17,30 +15,22 @@ import com.mysql.jdbc.Statement;
 
 public class CocktailRepositoryImpl implements СocktailRepository {
 	private static class SingletonHandler {
-		private final static CocktailRepositoryImpl INSTANCE = new CocktailRepositoryImpl();
+		private static final CocktailRepositoryImpl INSTANCE = new CocktailRepositoryImpl();
 	}
 
-	private final static String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
-	private final static String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished,cocktail_img) VALUES (?,?,?,?,?,?)";
-	private final static String SET_COCKTAIL = "UPDATE Cocktail SET cocktail_isPublished=1 WHERE cocktail_id = ?";
+	private static final String DELETE_COCKTAIL = "DELETE FROM Cocktail Where cocktail_id = ?";
+	private static final String INSERT_COCKTAIL = "INSERT INTO Cocktail(cocktail_name, user_id, cocktail_description, cocktail_vol,cocktail_isPublished,cocktail_img) VALUES (?,?,?,?,?,?)";
+	private static final String SET_COCKTAIL = "UPDATE Cocktail SET cocktail_isPublished=1 WHERE cocktail_id = ?";
 
-	private final static String SET_COCKTAIL_IMAGE = "UPDATE Cocktail SET cocktail_img= ? WHERE cocktail_id = ?";
+	private static final String SET_COCKTAIL_IMAGE = "UPDATE Cocktail SET cocktail_img= ? WHERE cocktail_id = ?";
 
-	public static CocktailRepositoryImpl getInstance() throws RepositoryException {
+	public static CocktailRepositoryImpl getInstance() {
 
-		try {
-			PoolConnection pool = PoolConnection.POOL;
-			pool.initialization();
-			return SingletonHandler.INSTANCE;
-		} catch (NoJDBCDriverException | NoJDBCPropertiesFileException e) {
-			// TODO Auto-generated catch bloc
-			throw new RepositoryException(e);
-		}
+		return SingletonHandler.INSTANCE;
 
 	}
 
 	private CocktailRepositoryImpl() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

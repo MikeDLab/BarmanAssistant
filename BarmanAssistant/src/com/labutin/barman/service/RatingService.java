@@ -13,19 +13,17 @@ import com.labutin.barman.specification.rating.FindCocktailRatingSetByUserId;
 import com.labutin.barman.specification.rating.FindCocktailRatingSetByUserIdAndCocktailId;
 
 public class RatingService {
-	private static RatingService INSTANCE;
+	private static RatingService instance;
 	private final RatingRepository ratingRepository;
-	private RatingService() throws ServiceException {
-		try {
-			ratingRepository = RatingRepository.getInstance();
-		} catch (RepositoryException e) {
-			throw new ServiceException(e);
-		}
+
+	private RatingService() {
+		ratingRepository = RatingRepository.getInstance();
 	}
-	public static RatingService getInstance() throws ServiceException
-	{
-		return (INSTANCE == null) ? INSTANCE = new RatingService() : INSTANCE;
+
+	public static RatingService getInstance() {
+		return (instance == null) ? instance = new RatingService() : instance;
 	}
+
 	public Set<Rating> receiveBarmanRatingSetByBarmanId(int userId) throws ServiceException {
 		try {
 			return ratingRepository.query(new FindAverageBarmanRatingSet(userId));
@@ -60,7 +58,8 @@ public class RatingService {
 
 	public Rating receiveCocktailRatingSetByUserIdAndCocktailId(int userId, int cocktailId) throws ServiceException {
 		try {
-			Set<Rating> setRating = ratingRepository.query(new FindCocktailRatingSetByUserIdAndCocktailId(userId, cocktailId));
+			Set<Rating> setRating = ratingRepository
+					.query(new FindCocktailRatingSetByUserIdAndCocktailId(userId, cocktailId));
 			if (setRating.iterator().hasNext()) {
 				return setRating.iterator().next();
 			} else {

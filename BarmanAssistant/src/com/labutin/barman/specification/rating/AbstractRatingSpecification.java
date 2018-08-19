@@ -18,7 +18,6 @@ public abstract class AbstractRatingSpecification {
 	private static Logger logger = LogManager.getLogger();
 
 	public AbstractRatingSpecification() {
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void closeResultSet() {

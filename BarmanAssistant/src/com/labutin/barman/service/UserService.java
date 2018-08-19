@@ -1,5 +1,7 @@
 package com.labutin.barman.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.labutin.barman.entity.Rating;
@@ -17,21 +19,26 @@ import com.labutin.barman.specification.user.FindUserSet;
 import com.labutin.barman.specification.user.UpdateUserToBarman;
 
 public class UserService {
-	private static UserService INSTANCE;
+	private static UserService instance;
 	private final RatingRepository ratingRepository;
 	private final UserRepositoryImpl userRepository;
+	private static Map<Integer, User> onlineUserMap = new HashMap<>();
 
-	private UserService() throws ServiceException {
-		try {
-			userRepository = UserRepositoryImpl.getInstance();
-			ratingRepository = new RatingRepository();
-		} catch (RepositoryException e) {
-			throw new ServiceException(e);
-		}
+	public static void addUser(User user) {
+		onlineUserMap.put(user.getUserId(), user);
 	}
 
-	public static UserService getInstance() throws ServiceException {
-		return (INSTANCE == null) ? INSTANCE = new UserService() : INSTANCE;
+	public static Map<Integer, User> getUserList() {
+		return onlineUserMap;
+	}
+
+	private UserService() {
+		userRepository = UserRepositoryImpl.getInstance();
+		ratingRepository = new RatingRepository();
+	}
+
+	public static UserService getInstance() {
+		return (instance == null) ? instance = new UserService() : instance;
 	}
 
 	public void addBarmanRating(int barmanRating, int barmanId, int userId) throws ServiceException {
