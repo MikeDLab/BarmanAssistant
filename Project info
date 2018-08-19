@@ -1,0 +1,38 @@
+final_project 'Barman assistant'
+ The application has four roles with the following responsibilities:
+ Guest:
+ View сocktails
+ View ingredients
+User(Active):
+View сocktails
+View ingredients
+View barman list
+Rate  barman
+Rate cocktail
+Offering cocktails
+
+Barman:
+View сocktails
+View ingredients
+View barman list
+Rate  barman
+Rate cocktail
+Publish cocktails
+
+Admin:
+View сocktails
+View ingredients
+View barman list
+Rate  barman
+Rate cocktail
+Publish cocktails
+Manage users(upgrade to barman,downgrade to user,delete user)
+Manage ingredient list(add,update)
+
+Java 10;
+JavaEE: Servlet, JSP;
+Server / Servlet container: tomcat9
+Data base: MySQL;
+JDBC;
+Logger: Log4J2;
+Tests: TestNG;
