@@ -11,7 +11,7 @@ import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindBarmanSet extends AbstractUserSpecification implements UserSpecification {
-	private final static String FIND_BARMAN_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role, user_isAvaible FROM User INNER JOIN Cocktail USING(user_id) WHERE user_id != ? AND cocktail_isPublished != 0 AND user_isAvaible != 0";
+	private static final  String FIND_BARMAN_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role, user_isAvaible FROM User INNER JOIN Cocktail USING(user_id) WHERE user_id != ? AND cocktail_isPublished != 0 AND user_isAvaible != 0";
 	private int userId;
 
 	public FindBarmanSet(int userId) {

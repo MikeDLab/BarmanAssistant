@@ -225,20 +225,6 @@
 													</button>
 												</form>
 											</c:if></td>
-										<td><c:if test="${sessionScope.Role == 'ADMIN'}">
-												<form action="app" method="post">
-													<input type="hidden" name="command"
-														value="Edit_Ingredient_Page" /> <input type="hidden"
-														name="ingredient_id" value="${ingredientSet.ingredientId}" />
-													<input type="hidden" name="ingredient_name"
-														value="${ingredientSet.ingredientName}" /> <input
-														type="hidden" name="ingredient_description"
-														value="${ingredientSet.ingredientDescription}" />
-													<button type="submit">
-														<fmt:message bundle="${locale}" key="ingredientlist.edit" />
-													</button>
-												</form>
-											</c:if></td>
 									</tr>
 								</c:forEach>
 							</table>

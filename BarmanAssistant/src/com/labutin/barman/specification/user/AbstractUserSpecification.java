@@ -19,10 +19,6 @@ public abstract class AbstractUserSpecification {
 	protected ResultSet resultSet;
 	private static Logger logger = LogManager.getLogger();
 
-	public AbstractUserSpecification() {
-		// TODO Auto-generated constructor stub
-	}
-
 	protected void closeResultSet() {
 		if (resultSet != null) {
 			try {

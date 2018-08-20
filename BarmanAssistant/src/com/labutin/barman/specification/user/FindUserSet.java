@@ -12,10 +12,7 @@ import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindUserSet extends AbstractUserSpecification implements UserSpecification {
-	private final static String FIND_USER_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User WHERE user_role != 0 AND user_isAvaible != 0";
-
-	public FindUserSet() {
-	}
+	private static final String FIND_USER_SET = "SELECT user_id,user_login,user_name,user_password,user_email,user_role,user_isAvaible FROM User WHERE user_role != 0 AND user_isAvaible != 0";
 
 	@Override
 	public Set<User> query() throws RepositoryException {

@@ -194,7 +194,7 @@
 						<form action="app" method="post">
 							<input type="hidden" name="command" value="Check_Cocktail_List" />
 							<button class="font-size" type="submit">
-								<fmt:message bundle="${locale}" key="adminpanel.barmanlist" />
+								<fmt:message bundle="${locale}" key="barmanpanel.cocktaillist" />
 							</button>
 						</form>
 				</div>

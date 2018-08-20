@@ -15,7 +15,7 @@ import com.labutin.barman.pool.ProxyConnection;
 
 public class UpdateUserToBarman extends AbstractUserSpecification implements UserSpecification {
 	private static Logger logger = LogManager.getLogger();
-	private final static String UPDATE_TO_BARMAN = "UPDATE  User Set user_role=1 WHERE user_id = ?";
+	private static final  String UPDATE_TO_BARMAN = "UPDATE  User Set user_role=1 WHERE user_id = ?";
 	private int userId;
 
 	public UpdateUserToBarman(int userId) {
@@ -32,7 +32,7 @@ public class UpdateUserToBarman extends AbstractUserSpecification implements Use
 				preparedStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
-			logger.info("Cannot update user to barman with user_id=" + userId);
+			logger.info("Cannot update user to barman with user_id=" + userId,e);
 			throw new RepositoryException(e);
 		} finally {
 			closeResultSet();

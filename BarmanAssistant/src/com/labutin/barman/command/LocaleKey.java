@@ -4,6 +4,7 @@ public enum LocaleKey {
 	LOCALE_PROPERTIES("resources.locale"),
 	USER_NO_SESSION("user.nosession"),
 	GENERAL_EXCEPTION("service.exception"),
+	EMPTY_FIELD("empty.fields"),
 	NO_INGREDIENT_NAME("ingredient.noname"),
 	NO_IMAGE("image.select"),
 	INVALID_USER("invalid.user"),

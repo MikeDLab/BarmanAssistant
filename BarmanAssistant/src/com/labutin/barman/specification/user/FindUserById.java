@@ -11,12 +11,11 @@ import com.labutin.barman.pool.PoolConnection;
 import com.labutin.barman.pool.ProxyConnection;
 
 public class FindUserById extends AbstractUserSpecification implements UserSpecification {
-	private int user_id;
-	private final static String FIND_USER_BY_ID = "SELECT user_id,user_login,user_name,user_password,user_email,user_role, user_isAvaible FROM User WHERE user_id = ?";
+	private int userId;
+	private static final String FIND_USER_BY_ID = "SELECT user_id,user_login,user_name,user_password,user_email,user_role, user_isAvaible FROM User WHERE user_id = ?";
 
-	public FindUserById(int user_id) {
-		// TODO Auto-generated constructor stubt
-		this.user_id = user_id;
+	public FindUserById(int userId) {
+		this.userId = userId;
 	}
 
 	@Override
@@ -25,7 +24,7 @@ public class FindUserById extends AbstractUserSpecification implements UserSpeci
 		try (ProxyConnection connection = PoolConnection.POOL.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_ID);) {
 			if (preparedStatement != null) {
-				preparedStatement.setInt(1, user_id);
+				preparedStatement.setInt(1, userId);
 				resultSet = preparedStatement.executeQuery();
 			}
 			if (resultSet.next()) {

@@ -221,7 +221,8 @@
 										<td>${cocktail.cocktailDescription}</td>
 										<td>${cocktail.cocktailVol}</td>
 										<td><img
-											src="app?imageId=${cocktail.cocktailId}&command=Show_Cocktail_Image" width="100%"  /></td>
+											src="app?imageId=${cocktail.cocktailId}&command=Show_Cocktail_Image"
+											width="100%" /></td>
 										<td><c:if test="${!empty cocktailRatingMap}">
 												<c:forEach items="${cocktailRatingMap}"
 													var="cocktailRatingMap">
@@ -258,7 +259,8 @@
 							<c:if test="${!empty author}">
 								<table>
 									<tr>
-										<th><fmt:message bundle="${locale}" key="user.name" /></th>
+										<th><fmt:message bundle="${locale}"
+												key="cocktaillist.author" /></th>
 										<th><fmt:message bundle="${locale}" key="user.email" /></th>
 									</tr>
 									<tr>

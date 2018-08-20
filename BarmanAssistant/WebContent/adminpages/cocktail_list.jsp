@@ -8,7 +8,11 @@
 <fmt:setBundle basename="resources.locale" var="locale" />
 <html lang="${language}">
 <head>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous">
 
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -24,13 +28,16 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 </head>
-<body style="display: flex; flex-flow: column; justify-content: space-between">
+<body
+	style="display: flex; flex-flow: column; justify-content: space-between">
 	<section>
 		<header>
 			<div class="container">
 				<div class="logo">
 					<i class="fa fa-glass logo-img"></i>
-					<p class="logo-text"><fmt:message bundle="${locale}" key="title" /></p>
+					<p class="logo-text">
+						<fmt:message bundle="${locale}" key="title" />
+					</p>
 				</div>
 			</div>
 		</header>
@@ -125,7 +132,7 @@
 		<div class="container">
 			<div id="heading">
 				<h1>${language}</h1>
-		
+
 				<h1>
 					<label for="username"><fmt:message bundle="${locale}"
 							key="homepage.title" /></label>
@@ -167,7 +174,8 @@
 								<form action="app" method="post">
 									<input type="hidden" name="command" value="Add_Ingredient" />
 									<button class="side" type="submit">
-										<fmt:message bundle="${locale}" key="sidebar.addingredientpage" />
+										<fmt:message bundle="${locale}"
+											key="sidebar.addingredientpage" />
 									</button>
 								</form>
 							</li>
@@ -184,63 +192,93 @@
 						</c:if>
 					</ul>
 				</nav>
-		<!-- 			<h2>OUR OFFICES</h2>
+				<!-- 			<h2>OUR OFFICES</h2>
 					<p>
 						<img src="images/sample.png" width="230" height="180"
 							alt="Our offices">
 					</p> -->
 			</aside>
-			<div  style="float: left; width: 73%;">
-			<blockquote>
-				<div class="col-6 col-sm-3">
-					<p>${Errormessage}</p>
-					<div class="form-group">
-						<c:if test="${!empty userCocktailMap}">
-							<table>
-								<tr>
-									<th><fmt:message bundle="${locale}" key="cocktaillist.id" /></th>
-									<th><fmt:message bundle="${locale}"
-											key="cocktaillist.name" /></th>
-									<th><fmt:message bundle="${locale}"
-											key="cocktaillist.description" /></th>
-									<th><fmt:message bundle="${locale}"
-											key="cocktaillist.vol" /></th>
-									<th><fmt:message bundle="${locale}"
-											key="cocktaillist.author" /></th>
-									<th><fmt:message bundle="${locale}"
-											key="cocktaillist.image" /></th>
-								</tr>
-								<c:forEach items="${userCocktailMap}" var="userCocktailMap">
-									<tr class="row">
-										<td>${userCocktailMap.key.cocktailId}</td>
-										<td>${userCocktailMap.key.cocktailName}</td>
-										<td>${userCocktailMap.key.cocktailDescription}</td>
-										<td>${userCocktailMap.key.cocktailVol}</td>
-										<td>${userCocktailMap.value.userName}</td>
-										<td><img src="app?imageId=${userCocktailMap.key.cocktailId}&command=Show_Cocktail_Image" width="100%" /></td>
-										<td><form action="app" method="post">
-												<input type="hidden" name="command" value="Cocktail_Info" />
-												<input type="hidden" name="cocktail_id"
-													value="${userCocktailMap.key.cocktailId}" /> <input
-													type="hidden" name="user_id"
-													value="${userCocktailMap.value.userId}" />
-												<button class="font-size" type="submit"><fmt:message bundle="${locale}" key="cocktaillist.info" /></button>
-											</form></td>
-										<td><form action="app" method="post">
-												<input type="hidden" name="command" value="Publish_Cocktail" />
-												<input type="hidden" name="cocktail_id"
-													value="${userCocktailMap.key.cocktailId}" />
-												<button class="font-size" type="submit">
-													<fmt:message bundle="${locale}" key="button.publish" />
-												</button>
-											</form></td>
+			<div style="float: left; width: 73%;">
+				<blockquote>
+					<div class="col-6 col-sm-3">
+						<p>${Errormessage}</p>
+						<div class="form-group">
+							<c:if test="${!empty userCocktailMap}">
+								<table>
+									<tr>
+										<th><fmt:message bundle="${locale}" key="cocktaillist.id" /></th>
+										<th><fmt:message bundle="${locale}"
+												key="cocktaillist.name" /></th>
+										<th><fmt:message bundle="${locale}"
+												key="cocktaillist.description" /></th>
+										<th><fmt:message bundle="${locale}"
+												key="cocktaillist.vol" /></th>
+										<th><fmt:message bundle="${locale}"
+												key="cocktaillist.author" /></th>
+										<th><fmt:message bundle="${locale}"
+												key="cocktaillist.image" /></th>
 									</tr>
-								</c:forEach>
-							</table>
-						</c:if>
+									<c:forEach items="${userCocktailMap}" var="userCocktailMap">
+										<tr class="row">
+											<td>${userCocktailMap.key.cocktailId}</td>
+											<td>${userCocktailMap.key.cocktailName}</td>
+											<td>${userCocktailMap.key.cocktailDescription}</td>
+											<td>${userCocktailMap.key.cocktailVol}</td>
+											<td>${userCocktailMap.value.userName}</td>
+											<td><img
+												src="app?imageId=${userCocktailMap.key.cocktailId}&command=Show_Cocktail_Image"
+												width="100%" /></td>
+											<td><form action="app" method="post">
+													<input type="hidden" name="command" value="Cocktail_Info" />
+													<input type="hidden" name="cocktail_id"
+														value="${userCocktailMap.key.cocktailId}" /> <input
+														type="hidden" name="user_id"
+														value="${userCocktailMap.value.userId}" />
+													<button class="font-size" type="submit">
+														<fmt:message bundle="${locale}" key="cocktaillist.info" />
+													</button>
+												</form></td>
+											<td><form action="app" method="post">
+													<input type="hidden" name="command"
+														value="Publish_Cocktail" /> <input type="hidden"
+														name="cocktail_id"
+														value="${userCocktailMap.key.cocktailId}" />
+													<button class="font-size" type="submit">
+														<fmt:message bundle="${locale}" key="button.publish" />
+													</button>
+												</form></td>
+											<td><c:if test="${sessionScope.Role == 'ADMIN'}">
+													<div>
+														<form action="app" method="post">
+															<input type="hidden" name="command"
+																value="Delete_Cocktail" /> <input type="hidden"
+																name="cocktail_id"
+																value="${userCocktailMap.key.cocktailId}" />
+															<button type="submit" onclick="return proverka();">
+																<fmt:message bundle="${locale}"
+																	key="cocktaillist.delete" />
+															</button>
+														</form>
+														<script type="text/javascript">
+															function proverka() {
+																if (confirm("<fmt:message bundle="${locale}" key="check" />")) {
+																	return true;
+																} else {
+																	return false;
+																}
+															}
+														</script>
+													</div>
+												</c:if></td>
+										</tr>
+									</c:forEach>
+
+								</table>
+							</c:if>
+
+						</div>
 					</div>
-				</div>
-			</blockquote>
+				</blockquote>
 			</div>
 		</div>
 	</section>

@@ -7,7 +7,6 @@ import com.labutin.barman.command.TypeCommand;
 
 
 public class Director {
-	
 	public static TypeCommand createTypeCommand(AbstactTypeCommandBuilder builder) {
 		builder.buildTypeCommand();
 		return builder.getTypeCommand();

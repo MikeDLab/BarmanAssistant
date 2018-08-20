@@ -17,6 +17,7 @@ import com.labutin.barman.command.ImageUtil;
 import com.labutin.barman.command.JspParameter;
 import com.labutin.barman.command.LocaleKey;
 import com.labutin.barman.command.UtilCommand;
+import com.labutin.barman.command.ingredient.IngredientUtil;
 import com.labutin.barman.entity.Cocktail;
 import com.labutin.barman.entity.Ingredient;
 import com.labutin.barman.entity.Rating;
@@ -28,49 +29,38 @@ import com.labutin.barman.service.RatingService;
 import com.labutin.barman.service.UserService;
 import com.labutin.barman.util.XssParser;
 
-class CoctailUtil extends  UtilCommand {
+class CoctailUtil extends UtilCommand {
 	private static Logger logger = LogManager.getLogger();
 	private CocktailService cocktailService;
 	private ImageUtil imageUtil = new ImageUtil();
+	private IngredientUtil ingredientUtil = new IngredientUtil();
 	private IngredientService ingredientService;
 	private RatingService ratingService;
 	private UserService userService;
-
-	public CoctailUtil() {
-	}
+	private static final String IMAGE_CONTENT_TYPE = "image/jpeg";
 
 	boolean addCocktail(HttpServletRequest request, HttpServletResponse response) {
 		String cocktailName = request.getParameter(JspParameter.COCKTAIL_NAME.getValue());
 		String cocktailDescription = request.getParameter(JspParameter.COCKTAIL_DESCRIPTION.getValue());
 		String cocktailVolParameter = request.getParameter(JspParameter.COCKTAIL_VOL.getValue());
-		/*
-		 * Null verfication
-		 */
-		if (cocktailName == null || cocktailDescription == null || cocktailVolParameter == null) {
-			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
-					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
-		} /*
-			 * Protection from JS injection.
-			 */
-		/*
-		 * Load Cocktail image from Servlet
-		 */
 		InputStream inputStream = imageUtil.getInputStream(request);
-		if (inputStream == null) {
+		User userSession = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
+		int cocktailVol = Integer.parseInt(cocktailVolParameter);
+		int userId;
+		boolean isPublished;
+		if (!checkRequestParameterSetOnNull(request, response) || cocktailName.isEmpty() || inputStream == null) {
+			ingredientUtil.showIngredientSet(request, response);
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
-					resourceBundle.getString(LocaleKey.NO_IMAGE.getValue()));
+					resourceBundle.getString(LocaleKey.EMPTY_FIELD.getValue()));
 			return false;
 		}
 		cocktailName = XssParser.parse(cocktailName);
 		cocktailDescription = XssParser.parse(cocktailDescription);
-		int cocktailVol = Integer.parseInt(cocktailVolParameter);
-		User userSession = (User) request.getSession().getAttribute(JspParameter.USER.getValue());
-		int userId;
-		boolean isPublished;
 		if (userSession != null) {
 			userId = userSession.getUserId();
 			isPublished = userSession.getUserRole() != 2;
 		} else {
+			ingredientUtil.showIngredientSet(request, response);
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.USER_NO_SESSION.getValue()));
 			return false;
@@ -136,7 +126,7 @@ class CoctailUtil extends  UtilCommand {
 		return sum / setRating.size();
 	}
 
-	 void deleteCocktail(HttpServletRequest request, HttpServletResponse response) {
+	void deleteCocktail(HttpServletRequest request, HttpServletResponse response) {
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
@@ -157,7 +147,7 @@ class CoctailUtil extends  UtilCommand {
 		}
 	}
 
-	 void findCocktailImage(HttpServletRequest request, HttpServletResponse response) {
+	void findCocktailImage(HttpServletRequest request, HttpServletResponse response) {
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
@@ -169,7 +159,7 @@ class CoctailUtil extends  UtilCommand {
 			Cocktail cocktail = cocktailService.receiveCocktailById(cocktailId);
 			if (cocktail != null) {
 				byte[] img = cocktail.getImage().readAllBytes();
-				response.setContentType("image/jpeg");
+				response.setContentType(IMAGE_CONTENT_TYPE);
 				OutputStream outputStream = response.getOutputStream();
 				outputStream.write(img);
 				outputStream.flush();
@@ -179,7 +169,8 @@ class CoctailUtil extends  UtilCommand {
 			logger.info("Image not found", e);
 		}
 	}
-	 void publishCocktail(HttpServletRequest request, HttpServletResponse response) {
+
+	void publishCocktail(HttpServletRequest request, HttpServletResponse response) {
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
@@ -225,7 +216,7 @@ class CoctailUtil extends  UtilCommand {
 
 	}
 
-	 void showCocktailInfo(HttpServletRequest request, HttpServletResponse response) {
+	void showCocktailInfo(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (!checkRequestParameterSetOnNull(request, response)) {
 				request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
@@ -265,7 +256,7 @@ class CoctailUtil extends  UtilCommand {
 		}
 	}
 
-	 void showNotPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
+	void showNotPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
@@ -296,7 +287,7 @@ class CoctailUtil extends  UtilCommand {
 		}
 	}
 
-	 void showPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
+	void showPublishedCocktail(HttpServletRequest request, HttpServletResponse response) {
 		if (!checkRequestParameterSetOnNull(request, response)) {
 			request.setAttribute(JspParameter.ERROR_MESSAGE.getValue(),
 					resourceBundle.getString(LocaleKey.GENERAL_EXCEPTION.getValue()));
